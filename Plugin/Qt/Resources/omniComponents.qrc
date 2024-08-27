@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/omniWidgets">
+        <file>Icons/About.png</file>
+        <file>Icons/Add_dark.png</file>
+        <file>Icons/Arrow_dark.png</file>
+        <file>Icons/Arrow_Right_dark.png</file>
+        <file>Icons/Disconnect.png</file>
+        <file>Icons/Export_Dark.png</file>
+        <file>Icons/FolderAdd_dark.png</file>
+        <file>Icons/Help.png</file>
+        <file>Icons/Import_light.png</file>
+        <file>Icons/OmniLivePanel.png</file>
+        <file>Icons/OmniversePanel.png</file>
+        <file>Icons/Publish.png</file>
+        <file>Icons/Refresh_dark.png</file>
+        <file>Icons/SendToBrick.png</file>
+        <file>Icons/SendToView.png</file>
+        <file>Icons/Settings.png</file>
+        <file>Icons/SignIn.png</file>
+        <file>Icons/User.png</file>
+        <file>Icons/UserDisconnected.png</file>
+        <file>Icons/UserSignedIn.png</file>
+		<file>Icons/NvOmni.bmp</file>
+		<file>Icons/NvOmni.png</file>
+		<file>Icons/Add.png</file>
+		<file>Icons/Remove.png</file>
+		<file>Icons/About.svg</file>
+		<file>Icons/Help.svg</file>
+		<file>Icons/OmniLivePanel.svg</file>
+		<file>Icons/SendToView.svg</file>
+		<file>Icons/Settings.svg</file>
+		<file>Icons/SignIn.svg</file>
+		<file>Icons/Add.svg</file>
+		<file>Icons/Remove.svg</file>
+		<file>Icons/Minus.svg</file>
+    </qresource>
+</RCC>

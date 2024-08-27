@@ -1,0 +1,633 @@
+<ServerManagerConfiguration>
+
+  <ProxyGroup name="views">
+    <OmniConnectRenderViewProxy name="OmniConnectRenderView" class="vtkPVOmniConnectRenderView"
+        label="Omniverse Connector"
+        processes="client|renderserver|dataserver"
+        base_proxygroup="views" base_proxyname="RenderView">
+    
+      <IntVectorProperty command="SetRenderingEnabled"
+          default_values="1"
+          name="RenderingEnabled"
+          panel_visibility="default"
+          number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>Set whether to render the transferred geometry in the Omniverse Connector view.</Documentation>
+      </IntVectorProperty>
+
+      <IntVectorProperty command="SetForceTimeVaryingTextures"
+          default_values="0"
+          name="ForceTimeVaryingTextures"
+          panel_visibility="default"
+          number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>All actors will generate one texture or colormap per timestep if this option is enabled, instead of just a single texture or colormap for all timesteps.</Documentation>
+      </IntVectorProperty>  
+      
+      <IntVectorProperty command="SetForceTimeVaryingMaterialParams"
+          default_values="0"
+          name="ForceTimeVaryingMaterialParameters"
+          panel_visibility="default"
+          number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>All actors will generate a separate material parameter value per timestep for each parameter that supports it if this option is enabled, instead of just a single parameter value for all timesteps.</Documentation>
+      </IntVectorProperty>
+
+      <IntVectorProperty command="SetForceConsistentWinding"
+          default_values="0"
+          name="ForceConsistentTriangleWinding"
+          panel_visibility="default"
+          number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>When set, any mesh triangle order that is inconsistent will be corrected, and normals regenerated.</Documentation>
+      </IntVectorProperty>  
+      
+      <IntVectorProperty command="SetMergeTfIntoVol"
+          default_values="0"
+          name="PreclassifiedVolumeOutput"
+          panel_visibility="default"
+          number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>For volumes, produce preclassified output where the transfer function is applied to the source data, producing a 'density' and 'diffuse' openvdb grid.</Documentation>
+      </IntVectorProperty>
+
+      <IntVectorProperty command="SetAllowWidgetActors"
+          default_values="0"
+          name="AllowWidgetActors"
+          panel_visibility="default"
+          number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow 3D Widgets (such as slice controls) to be represented in USD.</Documentation>
+      </IntVectorProperty>
+
+      <DoubleVectorProperty command="SetGlobalTimeScale"
+          name="UsdTimeScale"
+          number_of_elements="1"
+          default_values="1.0"
+          panel_visibility="default">
+        <Documentation>Set the time scale which will be applied to the scene and all its actors in USD. Previously written timesteps remain in the scene with the old scale.</Documentation>
+      </DoubleVectorProperty>
+
+      <IntVectorProperty command="SetLiveWorkflowEnabled"
+          default_values="0"
+          name="LiveWorkflow"
+          panel_visibility="never"
+          number_of_elements="1">
+        <BooleanDomain name="bool" />
+        <Documentation>Enable/disable the live workflow.</Documentation>
+      </IntVectorProperty>
+
+      <PropertyGroup label="Omniverse Connector"
+          panel_visibility="advanced">
+        <Property name="RenderingEnabled"/>
+        <Property name="ForceTimeVaryingTextures"/>
+        <Property name="ForceTimeVaryingMaterialParameters"/>
+        <Property name="ForceConsistentTriangleWinding"/>
+        <Property name="PreclassifiedVolumeOutput"/>
+        <Property name="AllowWidgetActors"/>
+        <Property name="UsdTimeScale"/>
+        <Property name="LiveWorkflow"/>
+      </PropertyGroup>
+
+    </OmniConnectRenderViewProxy>
+  </ProxyGroup>
+
+  <ProxyGroup name="settings">
+    <!-- ================================================================== -->
+    <SettingsProxy name="OmniConnectSettingsPlaceholder" label="Omniverse Connector"
+        processes="client|dataserver|renderserver"
+        class="vtkPVOmniConnectSettingsPlaceholder">
+      <Documentation>
+        Placeholder settings menu, for user re-direction to Omniverse Connector Settings.
+      </Documentation>
+
+      <IntVectorProperty name="HowTo"
+        number_of_elements="0"
+        panel_visibility="default">
+        <Documentation>
+          The Omniverse Connector settings are available from the cogwheel button on the Omniverse Connector toolbar. The settings apply to the view that is currently in focus within ParaView; each view has its own individual settings. They are also presented right before creating a new Omniverse Connector view.
+        </Documentation>
+      </IntVectorProperty>
+
+      <PropertyGroup label="Omniverse Connector Settings">
+        <Property name="HowTo" />
+      </PropertyGroup>
+
+      <Hints>
+        <UseDocumentationForLabels />
+      </Hints>
+    </SettingsProxy>
+  </ProxyGroup>
+  
+  <ProxyGroup name="OmniConnectProxyGroup">
+    <Proxy class="vtkPVOmniConnectProxy"
+           name="OmniConnectProxy">
+      <Documentation>
+        Proxy for Omniverse Connection class.
+      </Documentation>
+      <StringVectorProperty command="SetUrlInfoList_Url"
+        name="UrlInfoList_Url"
+        is_internal="1"/>
+    </Proxy>
+
+    <Proxy class="vtkPVOmniConnectAnimProxy"
+           name="OmniConnectAnimProxy">
+      <Documentation>
+        Proxy for communicating animation state.
+      </Documentation>
+
+      <!-- Dummy prop for global registration of the anim proxy on the server (for convenience, since it cannot be accessed otherwise) -->
+      <IntVectorProperty name="RegisterGlobally"
+          command="SetRegisterGlobally"
+          number_of_elements="1"
+          default_values="0"
+          is_internal="1"/>
+
+      <IntVectorProperty command="SetAnimatedObjectId"
+        name="AnimatedObjectIds"
+        number_of_elements_per_command="1"
+        repeat_command="1"
+        set_number_command="SetNumberOfAnimatedObjectIds"
+        use_index="1"
+        is_internal="1"/>
+
+      <IntVectorProperty command="SetRegisteredObjectId"
+        name="RegisteredObjectIds"
+        number_of_elements_per_command="1"
+        repeat_command="1"
+        set_number_command="SetNumberOfRegisteredObjectIds"
+        use_index="1"
+        is_internal="1"/>
+
+      <StringVectorProperty command="SetRegisteredObjectName"
+        name="RegisteredObjectNames"
+        number_of_elements_per_command="1"
+        repeat_command="1"
+        set_number_command="SetNumberOfRegisteredObjectNames"
+        use_index="1"
+        is_internal="1"/>
+    </Proxy>
+
+    <!-- ================================================================== -->
+    <SettingsProxy name="OmniConnectSettings" label="Omniverse Connector Settings"
+        processes="client|dataserver|renderserver"
+        class="vtkPVOmniConnectSettings">
+      <Documentation>
+        Collection of general settings for ParaView.
+      </Documentation>
+      
+      <StringVectorProperty name="OmniverseServer"
+          command="SetOmniServer"
+          default_values="localhost"
+          number_of_elements="1"
+          panel_visibility="default">
+        <Documentation>
+          Omniverse server to connect to when opening an Omniverse Connector renderview (if Output Local disabled).
+        </Documentation>    
+      </StringVectorProperty>
+
+      <StringVectorProperty name="OmniverseWorkingDirectory"
+          command="SetOmniWorkingDirectory"
+          default_values="/Users/test/paraview/"
+          number_of_elements="1"
+          panel_visibility="default">
+        <Documentation>
+          Omniverse user name when opening an Omniverse Connector renderview (if Output Local disabled). 
+        </Documentation>
+      </StringVectorProperty>
+      
+      <StringVectorProperty name="LocalOutputDirectory"
+          command="SetLocalOutputDirectory"
+          default_values=""
+          number_of_elements="1"
+          panel_visibility="default">
+        <Documentation>
+          The local output directory used when Output Local is enabled.
+        </Documentation>
+      </StringVectorProperty>
+      
+      <IntVectorProperty name="OutputLocal"
+          command="SetOutputLocal"
+          number_of_elements="1"
+          default_values="0"
+          panel_visibility="default">
+        <Documentation>
+          Output to the Local Output Directory instead of Omniverse when opening an Omniverse Connector renderview.
+        </Documentation>
+        <BooleanDomain name="bool" />
+      </IntVectorProperty>
+
+      <IntVectorProperty name="OutputExtension"
+          command="SetOutputBinary"
+          number_of_elements="1"
+          default_values="1"
+          panel_visibility="default">
+        <Documentation>
+          Choose whether USD output should be either binary (.usd) or text-based. Applied when opening an Omniverse Connector renderview.
+        </Documentation>
+        <EnumerationDomain name= "enum">
+          <Entry text=".usda"
+            value="0" />
+          <Entry text=".usd"
+            value="1" />
+        </EnumerationDomain>
+      </IntVectorProperty>
+
+      <IntVectorProperty name="UpAxis"
+          command="SetUpAxis"
+          number_of_elements="1"
+          default_values="0"
+          panel_visibility="advanced">
+        <Documentation>
+          Select which axis is chosen as the up axis in the USD output when opening an Omniverse Connector renderview. 
+        </Documentation>
+        <EnumerationDomain name= "enum">
+          <Entry text="Y Axis"
+            value="0" />
+          <Entry text="Z Axis"
+            value="1" />
+        </EnumerationDomain>
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="PointsRepresentation"
+          command="SetUsePointInstancer"
+          number_of_elements="1"
+          default_values="1"
+          panel_visibility="advanced">
+        <Documentation>
+          Choose the representation of points in USD: either use the UsdGeomPointInstancer or the UsdGeomPoints prim. Applied when opening an Omniverse Connector renderview.
+        </Documentation>
+        <EnumerationDomain name= "enum">
+          <Entry text="UsdGeomPoints"
+            value="0" />
+          <Entry text="UsdGeomPointInstancer"
+            value="1" />
+        </EnumerationDomain>
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="LinesRepresentation"
+          command="SetUseStickLines"
+          number_of_elements="1"
+          default_values="0"
+          panel_visibility="advanced">
+        <Documentation>
+          Choose the representation of lines in USD: either use the UsdGeomBasisCurves prim (curves) or UsdGeomPointInstancer with cylinders (sticks). Applied when opening an Omniverse Connector renderview.
+        </Documentation>
+        <EnumerationDomain name= "enum">
+          <Entry text="UsdGeomBasisCurves"
+            value="0" />
+          <Entry text="UsdGeomPointInstancer"
+            value="1" />
+        </EnumerationDomain>
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="TriangleWireframeRepresentation"
+          command="SetUseStickWireframe"
+          number_of_elements="1"
+          default_values="1"
+          panel_visibility="advanced">
+        <Documentation>
+          Choose the representation of wireframe triangle meshes in USD: either use the UsdGeomBasisCurves prim (curves) or UsdGeomPointInstancer with cylinders (sticks). Applied when opening an Omniverse Connector renderview.
+        </Documentation>
+        <EnumerationDomain name= "enum">
+          <Entry text="UsdGeomBasisCurves"
+            value="0" />
+          <Entry text="UsdGeomPointInstancer"
+            value="1" />
+        </EnumerationDomain>
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="VolumeRepresentation"
+          command="SetUseMeshVolume"
+          number_of_elements="1"
+          default_values="0"
+          panel_visibility="advanced">
+        <Documentation>
+          Choose the representation of volumes in USD: either use the UsdVolVolume prim with OpenVDBAsset fields, or a textured UsdGeomMesh with corresponding MDL material. Applied when opening an Omniverse Connector renderview.
+        </Documentation>
+        <EnumerationDomain name= "enum">
+          <Entry text="UsdVolVolume"
+            value="0" />
+          <Entry text="Textured UsdGeomMesh"
+            value="1" />
+        </EnumerationDomain>
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="CreateNewOmniverseSession"
+          command="SetCreateNewOmniSession"
+          number_of_elements="1"
+          default_values="1"
+          panel_visibility="default">
+        <Documentation>
+          Create a new Omniverse Session directory every time an Omniverse Connector renderview is opened.
+        </Documentation>
+        <BooleanDomain name="bool" /> 
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="ShowErrorMessages"
+          command="SetShowOmniErrors"
+          number_of_elements="1"
+          default_values="1"
+          panel_visibility="default">
+        <Documentation>
+          Show Omniverse error messages. Applies immediately and globally.
+        </Documentation>
+        <BooleanDomain name="bool" /> 
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="ShowDebugMessages"
+          command="SetShowOmniDebug"
+          number_of_elements="1"
+          default_values="0"
+          panel_visibility="default">
+        <Documentation>
+          Show Omniverse debug messages. Applies immediately and globally.
+        </Documentation>
+        <BooleanDomain name="bool" />
+      </IntVectorProperty>
+      
+      <IntVectorProperty name="NucleusVerbosity"
+          command="SetNucleusVerbosity"
+          number_of_elements="1"
+          default_values="0"
+          panel_visibility="advanced">
+        <Documentation>
+          Set the verbosity of messages generated by Nucleus, with 'Debug' as most verbose. Requires 'Show Debug Messages' to be enabled. Applies immediately and globally.
+        </Documentation>
+        <EnumerationDomain name= "enum">
+          <Entry text="Debug"
+            value="0" />
+          <Entry text="Verbose"
+            value="1" />
+          <Entry text="Info"
+            value="2" />
+          <Entry text="Warning"
+            value="3" />
+          <Entry text="Error"
+            value="4" />
+        </EnumerationDomain>
+      </IntVectorProperty>
+      
+      <PropertyGroup label="Connection Options"
+          panel_visibility="default">
+        <Property name="OmniverseServer"/>
+        <Property name="OmniverseWorkingDirectory"/>
+        <Property name="LocalOutputDirectory"/>
+        <Property name="OutputLocal"/>
+      </PropertyGroup>
+      <PropertyGroup label="USD options"
+          panel_visibility="default">
+        <Property name="OutputExtension"/>
+        <Property name="UpAxis"/>
+        <Property name="PointsRepresentation"/>
+        <Property name="LinesRepresentation"/>
+        <Property name="TriangleWireframeRepresentation"/>
+        <Property name="VolumeRepresentation"/>
+        <Property name="CreateNewOmniverseSession"/>
+      </PropertyGroup>      
+      <PropertyGroup label="Logging"
+          panel_visibility="default">
+        <Property name="ShowErrorMessages"/>
+        <Property name="ShowDebugMessages"/>
+        <Property name="NucleusVerbosity"/>
+      </PropertyGroup>
+    </SettingsProxy> 
+  </ProxyGroup> 
+
+
+  <ProxyGroup name="filters">
+    <SourceProxy name="OmniConnectPassArraysFilter" 
+        class="vtkOmniConnectPassArrays" 
+        label="Omniverse Connector Pass Arrays"
+        base_proxygroup="filters"
+        base_proxyname="PassArrays">
+      <Documentation
+        long_help="Allows for point and cell arrays (those that are enabled) to be transferred to Omniverse, alongside the regular vertex/normal/texcoord/etc renderdata."
+        short_help="Allows for point and cell arrays to be transferred to Omniverse.">
+          Omniverse Connector Pass Arrays filter
+      </Documentation>
+      <IntVectorProperty command="SetConvertDoubleToFloat"
+          default_values="1"
+          name="ConvertDoubleToFloat"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Double arrays are directly cast to float</Documentation>
+      </IntVectorProperty>
+      <Hints>
+        <ShowInMenu category="Omniverse Connector" />
+      </Hints>
+    </SourceProxy>
+  </ProxyGroup>  
+  
+  <ProxyGroup name="filters">
+    <SourceProxy name="OmniConnectTemporalArraysFilter" 
+        class="vtkOmniConnectTemporalArrays" 
+        label="Omniverse Connector Temporal Arrays"
+        base_proxygroup="filters"
+        base_proxyname="PassArrays">
+      <Documentation
+        long_help="Enabled arrays vary (and get copied over) per individual timestep, disabled arrays are uniform over all timesteps (and do not update when switching to new timestep)."
+        short_help="Defines which arrays vary over time (checked) and which are uniform over all timesteps (unchecked).">
+          Omniverse Connector Limit Time Series filter
+      </Documentation>
+      <IntVectorProperty command="SetAllowMeshPoints"
+          default_values="1"
+          name="MeshPoints"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of mesh points per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowMeshIndices"
+          default_values="1"
+          name="MeshIndices"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of mesh vertex topology indices per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowMeshNormals"
+          default_values="1"
+          name="MeshNormals"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of mesh normals per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowMeshTexcoords"
+          default_values="1"
+          name="MeshTexcoords"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of mesh texture coordinates per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowMeshVertexColors"
+          default_values="1"
+          name="MeshVertexColors"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of mesh vertex colors per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowPointsPositions"
+          default_values="1"
+          name="PointsSticksPositions"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of points/sticks positions per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowPointsIds"
+          default_values="1"
+          name="PointsSticksIds"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of points/sticks ids per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowPointsScales"
+          default_values="1"
+          name="PointsSticksScales"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of points/sticks scales per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowPointsOrientations"
+          default_values="1"
+          name="PointsSticksOrientations"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of points/sticks orientations per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowPointsTexcoords"
+          default_values="1"
+          name="PointsSticksTexcoords"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of points/sticks texture coordinates per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowPointsVertexColors"
+          default_values="1"
+          name="PointsSticksVertexColors"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of points/sticks vertex colors per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowCurvePoints"
+          default_values="1"
+          name="CurvePoints"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of curve points per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowCurveLengths"
+          default_values="1"
+          name="CurveLengths"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of curve lengths per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowCurveNormals"
+          default_values="1"
+          name="CurveNormals"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of curve orientation normals per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowCurveWidths"
+          default_values="1"
+          name="CurveWidths"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of curve widths per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowCurveTexcoords"
+          default_values="1"
+          name="CurveTexcoords"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of curve texture coordinates per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowCurveVertexColors"
+          default_values="1"
+          name="CurveVertexColors"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of curve vertex colors per-timestep</Documentation>
+      </IntVectorProperty>
+      <IntVectorProperty command="SetAllowVolumeData"
+          default_values="1"
+          name="VolumeData"
+          number_of_elements="1"
+          panel_visibility="default">
+        <BooleanDomain name="bool" />
+        <Documentation>Allow for update and storage of volume data per-timestep</Documentation>
+      </IntVectorProperty>
+      <PropertyGroup label="Mesh Arrays"
+          panel_visibility="default">
+        <Property name="MeshPoints"/>
+        <Property name="MeshIndices"/>
+        <Property name="MeshNormals"/>
+        <Property name="MeshTexcoords"/>
+        <Property name="MeshVertexColors"/>
+      </PropertyGroup>
+      <PropertyGroup label="Points and Sticks Arrays"
+          panel_visibility="default">
+        <Property name="PointsSticksPositions"/>
+        <Property name="PointsSticksIds"/>
+        <Property name="PointsSticksScales"/>
+        <Property name="PointsSticksOrientations"/>
+        <Property name="PointsSticksTexcoords"/>
+        <Property name="PointsSticksVertexColors"/>
+      </PropertyGroup>      
+      <PropertyGroup label="Curve Arrays"
+          panel_visibility="default">
+        <Property name="CurvePoints"/>
+        <Property name="CurveLengths"/>
+        <Property name="CurveNormals"/>
+        <Property name="CurveWidths"/>
+        <Property name="CurveTexcoords"/>
+        <Property name="CurveVertexColors"/>
+      </PropertyGroup>
+      <PropertyGroup label="Volume Arrays"
+          panel_visibility="default">
+        <Property name="VolumeData"/>
+      </PropertyGroup>
+      <Hints>
+        <ShowInMenu category="Omniverse Connector" />
+      </Hints>
+    </SourceProxy>
+  </ProxyGroup>
+
+  <ProxyGroup name="exporters">
+
+    <RenderViewExporterProxy class="vtkPVOmniConnectUsdExporter"
+                             name="USDExporter">
+      <Documentation>Exporter to export a single render view to usd(a).
+      </Documentation>
+      <StringVectorProperty command="SetFileName"
+                            name="FileName"
+                            panel_visibility="never"
+                            number_of_elements="1">
+        <Documentation>Name of the file to be written.</Documentation>
+      </StringVectorProperty>
+      <Hints>
+        <ExporterFactory extensions="usd usda" />
+      </Hints>
+    </RenderViewExporterProxy>
+
+  </ProxyGroup> 
+  
+</ServerManagerConfiguration>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg194"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="Remove.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs198" />
+  <sodipodi:namedview
+     id="namedview196"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="10"
+     inkscape:cx="16.55"
+     inkscape:cy="8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="450"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="g200" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g200">
+    <path
+       style="fill:#464645"
+       d="M 2.7,10.681787 V 6.2635749 L 2.1996083,4.9317875 1.6992165,3.6 4.3989728,2.35 7.0987291,1.1 H 8.8993645 10.7 v 1 1 h 1.877163 1.877163 L 13.998302,7.85 13.542279,12.6 13.152524,13.85 12.76277,15.1 H 7.7313848 2.7 Z M 11.7,9.6 V 5.1 h -4 -4 v 3.833333 3.833334 L 4.3666667,13.433333 5.0333333,14.1 H 8.3666667 11.7 Z m -7,-0.5 v -3 h 1 1 v 3 3 h -1 -1 z m 3.2320027,0 V 5.6 L 8.3893255,7.35 8.8466483,9.1 8.3893255,10.85 7.9320027,12.6 Z m 2.0000003,0 V 5.6 l 0.457323,1.75 0.457322,1.75 -0.457322,1.75 -0.457323,1.75 z M 9.4291667,2.4958333 8.825,1.8916667 7.5125,2.416886 6.2,2.9421053 8.1166667,3.0210526 10.033333,3.1 Z"
+       id="path1218" />
+    <path
+       style="fill:#464645"
+       d="m 6,6.4 -0.1,5"
+       id="path397" />
+    <path
+       style="fill:#464645"
+       d="m 6.4,6.3 -0.1,5"
+       id="path399" />
+  </g>
+</svg>

@@ -1,0 +1,2953 @@
+Parts of ParaView are under the following licenses:
+
+ParaView License Version 1.2
+========================================================================
+
+Copyright (c) 2005-2008 Sandia Corporation, Kitware Inc.
+
+Sandia National Laboratories, New Mexico
+PO Box 5800
+Albuquerque, NM 87185
+
+Kitware Inc.
+28 Corporate Drive
+Clifton Park, NY 12065
+USA
+
+Under the terms of Contract DE-AC04-94AL85000, there is a
+non-exclusive license for use of this work by or on behalf of the
+U.S. Government.  
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+ * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the
+   distribution.
+
+ * Neither the name of Kitware nor the names of any contributors may
+   be used to endorse or promote products derived from this software
+   without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+========================================================================
+
+Other licenses:
+
+========================================================================
+
+Copyright (c) 2000-2005 Kitware Inc. 28 Corporate Drive, Suite 204,
+Clifton Park, NY, 12065, USA.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+ * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the
+   distribution.
+
+ * Neither the name of Kitware nor the names of any contributors may
+   be used to endorse or promote products derived from this software
+   without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+========================================================================
+
+Copyright (c) 2002-2005 Los Alamos National Laboratory
+
+This software and ancillary information known as vtk_ext (and herein
+called "SOFTWARE") is made available under the terms described below.
+The SOFTWARE has been approved for release with associated LA_CC
+Number 99-44, granted by Los Alamos National Laboratory in July 1999.
+
+Unless otherwise indicated, this SOFTWARE has been authored by an
+employee or employees of the University of California, operator of the
+Los Alamos National Laboratory under Contract No. W-7405-ENG-36 with
+the United States Department of Energy.
+
+The United States Government has rights to use, reproduce, and
+distribute this SOFTWARE.  The public may copy, distribute, prepare
+derivative works and publicly display this SOFTWARE without charge,
+provided that this Notice and any statement of authorship are
+reproduced on all copies.
+
+Neither the U. S. Government, the University of California, nor the
+Advanced Computing Laboratory makes any warranty, either express or
+implied, nor assumes any liability or responsibility for the use of
+this SOFTWARE.
+
+If SOFTWARE is modified to produce derivative works, such modified
+SOFTWARE should be clearly marked, so as not to confuse it with the
+version available from Los Alamos National Laboratory.
+
+========================================================================
+
+VTK License
+
+========================================================================
+
+Copyright (c) 2000-2006 Kitware Inc. 28 Corporate Drive, Suite 204,
+Clifton Park, NY, 12065, USA.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+ * Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+
+ * Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the
+   distribution.
+
+ * Neither the name of Kitware nor the names of any contributors may
+   be used to endorse or promote products derived from this software
+   without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+========================================================================
+
+HDF5 License
+
+========================================================================
+
+NCSA HDF5 (Hierarchical Data Format 5) Software Library and Utilities
+Copyright 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005 by the Board of
+Trustees of the University of Illinois All rights reserved.
+
+Contributors: National Center for Supercomputing Applications (NCSA) at the
+University of Illinois at Urbana-Champaign (UIUC), Lawrence Livermore National
+Laboratory (LLNL), Sandia National Laboratories (SNL), Los Alamos National
+Laboratory (LANL), Jean-loup Gailly and Mark Adler (gzip library).
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted for any purpose (including commercial purposes)
+provided that the following conditions are met:
+
+   1. Redistributions of source code must retain the above copyright notice,
+      this list of conditions, and the following disclaimer.
+   2. Redistributions in binary form must reproduce the above copyright notice,
+      this list of conditions, and the following disclaimer in the
+      documentation and/or materials provided with the distribution.
+   3. In addition, redistributions of modified forms of the source or binary
+      code must carry prominent notices stating that the original code was
+      changed and the date of the change.
+   4. All publications or advertising materials mentioning features or use of
+      this software are asked, but not required, to acknowledge that it was
+      developed by the National Center for Supercomputing Applications at the
+      University of Illinois at Urbana-Champaign and to credit the
+      contributors.
+   5. Neither the name of the University nor the names of the Contributors may
+      be used to endorse or promote products derived from this software without
+      specific prior written permission from the University or the
+      Contributors, as appropriate for the name(s) to be used.
+   6. THIS SOFTWARE IS PROVIDED BY THE UNIVERSITY AND THE CONTRIBUTORS "AS IS"
+      WITH NO WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED. In no event
+      shall the University or the Contributors be liable for any damages
+      suffered by the users arising out of the use of this software, even if
+      advised of the possibility of such damage. 
+
+Portions of HDF5 were developed with support from the University of California,
+Lawrence Livermore National Laboratory (UC LLNL). The following statement
+applies to those portions of the product and must be retained in any
+redistribution of source code, binaries, documentation, and/or accompanying
+materials:
+This work was partially produced at the University of California, Lawrence
+Livermore National Laboratory (UC LLNL) under contract no. W-7405-ENG-48
+(Contract 48) between the U.S. Department of Energy (DOE) and The Regents of
+the University of California (University) for the operation of UC LLNL.
+
+DISCLAIMER: This work was prepared as an account of work sponsored by an agency
+of the United States Government. Neither the United States Government nor the
+University of California nor any of their employees, makes any warranty,
+express or implied, or assumes any liability or responsibility for the
+accuracy, completeness, or usefulness of any information, apparatus, product,
+or process disclosed, or represents that its use would not infringe privately-
+owned rights. Reference herein to any specific commercial products, process, or
+service by trade name, trademark, manufacturer, or otherwise, does not
+necessarily constitute or imply its endorsement, recommendation, or favoring by
+the United States Government or the University of California. The views and
+opinions of authors expressed herein do not necessarily state or reflect those
+of the United States Government or the University of California, and shall not
+be used for advertising or product endorsement purposes. 
+
+========================================================================
+
+Xdmf License
+
+========================================================================
+
+Copyright (c) 2002 U.S. Army Research Laboratory 
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+ * Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+
+ * Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+ * Neither the name of the U.S. Army Research Laboratory nor the names
+   of any contributors may be used to endorse or promote products derived
+   from this software without specific prior written permission.
+
+ * Modified source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS''
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+========================================================================
+
+Protocol Buffer License
+
+========================================================================
+
+Copyright 2008, Google Inc.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+    * Neither the name of Google Inc. nor the names of its
+contributors may be used to endorse or promote products derived from
+this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Code generated by the Protocol Buffer compiler is owned by the owner
+of the input file used when generating it.  This code is not
+standalone and requires a support library to be linked with it.  This
+support library is itself covered by the above license.
+
+
+========================================================================
+
+NVD3 License
+
+========================================================================
+
+Copyright (c) 2011, 2012 [Novus Partners, Inc.][novus]
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+    https://www.novus.com/
+
+
+========================================================================
+
+D3 License
+
+========================================================================
+
+Copyright (c) 2012, Michael Bostock
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this
+  list of conditions and the following disclaimer.
+
+* Redistributions in binary form must reproduce the above copyright notice,
+  this list of conditions and the following disclaimer in the documentation
+  and/or other materials provided with the distribution.
+
+* The name Michael Bostock may not be used to endorse or promote products
+  derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL MICHAEL BOSTOCK BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+========================================================================
+
+jQuery License
+
+========================================================================
+
+Copyright 2013 jQuery Foundation and other contributors
+http://jquery.com/
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+========================================================================
+
+jQuery UI License
+
+========================================================================
+
+Copyright (c) 2013 jQuery Foundation and other contributors Licensed MIT 
+
+
+
+========================================================================
+
+Qt License
+
+========================================================================
+
+QT LICENSE AGREEMENT
+Agreement version 4.2.1
+
+This Qt License Agreement ("Agreement") is a legal agreement for the licensing
+of Licensed Software (as defined below) between The Qt Company (as defined
+below) and the Licensee who has accepted the terms of this Agreement by
+downloading or using the Licensed Software and/or as defined herein:
+
+Capitalized terms used herein are defined in Section 1.
+
+WHEREAS:
+   (A)   Licensee wishes to use the Licensed Software for the purpose of
+         developing and distributing Applications and/or Devices (each as
+         defined below); and
+   (B)   The Qt Company is willing to grant the Licensee a right to use
+         Licensed Software for such a purpose pursuant to term and conditions
+         of this Agreement.
+
+NOW, THEREFORE, THE PARTIES HEREBY AGREE AS FOLLOWS:
+
+1. DEFINITIONS
+"Affiliate" of a Party shall mean an entity (i) which is directly or indirectly
+controlling such Party; (ii) which is under the same direct or indirect
+ownership or control as such Party; or (iii) which is directly or indirectly
+owned or controlled by such Party.  For these purposes, an entity shall be
+treated as being controlled by another if that other entity has fifty percent
+(50 %) or more of the votes in such entity, is able to direct its affairs
+and/or to control the composition of its board of directors or equivalent body.
+
+"Add-on Products" shall mean The Qt Company's specific add-on software products
+(for example Qt Safe Renderer, Qt for Automation, Qt Application Manager),
+which are not licensed as part of The Qt Company's standard offering, but shall
+be included into the scope of Licensed Software only if so specifically agreed
+between the Parties.
+
+"Applications" shall mean Licensee's software products created using the
+Licensed Software, which may include the Redistributables, or part thereof.
+
+"Contractor(s)" shall mean third party consultants, distributors and
+contractors performing services to the Licensee under applicable contractual
+arrangement.
+
+"Customer(s)" shall mean Licensee's end users to whom Licensee, directly or
+indirectly, distributes copies of the Redistributables.
+
+"Data Protection Legislation" shall mean the General Data Protection Regulation
+(EU 2016/679) (GDPR) and any national implementing laws, regulations and
+secondary legislation, as may be amended or updated from time to time, as well
+as any other data protection laws or regulations applicable in relevant
+territory.
+
+"Deployment Platforms" shall mean operating systems and/or hardware specified
+in the License Certificate, on which the Redistributables can be distributed
+pursuant to the terms and conditions of this Agreement.
+
+"Designated User(s)" shall mean the employee(s) of Licensee or Licensee's
+Affiliates acting within the scope of their employment or Licensee's
+Contractors acting within the scope of their services for Licensee and on
+behalf of Licensee. Designated Users shall be named in the License Certificate.
+
+"Development License" shall mean the license needed by the Licensee for each
+Designated User to use the Licensed Software under the license grant described
+in Section 3.1 of this Agreement. Development Licenses are available
+separately for Qt for Application Development and Qt for Device Creation
+products, each product having its designated scope and purpose of use.
+Distribution Licenses are always connected to Qt for Device Creation
+product only.
+
+"Development Platforms" shall mean those operating systems specified in the
+License Certificate, in which the Licensed Software can be used under the
+Development License, but not distributed in any form or used for any other
+purpose.
+
+"Devices" shall mean hardware devices or products that 1) are manufactured
+and/or distributed by the Licensee or its Affiliates or Contractors, and
+(2)(i) incorporate or integrate the Redistributables or parts thereof; or (ii)
+where the main user interface or substantial functionality of such unit , when
+used by a Customer, is provided by Application(s) or otherwise depends on the
+Licensed Software, regardless of whether the Redistributables are distributed
+together with the hardware or not. Devices covered with this Agreement shall
+be specified in Appendix 2 or in a quote.
+
+"Distribution License(s)" shall mean the license required for any kind of sale,
+trade, exchange, loan, lease, rental or other distribution by or on behalf of
+Licensee to a third party of Redistributables in connection with Devices
+pursuant to license grant described in Section 3.3 of this Agreement.
+
+"Distribution License Packs" shall mean set of prepaid Distribution Licenses
+for distribution of Redistributables, as defined in The Qt Company's standard
+price list, quote, Purchase Order confirmation or in an appendix hereto, as
+the case may be.
+
+"Intellectual Property Rights" shall mean patents (including utility models),
+design patents, and designs (whether or not capable of registration), chip
+topography rights and other like protection, copyrights, trademarks, service
+marks, trade names, logos or other words or symbols and any other form of
+statutory protection of any kind and applications for any of the foregoing as
+well as any trade secrets.
+
+"License Certificate" shall mean a certificate generated by The Qt Company for
+each Designated User respectively upon them downloading the Licensed Software,
+which will be available under respective Designated User's Qt Account at
+account.qt.io. License Certificates will specify the Designated User, the
+Development Platforms, Deployment Platforms and the License Term. Such terms
+are considered part of the licenses granted hereunder and shall be updated
+from time to time to reflect any agreed changes to the foregoing terms
+relating to Designated User's rights to the Licensed Software.
+
+"License Fee" shall mean the fee charged to the Licensee for rights granted
+under the terms of this Agreement.
+
+"License Term" shall mean the agreed validity period of the Development License
+of the respective Designated User, during which time the Designated User is
+entitled to use the Licensed Software, as set forth in the respective License
+Certificate.
+
+"Licensed Software" shall mean either
+    (i)     Qt for Application Development or
+    (ii)    Qt for Device Creation, and/or
+    (iii)   Qt 3D Studio, and/or
+    (iv)    Qt Design Studio, and/or
+    (v)     Qt for MCUs, and/or
+    (vi)    selected Add-on Products, if any,
+
+depending on which product(s) the Licensee has purchased under this Agreement,
+as well as corresponding online or electronic documentation, associated media
+and printed materials, including the source code (where applicable), example
+programs and the documentation, licensed to the Licensee under this Agreement.
+Licensed Software does not include Third Party Software (as defined in Section
+4) or Open Source Qt. The Qt Company may, in the course of its development
+activities, at its free and absolute discretion and without any obligation to
+send or publish any notifications to the Licensee or in general, make changes,
+additions or deletions in the components and functionalities of the Licensed
+Software, provided that no such changes, additions or deletions will affect
+the already released version of the Licensed Software, but only upcoming
+version(s).
+
+"Licensee" shall mean the individual or legal entity that is party to this
+Agreement, as identified on the signature page hereof.
+
+"Licensee's Records" shall mean books and records that are likely to contain
+information bearing on Licensee's compliance with this Agreement, Licensee's
+use of Open Source Qt and/or the payments due to The Qt Company under this
+Agreement, including, but not limited to user information, assembly logs,
+sales records and distribution records.
+
+"Modified Software" shall have the meaning as set forth in Section 2.3.
+
+"Online Services" shall mean any services or access to systems made available
+by The Qt Company to the Licensee over the Internet relating to the Licensed
+Software or for the purpose of use by the Licensee of the Licensed Software or
+Support. Use of any such Online Services is discretionary for the Licensee and
+some of them may be subject to additional fees.
+
+"Open Source Qt" shall mean the non-commercial Qt computer software products,
+licensed under the terms of the GNU Lesser General Public License, version 2.1
+or later ("LGPL") or the GNU General Public License, version 2.0 or later
+("GPL"). For clarity, Open Source Qt shall not be provided nor governed under
+this Agreement.
+
+"Party" or "Parties" shall mean Licensee and/or The Qt Company.
+
+"Permitted Combination" shall have the meaning as set forth in Section
+3.4(viii).
+
+"Pre-Release Code" shall have the meaning as set forth in Section 4.
+
+"Prohibited Combination" shall mean any means to (i) use, combine, incorporate,
+link or integrate Licensed Software with any software created with or
+incorporating Open Source Qt, (ii) use Licensed Software for creation of any
+software created with or incorporating Open Source Qt, or (iii) incorporate or
+integrate Applications into a hardware device or product other than a Device.
+
+"Qt 3D Studio" shall mean The Qt Company's productized offering, which consist
+of all versions of modules and tools as set forth in Appendix 1.
+
+"Qt Design Studio" shall mean The Qt Company's productized offering, which
+consist of all versions of modules and tools as set forth in Appendix 1.
+
+"Qt for Application Development" shall mean The Qt Company's productized
+offering, which consist of all versions of modules and tools as set forth in
+Appendix 1.
+
+"Qt for Device Creation" shall mean The Qt Company's productized offering,
+which consist of all versions of modules and tools as set forth in Appendix 1.
+
+"Qt for MCUs" shall mean The Qt Company's productized offering, which consist
+of all versions of modules and tools as set forth in Appendix 1.
+
+"Redistributables" shall mean the portions of the Licensed Software set forth
+in Appendix 1 that may be distributed pursuant to the terms of this Agreement
+in object code form only, including any relevant documentation. Where
+relevant, any reference to Licensed Software in this Agreement shall include
+and refer also to Redistributables.
+
+"Renewal Term" shall mean an extension of previous License Term as agreed
+between the Parties.
+
+"Submitted Modified Software" shall have the meaning as set forth in
+Section 2.3.
+
+"Support" shall mean standard developer support that is provided by The Qt
+Company to assist Designated Users in using the Licensed Software in
+accordance with The Qt Company's standard support terms available at
+https://www.qt.io/terms-conditions/ and as further defined in Section 8
+hereunder.
+
+"Taxes" shall have the meaning set forth in Section 10.5.
+
+"Term" shall have the meaning set forth in Section 12.
+
+"The Qt Company" shall mean:
+    (i)     in the event Licensee is an individual residing in the United
+            States or a legal entity incorporated in the United States or
+            having its headquarters in the United States, The Qt Company Inc.,
+            a Delaware corporation with its office at 2350 Mission College
+            Blvd., Suite 1020, Santa Clara, CA 95054, USA.; or
+    (ii)    in the event the Licensee is an individual residing outside of the
+            United States or a legal entity incorporated outside of the United
+            States or having its registered office outside of the United
+            States, The Qt Company Ltd., a Finnish company with its registered
+            office at Bertel Jungin aukio D3A, 02600 Espoo, Finland.
+
+"Third-Party Software" shall have the meaning set forth in Section 4.
+
+"Updates" shall mean a release or version of the Licensed Software containing
+bug fixes, error corrections and other changes that are generally made
+available to users of the Licensed Software that have contracted for Support.
+Updates are generally depicted as a change to the digits following the decimal
+in the Licensed Software version number. The Qt Company shall make Updates
+available to the Licensee under the Support. Updates shall be considered as
+part of the Licensed Software hereunder.
+
+"Upgrades" shall mean a release or version of the Licensed Software containing
+enhancements and new features and are generally depicted as a change to the
+first digit of the Licensed Software version number. In the event Upgrades are
+provided to the Licensee under this Agreement, they shall be considered as
+part of the Licensed Software hereunder.
+
+
+2. OWNERSHIP
+2.1. Ownership of The Qt Company
+The Licensed Software is protected by copyright laws and international
+copyright treaties, as well as other intellectual property laws and
+treaties. The Licensed Software is licensed, not sold.
+
+All of The Qt Company's Intellectual Property Rights are and shall remain the
+exclusive property of The Qt Company or its licensors respectively.
+
+2.2. Ownership of Licensee
+All the Licensee's Intellectual Property Rights are and shall remain the
+exclusive property of the Licensee or its licensors respectively.
+
+All Intellectual Property Rights to the Modified Software, Applications and
+Devices shall remain with the Licensee and no rights thereto shall be granted
+by the Licensee to The Qt Company under this Agreement (except as set forth in
+Section 2.3 below).
+
+2.3. Modified Software
+Licensee may create bug-fixes, error corrections, patches or modifications to
+the Licensed Software ("Modified Software"). Such Modified Software may break
+the source or binary compatibility with the Licensed Software (including
+without limitation through changing the application programming interfaces
+("API") or by adding, changing or deleting any variable, method, or class
+signature in the Licensed Software and/or any inter-process protocols,
+services or standards in the Licensed Software libraries). To the extent that
+Licensee's Modified Software so breaks source or binary compatibility with the
+Licensed Software, Licensee acknowledges that The Qt Company's ability to
+provide Support may be prevented or limited and Licensee's ability to make use
+of Updates may be restricted.
+
+Licensee may, at its sole and absolute discretion, choose to submit Modified
+Software to The Qt Company ("Submitted Modified Software") in connection with
+Licensee's Support request, service request or otherwise. In the event
+Licensee does so, then, Licensee hereby grants The Qt Company a sublicensable,
+assignable, irrevocable, perpetual, worldwide, non-exclusive, royalty-free and
+fully paid-up license, under all of Licensee's Intellectual Property Rights,
+to reproduce, adapt, translate, modify, and prepare derivative works of,
+publicly display, publicly perform, sublicense, make available and distribute
+such Submitted Modified Software as The Qt Company sees fit at its free and
+absolute discretion.
+
+3. LICENSES GRANTED
+3.1. Development with Licensed Software
+Subject to the terms of this Agreement, The Qt Company grants to Licensee a
+worldwide, non-exclusive, non-transferable license, valid for the License
+Term, to use, modify and copy the Licensed Software by Designated Users on the
+Development Platforms for the sole purposes of designing, developing,
+demonstrating and testing Application(s) and/or Devices, and to provide
+thereto related support and other related services to end-user Customers.
+
+Licensee may install copies of the Licensed Software on five (5) computers per
+Designated User, provided that only the Designated Users who have a valid
+Development License may use the Licensed Software.
+
+Licensee may at any time designate another Designated User to replace a
+then-current Designated User by notifying The Qt Company in writing, provided
+that any Designated User may be replaced only once during any six-month period.
+
+Upon expiry of the initially agreed License Term, the respective License Terms
+shall be automatically extended to one or more Renewal Term(s), unless and
+until either Party notifies the other Party in writing that it does not wish
+to continue the License Term, such notification to be provided to the other
+Party no less than ninety (90) days before expiry of the respective License
+Term. Unless otherwise agreed between the Parties, Renewal Term shall be of
+equal length with the initial License Term.
+
+Any such Renewal Term shall be subject to License Fees agreed between the
+Parties or, if no advance agreement exists, subject to The Qt Company's
+standard pricing applicable at the commencement date of any such Renewal Term.
+
+Any price or other term specified for a Renewal Term shall be valid only for
+the specified time.
+
+The Qt Company may request the Licensee to place a purchase order corresponding
+to a quote by The Qt Company for the relevant Renewal Term.
+
+In the event Licensee does not prevent auto-renewal pursuant the above, but a
+Renewal Term is nevertheless not duly ordered within 30 days from the date of
+the respective quote from The Qt Company and/or the respective License Fee
+paid by due date specified in The Qt Company's respective invoice, The Qt
+Company shall apply a reinstatement fee equal to ten percent (10 %) of the
+total value of the License Fees of the Development Licenses for the expired
+term to be added to the License Fee of the respective Renewal Term.
+
+In the event Licensee chooses not to renew a Development License for a Renewal
+Term by notifying The Qt Company thereof no less than ninety (90) days before
+expiry of the respective License Term, Licensee may still reinstate such
+expired Development Licenses for a Renewal Term subject to applicable renewal
+Term License Fees until thirty (30) days from the expiry of the initially
+agreed License Term or preceding Renewal Term. After such thirty (30) day
+period a Development License shall be subject to applicable License Fees for a
+new Development License and not any Renewal Term License Fees.
+
+3.2. Distribution of Applications
+Subject to the terms of this Agreement, The Qt Company grants to Licensee a
+worldwide, non-exclusive, non-transferable, revocable (for cause pursuant to
+this Agreement) right and license, valid for the Term, to
+    (i)     distribute, by itself or through its Contractors, Redistributables
+            as installed, incorporated or integrated into Applications for
+            execution on the Deployment Platforms, and
+    (ii)    grant sublicenses to Redistributables, as distributed hereunder,
+            for Customers solely for Customer's internal use and to the extent
+            necessary in order for the Customers to use the Applications for
+            their respective intended purposes.
+
+Right to distribute the Redistributables as part of an Application as provided
+herein is not royalty-bearing but is conditional upon the Licensee not having
+any unpaid License Fees for Development Licenses owed to The Qt Company at the
+time of distribution of any Redistributables to Customers.
+
+3.3. Distribution of Devices
+Subject to the terms of this Agreement, The Qt Company grants to Licensee a
+worldwide, non-exclusive, non-transferable, revocable (for cause pursuant to
+this Agreement) right and license, valid for the Term, to
+    (i)     distribute, by itself or through one or more tiers of Contractors,
+            Redistributables as installed, incorporated or integrated, or
+            intended to be installed, incorporated or integrated into Devices
+            for execution on the Deployment Platforms, and
+    (ii)    grant sublicenses to Redistributables, as distributed hereunder,
+            for Customers solely for Customer's internal use and to the extent
+            necessary in order for the Customers to use the Devices for their
+            respective intended purposes.
+
+Right to distribute the Redistributables with Devices as provided herein is
+conditional upon the Licensee (i) not having any unpaid License Fees for
+Development Licenses owed to The Qt Company, and (ii) having purchased and
+paid corresponding Distribution Licenses at the time of distribution of any
+Redistributables to Customers.
+
+3.4. Further Requirements
+The licenses granted above in this Section 3 by The Qt Company to Licensee are
+conditional and subject to Licensee's compliance with the following terms:
+    (i)     Licensee shall not remove or alter any copyright, trademark or
+            other proprietary rights notice(s) contained in any portion of the
+            Licensed Software;
+    (ii)    Applications must add primary and substantial functionality to the
+            Licensed Software so as not to compete with the Licensed Software;
+    (iii)   Applications may not pass on functionality which in any way makes
+            it possible for others to create software with the Licensed
+            Software; provided however that Licensee may use the Licensed
+            Software's scripting and QML ("Qt Quick") functionality solely in
+            order to enable scripting, themes and styles that augment the
+            functionality and appearance of the Application(s) without adding
+            primary and substantial functionality to the Application(s);
+    (iv)    Licensee shall not use Licensed Software in any manner or for any
+            purpose that infringes, misappropriates or otherwise violates any
+            Intellectual property or right of any third party, or that
+            violates any applicable law;
+    (v)     Licensee shall not use The Qt Company's or any of its suppliers'
+            names, logos, or trademarks to market Applications, except that
+            Licensee may use "Built with Qt" logo to indicate that
+            Application(s) was developed using the Licensed Software;
+    (vi)    Licensee shall not distribute, sublicense or disclose source code
+            of Licensed Software to any third party (provided however that
+            Licensee may appoint employee(s) of Contractors as Designated
+            Users to use Licensed Software pursuant to this Agreement). Such
+            right may be available for the Licensee subject to a separate
+            software development kit ("SDK") license agreement to be concluded
+            with The Qt Company;
+    (vii)   Licensee shall not grant the Customers a right to (i) make copies
+            of the Redistributables except when and to the extent required to
+            use the Applications and/or Devices for their intended purpose,
+            (ii) modify the Redistributables or create derivative works
+            thereof, (iii) decompile, disassemble or otherwise reverse
+            engineer Redistributables, or (iv) redistribute any copy or
+            portion of the Redistributables to any third party, except as part
+            of the onward sale of the Device on which the Redistributables are
+            installed;
+    (viii)  Licensee shall not and shall cause that its Affiliates or
+            Contractors shall not use Licensed Software in any Prohibited
+            Combination, unless Licensee has received an advance written
+            permission from The Qt Company to do so. Absent such written
+            permission, any and all distribution by the Licensee during the
+            Term of a hardware device or product a) which incorporate or
+            integrate any part of Licensed Software or Open Source Qt; or b)
+            where the main user interface or substantial functionality is
+            provided by software built with Licensed Software or Open Source
+            Qt or otherwise depends on the Licensed Software or Open Source
+            Qt, shall be considered to be Device distribution under this
+            Agreement and shall be dependent on Licensee's compliance thereof
+            (including but not limited to obligation to pay applicable License
+            Fees for such distribution). Notwithstanding what is provided
+            above in this sub-section (viii), Licensee is entitled to use and
+            combine Qt 3D Studio and/or Qt Design Studio with Open Source Qt
+            ("Permitted Combination") for its internal evaluation purposes,
+            provided that Licensee shall in no way transfer, publish, disclose,
+            display or otherwise make available any software or work resulting
+            from such Permitted Combination;
+    (ix)    Licensee shall cause all of its Affiliates and Contractors
+            entitled to make use of the licenses granted under this Agreement,
+            to be contractually bound to comply with the relevant terms of
+            this Agreement and not to use the Licensed Software beyond the
+            terms hereof and for any purposes other than operating within the
+            scope of their services for Licensee. Licensee shall be responsible
+            for any and all actions and omissions of its Affiliates and
+            Contractors relating to the Licensed Software and use thereof
+            (including but not limited to payment of all applicable License
+            Fees);
+    (x)     Except when and to the extent explicitly provided in this Section
+            3, Licensee shall not transfer, publish, disclose, display or
+            otherwise make available the Licensed Software; and
+    (xi)    Licensee shall not attempt or enlist a third party to conduct or
+            attempt to conduct any of the above.
+
+Above terms shall not be applicable if and to the extent they conflict with
+any mandatory provisions of any applicable laws.
+Any use of Licensed Software beyond the provisions of this Agreement is
+strictly prohibited and requires an additional license from The Qt Company.
+
+4. THIRD-PARTY SOFTWARE
+The Licensed Software may provide links to third party libraries or code
+(collectively "Third-Party Software") to implement various functions.
+Third-Party Software does not comprise part of the Licensed Software. In some
+cases, access to Third-Party Software may be included with the Licensed
+Software. Such Third-Party Software will be listed in the ".../src/3rdparty"
+source tree delivered with the Licensed Software or documented in the Licensed
+Software, as such may be amended from time to time. Licensee acknowledges that
+use or distribution of Third-Party Software is in all respects subject to
+applicable license terms of applicable third-party right holders.
+
+5. PRE-RELEASE CODE
+The Licensed Software may contain pre-release code and functionality, or sample
+code marked or otherwise stated with appropriate designation such as
+"Technology Preview", "Alpha", "Beta", "Sample" etc. ("Pre-Release Code").
+
+Such Pre-Release Code may be present complimentary for the Licensee, in order
+to provide experimental support or information for new platforms or preliminary
+versions of one or more new functionalities or for other similar reasons. The
+Pre-Release Code may not be at the level of performance and compatibility of a
+final, generally available, product offering. The Pre-Release Code may not
+operate correctly, may contain errors and may be substantially modified by The
+Qt Company prior to the first commercial product release, if any. The Qt
+Company is under no obligation to make Pre-Release Code commercially available,
+or provide any Support or Updates relating thereto. The Qt Company assumes no
+liability whatsoever regarding any Pre-Release Code, but any use thereof is
+exclusively at Licensee's own risk and expense.
+
+For clarity, unless Licensed Software specifies different license terms for the
+respective Pre-Release Code, the Licensee is entitled to use such pre-release
+code pursuant to Section 3, just like other Licensed Software, provided however
+that in the event Add-on Products are included and available as such
+Pre-Release Code, Licensee's right to use such Add-on Products is nevertheless
+subject to and conditional upon conclusion of separate agreement with The Qt
+Company.
+
+6. LIMITED WARRANTY AND WARRANTY DISCLAIMER
+The Qt Company hereby represents and warrants that it has the power and
+authority to grant the rights and licenses granted to Licensee under this
+Agreement.
+
+Except as set forth above, the Licensed Software is licensed to Licensee
+"as is" and Licensee's exclusive remedy and The Qt Company's entire liability
+for errors in the Licensed Software shall be limited, at The Qt Company's
+option, to correction of the error, replacement of the Licensed Software or
+return of the applicable fees paid for the defective Licensed Software for the
+time period during which the License is not able to utilize the Licensed
+Software under the terms of this Agreement.
+
+TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE QT COMPANY ON BEHALF OF
+ITSELF AND ITS LICENSORS, SUPPLIERS AND AFFILIATES, DISCLAIMS ALL OTHER
+WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, ANY IMPLIED
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND
+NON-INFRINGEMENT WITH REGARD TO THE LICENSED SOFTWARE. THE QT COMPANY DOES NOT
+WARRANT THAT THE LICENSED SOFTWARE WILL SATISFY LICENSEE'S REQUIREMENTS OR THAT
+IT WILL OPERATE WITHOUT DEFECT OR ERROR OR THAT THE OPERATION THEREOF WILL BE
+UNINTERRUPTED.
+
+7. INDEMNIFICATION AND LIMITATION OF LIABILITY
+7.1. Limitation of Liability
+EXCEPT FOR (I) CASES OF GROSS NEGLIGENCE OR INTENTIONAL MISCONDUCT,  AND (II)
+BREACH OF CONFIDENTIALITY, AND TO THE EXTENT PERMITTED BY APPLICABLE LAW, IN NO
+EVENT SHALL EITHER PARTY BE LIABLE TO THE OTHER PARTY FOR ANY LOSS OF PROFIT,
+LOSS OF DATA, LOSS OF BUSINESS OR GOODWILL OR ANY OTHER INDIRECT, SPECIAL,
+CONSEQUENTIAL, INCIDENTAL OR PUNITIVE COST, DAMAGES OR EXPENSE OF ANY KIND,
+HOWSOEVER ARISING UNDER OR IN CONNECTION WITH THIS AGREEMENT.
+
+EXCEPT FOR (I) CASES OF GROSS NEGLIGENCE OR INTENTIONAL MISCONDUCT,  AND (II)
+BREACH OF CONFIDENTIALITY, AND TO THE EXTENT PERMITTED BY APPLICABLE LAW, IN NO
+EVENT SHALL EITHER PARTY'S TOTAL AGGREGATE LIABILITY UNDER THIS AGREEMENT
+EXCEED THE AGGREGATE LICENSE FEES PAID OR PAYABLE TO THE QT COMPANY FROM
+LICENSEE DURING THE PERIOD OF TWELVE (12) MONTHS IMMEDIATELY PRECEDING THE
+EVENT RESULTING IN SUCH LIABILITY.
+
+THE PROVISIONS OF THIS SECTION 7 ALLOCATE THE RISKS UNDER THIS AGREEMENT
+BETWEEN THE QT COMPANY AND LICENSEE AND THE PARTIES HAVE RELIED UPON THE
+LIMITATIONS SET FORTH HEREIN IN DETERMINING WHETHER TO ENTER INTO THIS
+AGREEMENT.
+
+NOTWITHSTANDING ANYTHING TO THE CONTRARY IN THIS AGREEMENT, LICENSEE SHALL
+ALWAYS BE LIABLE TO PAY THE APPLICABLE LICENSE FEES CORRESPONDING TO ITS ACTUAL
+USE OF LICENSED SOFTWARE.
+
+8. SUPPORT, UPDATES AND ONLINE SERVICES
+Upon due payment of the agreed License Fees the Licensee will be eligible to
+receive Support and Updates and to use the Online Services during the License
+Term, provided, however, that in the event the License Term is longer than 36
+months, the initial payment includes Support for only the first 12 months,
+unless the Parties specifically otherwise agree.
+
+Unless otherwise decided by The Company at its free and absolute discretion,
+Upgrades will not be included in the Support but may be available subject to
+additional fees.
+
+From time to time The Qt Company may change the Support terms, provided that
+during the respective ongoing License Term the level of Support provided by The
+Qt Company may not be reduced without the consent of the Licensee.
+
+Unless otherwise agreed, The Qt Company shall not be responsible for providing
+any service or support to Customers.
+
+9. CONFIDENTIALITY
+Each Party acknowledges that during the Term of this Agreement each Party may
+receive information about the other Party's business, business methods,
+business plans, customers, business relations, technology, and other
+information, including the terms of this Agreement, that is confidential and of
+great value to the other Party, and the value of which would be significantly
+reduced if disclosed to third parties ("Confidential Information").
+Accordingly, when a Party (the "Receiving Party") receives Confidential
+Information from the other Party (the "Disclosing Party"), the Receiving Party
+shall only disclose such information to employees and Contractors on a need to
+know basis, and shall cause its employees and employees of its Affiliates to:
+(i) maintain any and all Confidential Information in confidence; (ii) not
+disclose the Confidential Information to a third party without the Disclosing
+Party's prior written approval; and (iii) not, directly or indirectly, use the
+Confidential Information for any purpose other than for exercising its rights
+and fulfilling its responsibilities pursuant to this Agreement. Each Party
+shall take reasonable measures to protect the Confidential Information of the
+other Party, which measures shall not be less than the measures taken by such
+Party to protect its own confidential and proprietary information.
+
+Obligation of confidentiality shall not apply to information that (i) is or
+becomes generally known to the public through no act or omission of the
+Receiving Party; (ii) was in the Receiving Party's lawful possession prior to
+the disclosure hereunder and was not subject to limitations on disclosure or
+use; (iii) is developed independently by employees or Contractors of the
+Receiving Party or other persons working for the Receiving Party who have not
+had access to the Confidential Information of the Disclosing Party, as proven
+by the written records of the Receiving Party; (iv) is lawfully disclosed to
+the Receiving Party without restrictions, by a third party not under an
+obligation of confidentiality; or (v) the Receiving Party is legally compelled
+to disclose, in which case the Receiving Party shall notify the Disclosing
+Party of such compelled disclosure and assert the privileged and confidential
+nature of the information and cooperate fully with the Disclosing Party to
+limit the scope of disclosure and the dissemination of disclosed Confidential
+Information to the minimum extent necessary.
+
+The obligations under this Section 9 shall continue to remain in force for a
+period of five (5) years after the last disclosure, and, with respect to trade
+secrets, for so long as such trade secrets are protected under applicable trade
+secret laws.
+
+10. FEES, DELIVERY AND PAYMENT
+10.1. License Fees
+License Fees are described in The Qt Company's standard price list, quote or
+Purchase Order confirmation or in an appendix hereto, as the case may be.
+
+The License Fees shall not be refunded or claimed as a credit in any event or
+for any reason whatsoever.
+
+10.2. Ordering Licenses
+Licensee may purchase Development Licenses and Distribution Licenses pursuant
+to agreed pricing terms or, if no specific pricing terms have been agreed upon,
+at The Qt Company's standard pricing terms applicable at the time of purchase.
+Unless specifically otherwise provided, any pricing terms referenced in this
+Agreement shall be valid for twelve (12) months from the date of this Agreement.
+
+Licensee shall submit all purchase orders for Development Licenses and
+Distribution Licenses to The Qt Company by email or any other method acceptable
+to The Qt Company (each such order is referred to herein as a "Purchase Order")
+for confirmation, whereupon the Purchase Order shall become binding between the
+Parties.
+
+10.3. Distribution License Packs
+Unless otherwise agreed, Distribution Licenses shall be purchased by way of
+Distribution License Packs.
+
+Upon due payment of the ordered Distribution License Pack(s), the Licensee will
+have an account of Distribution Licenses available for distributing the
+Redistributables in accordance with this Agreement.
+
+Each time Licensee distributes a copy of Redistributables, then one
+Distribution License is used, and Licensee's account of available Distribution
+Licenses is decreased accordingly.Licensee may distribute copies of the
+Redistributables so long as Licensee has Distribution Licenses remaining on
+its account.
+
+10.4. Payment Terms
+License Fees and any other charges under this Agreement shall be paid by
+Licensee no later than thirty (30) days from the date of the applicable
+invoice from The Qt Company.
+
+The Qt Company will submit an invoice to Licensee after the date of this
+Agreement and/or after The Qt Company receives a Purchase Order from Licensee.
+
+A late payment charge of the lower of (a) one percent per month; or (b) the
+interest rate stipulated by applicable law, shall be charged on any unpaid
+balances that remain past due.
+
+10.5. Taxes
+All License Fees and other charges payable hereunder are gross amounts but
+exclusive of any value added tax, use tax, sales tax, withholding tax and other
+taxes, duties or tariffs ("Taxes") levied directly for the sale, delivery or
+use of Licensed Software hereunder pursuant to any applicable law. Such
+applicable Taxes shall be paid by Licensee to The Qt Company, or, where
+applicable, in lieu of payment of such Taxes to The Qt Company, Licensee shall
+provide an exemption certificate to The Qt Company and any applicable authority.
+
+11. RECORD-KEEPING AND REPORTING OBLIGATIONS; AUDIT RIGHTS
+11.1. Licensee's Record-keeping
+Licensee shall at all times during the Term of this Agreement and for a period
+of seven (7) years thereafter maintain Licensee's Records in an accurate and
+up-to-date form. Licensee's Records shall be adequate to reasonably enable The
+Qt Company to determine Licensee's compliance with the provisions of this
+Agreement. The records shall conform to general good accounting practices.
+
+Licensee shall, within thirty (30) days from receiving The Qt Company's request
+to that effect, deliver to The Qt Company a report based on Licensee's Records,
+such report to contain information, in sufficient detail, on (i) number and
+identity of users working with Licensed Software or Open Source Qt, (ii) copies
+of Redistributables distributed by Licensee during the most recent calendar
+quarter and/or any other term specified by The Qt Company, (iii) number of
+undistributed copies of Redistributables and corresponding number of unused
+Distribution Licenses remaining on Licensee's account, and (iv) any other
+information as The Qt Company may reasonably require from time to time.
+
+11.2. The Qt Company's Audit Rights
+The Qt Company or an independent auditor acting on behalf of The Qt Company's,
+may, upon at least five (5) business days' prior written notice and at its
+expense, audit Licensee with respect to the Licensee's use of the Licensed
+Software, but not more frequently than once during each 6-month period. Such
+audit may be conducted by mail, electronic means or through an in-person visit
+to Licensee's place of business. Any such in-person audit shall be conducted
+during regular business hours at Licensee's facilities and shall not
+unreasonably interfere with Licensee's business activities. The Qt Company or
+the independent auditor acting on behalf of The Qt Company shall be entitled to
+inspect Licensee's Records and conduct necessary interviews of Licensee's
+relevant employees and Contractors. All such Licensee's Records and use thereof
+shall be subject to an obligation of confidentiality under this Agreement.
+
+If an audit reveals that Licensee is using the Licensed Software beyond scope
+of the licenses Licensee has paid for, Licensee agrees to pay The Qt Company
+any amounts owed for such unauthorized use within 30 days from receipt of the
+corresponding invoice from The Qt Company. In addition, in the event the audit
+reveals a material violation of the terms of this Agreement (without
+limitation, either (i) underpayment of more than 10 % of License Fees or 10,000
+euros (whichever is more) or (ii) distribution of products, which include or
+result from Prohibited Combination, shall be deemed a material violation for
+purposes of this section), then the Licensee shall pay The Qt Company's
+reasonable cost of conducting such audit.
+
+12. TERM AND TERMINATION
+12.1. Agreement Term
+This Agreement shall enter into force upon due acceptance by both Parties and
+remain in force for as long as there is any Development License(s) purchased
+under this Agreement in force ("Term"), unless and until terminated pursuant to
+the terms of this Section 12.
+
+12.2. Termination and suspension of rights
+Either Party shall have the right to terminate this Agreement upon thirty (30)
+days prior written notice if the other Party commits a material breach of any
+obligation of this Agreement and fails to remedy such breach within such notice
+period.
+
+Instead of termination, The Qt Company shall have the right to suspend or
+withhold grants of all rights to the Licensed Software hereunder, including but
+not limited to the Development Licenses, Distribution License, and Support,
+should Licensee fail to make payment in timely fashion or otherwise violates or
+is reasonably suspected to violate its obligations or terms of this Agreement,
+and where such violation or breach is not cured within five (5) business days
+following The Qt Company's written notice thereof.
+
+12.3. Mutual Right to Terminate
+Either Party shall have the right to terminate this Agreement immediately upon
+written notice in the event that the other Party becomes insolvent, files for
+any form of bankruptcy, makes any assignment for the benefit of creditors, has
+a receiver, administrative receiver or officer appointed over the whole or a
+substantial part of its assets, ceases to conduct business, or an act
+equivalent to any of the above occurs under the laws of the jurisdiction of the
+other Party.
+
+12.4. Parties´ Rights and Duties upon Termination
+Upon expiry or termination of the Agreement, Licensee shall cease and shall
+cause all Designated Users (including those of its Affiliates' and
+Contractors') to cease using the Licensed Software and distribution of the
+Redistributables under this Agreement.
+
+Notwithstanding the above, in the event the Agreement expires or is terminated:
+    (i)     as a result of The Qt Company choosing not to renew the Development
+            License(s) as set forth in Section 3.1, then all valid licenses
+            possessed by the Licensee at such date shall be extended to be
+            valid in perpetuity under the terms of this Agreement and Licensee
+            is entitled to purchase additional licenses as set forth in
+            Section 10.2; or
+    (ii)    for reason other than by The Qt Company pursuant to item (i) above
+            or pursuant to Section 12.2, then the Licensee is entitled, for a
+            period of six (6) months after the effective date of termination,
+            to continue distribution of Devices under the Distribution Licenses
+            paid but unused at such effective date of termination.
+
+Upon any such termination the Licensee shall destroy or return to The Qt
+Company all copies of the Licensed Software and all related materials and will
+certify the same to The Qt Company upon its request, provided however that
+Licensee may retain and exploit such copies of the Licensed Software as it may
+reasonably require in providing continued support to Customers.
+
+Expiry or termination of this Agreement for any reason whatsoever shall not
+relieve Licensee of its obligation to pay any License Fees accrued or payable
+to The Qt Company prior to the effective date of termination, and Licensee
+shall immediately pay to The Qt Company all such fees upon the effective date
+of termination. Termination of this Agreement shall not affect any rights of
+Customers to continue use of Applications and Devices (and therein incorporated
+Redistributables).
+
+12.5. Extension in case of bankruptcy
+In the event The Qt Company is declared bankrupt under a final, non-cancellable
+decision by relevant court of law, and this Agreement is not, at the date of
+expiry of the Development License(s) pursuant to Section 3.1, assigned to
+party, who has assumed The Qt Company's position as a legitimate licensor of
+Licensed Software under this Agreement, then all valid licenses possessed by
+the Licensee at such date of expiry, and which the Licensee has not notified
+for expiry, shall be extended to be valid in perpetuity under the terms of this
+Agreement.
+
+13. GOVERNING LAW AND LEGAL VENUE
+In the event this Agreement is in the name of The Qt Company Inc., a Delaware
+Corporation, then:
+    (i)     this Agreement shall be construed and interpreted in accordance
+            with the laws of the State of California, USA, excluding its choice
+            of law provisions;
+    (ii)    the United Nations Convention on Contracts for the International
+            Sale of Goods will not apply to this Agreement; and
+    (iii)   any dispute, claim or controversy arising out of or relating to
+            this Agreement or the breach, termination, enforcement,
+            interpretation or validity thereof, including the determination of
+            the scope or applicability of this Agreement to arbitrate, shall
+            be determined by arbitration in San Francisco, USA, before one
+            arbitrator. The arbitration shall be administered by JAMS pursuant
+            to JAMS' Streamlined Arbitration Rules and Procedures. Judgment on
+            the Award may be entered in any court having jurisdiction. This
+            Section shall not preclude parties from seeking provisional
+            remedies in aid of arbitration from a court of appropriate
+            jurisdiction.
+
+In the event this Agreement is in the name of The Qt Company Ltd., a Finnish
+Company, then:
+    (i)     this Agreement shall be construed and interpreted in accordance
+            with the laws of Finland, excluding its choice of law provisions;
+    (ii)    the United Nations Convention on Contracts for the International
+            Sale of Goods will not apply to this Agreement; and
+    (iii)   any disputes, controversy or claim arising out of or relating to
+            this Agreement, or the breach, termination or validity thereof
+            shall be finally settled by arbitration in accordance with the
+            Arbitration Rules of Finland Chamber of Commerce. The arbitration
+            tribunal shall consist of one (1), or if either Party so requires,
+            of three (3), arbitrators. The award shall be final and binding and
+            enforceable in any court of competent jurisdiction. The arbitration
+            shall be held in Helsinki, Finland and the process shall be
+            conducted in the English language. This Section shall not preclude
+            parties from seeking provisional remedies in aid of arbitration
+            from a court of appropriate jurisdiction.
+
+14. GENERAL PROVISIONS
+14.1. No Assignment
+Except in the case of a merger or sale of substantially all of its corporate
+assets, Licensee shall not be entitled to assign or transfer all or any of its
+rights, benefits and obligations under this Agreement without the prior written
+consent of The Qt Company, which shall not be unreasonably withheld or delayed.
+The Qt Company shall be entitled to freely assign or transfer any of its
+rights, benefits or obligations under this Agreement.
+
+14.2. No Third-Party Representations
+Licensee shall make no representations or warranties concerning the Licensed
+Software on behalf of The Qt Company. Any representation or warranty Licensee
+makes or purports to make on The Qt Company's behalf shall be void as to The
+Qt Company.
+
+14.3. Surviving Sections
+Any terms and conditions that by their nature or otherwise reasonably should
+survive termination of this Agreement shall so be deemed to survive. Such
+sections include especially the following: 1, 2, 6, 7, 9, 11, 12.4, 13 and 14.
+
+14.4. Entire Agreement
+This Agreement, the exhibits hereto, the License Certificate and any applicable
+Purchase Order accepted by The Qt Company constitute the complete agreement
+between the Parties and supersedes all prior or contemporaneous discussions,
+representations, and proposals, written or oral, with respect to the subject
+matters discussed herein.
+
+In the event of any conflict or inconsistency between this Agreement and any
+Purchase Order, the terms of this Agreement will prevail over the terms of the
+Purchase Order with respect to such conflict or inconsistency.
+
+Parties specifically acknowledge and agree that this Agreement prevails over
+any click-to-accept or similar agreements the Designated Users may need to
+accept online upon download of the Licensed Software, as may be required by
+The Qt Company's applicable processes relating to Licensed Software.
+
+14.5. Modifications
+No modification of this Agreement shall be effective unless contained in a
+writing executed by an authorized representative of each Party. No term or
+condition contained in Licensee's Purchase Order ("Deviating Terms") shall
+apply unless The Qt Company has expressly agreed such Deviating Terms in
+writing. Unless and to the extent expressly agreed by The Qt Company, any such
+Deviating Terms shall be deemed void and with no legal effect. For clarity,
+delivery of the Licensed Software following the receipt of the Purchase Order
+including Deviating Terms shall not constitute acceptance of such Deviating
+Terms."
+
+14.6. Force Majeure
+Except for the payment obligations hereunder, neither Party shall be liable to
+the other for any delay or non-performance of its obligations hereunder in the
+event and to the extent that such delay or non-performance is due to an event
+of act of God, terrorist attack or other similar unforeseeable catastrophic
+event that prevents either Party for fulfilling its obligations under this
+Agreement and which such Party cannot avoid or circumvent ("Force Majeure
+Event"). If the Force Majeure Event results in a delay or non-performance of a
+Party for a period of three (3) months or longer, then either Party shall have
+the right to terminate this Agreement with immediate effect without any
+liability (except for the obligations of payment arising prior to the event of
+Force Majeure) towards the other Party.
+
+14.7. Notices
+Any notice given by one Party to the other shall be deemed properly given and
+deemed received if specifically acknowledged by the receiving Party in writing
+or when successfully delivered to the recipient by hand, fax, or special
+courier during normal business hours on a business day to the addresses
+specified for each Party on the signature page. Each communication and document
+made or delivered by one Party to the other Party pursuant to this Agreement
+shall be in the English language.
+
+14.8. Export Control
+Licensee acknowledges that the Redistributables, as incorporated in
+Applications or Devices, may be subject to export control restrictions under
+the applicable laws of respective countries. Licensee shall fully comply with
+all applicable export license restrictions and requirements as well as with all
+laws and regulations relating to the Redistributables and exercise of licenses
+hereunder and shall procure all necessary governmental authorizations,
+including without limitation, all necessary licenses, approvals, permissions or
+consents, where necessary for the re-exportation of the Redistributables,
+Applications and/or Devices.
+
+14.9. No Implied License
+There are no implied licenses or other implied rights granted under this
+Agreement, and all rights, save for those expressly granted hereunder, shall
+remain with The Qt Company and its licensors. In addition, no licenses or
+immunities are granted to the combination of the Licensed Software with any
+other software or hardware not delivered by The Qt Company under this Agreement.
+
+14.10. Attorney Fees
+The prevailing Party in any action to enforce this Agreement shall be entitled
+to recover its attorney's fees and costs in connection with such action.
+
+14.11. Privacy
+Licensee acknowledges and agrees that for the purpose of this Agreement, The Qt
+Company may collect, use, transfer and disclose personal data pertaining to
+Designated Users as well as any other employees and directors of the Licensee
+and its Contractors relevant for carrying out the intent of this Agreement.
+Such personal data may be collected from the Licensee or directly from the
+relevant individuals. The Parties acknowledge that with regard to such personal
+data processed hereunder, The Qt Company shall be regarded as the Data
+Controller under the applicable Data Protection Legislation. The Qt Company
+shall process any such personal data in accordance with its privacy policies
+and practices, which will comply with all applicable requirements of the Data
+Protection Legislation.
+
+14.12. Severability
+If any provision of this Agreement shall be adjudged by any court of competent
+jurisdiction to be unenforceable or invalid, that provision shall be limited or
+eliminated to the minimum extent necessary so that this Agreement shall
+otherwise remain in full force and effect and enforceable.
+
+
+
+APPENDICES
+The Agreement includes Appendix 1, and possibly one or more of the appendices
+3-5, depending on the product(s) purchased by the Licensee, what is stated in
+the quote or invoice, and/or what is stated in the Licensee's License
+Certificate.
+
+
+APPENDIX 1
+The modules and/or tools that are included in the respective product - Qt for
+Application Development (QtAD), Qt for Device Creation (QtDC), Qt for MCUs
+(QtMCU), Qt 3D Studio (Qt3DS) and Qt Design Studio (QtDS) - are marked with 'X'
+in the below table.
+
+Parts of the product that are permitted for distribution in object-code form
+only ("Redistributables") are marked with 'R' in the below table.
+
+Modules/Tools                          | QtAD  | QtDC  | QtMCU | Qt3DS | QtDS
+-------------------------------------------------------------------------------
+Qt Core                                |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt GUI                                 |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Multimedia                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Multimedia Widgets                  |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Network                             |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt QML                                 |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick                               |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Controls 2                    |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Dialogs                       |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Layouts                       |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Test                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt SQL                                 |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Test                                |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Widgets                             |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Active Qt                              |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt 3D                                  |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Android Extras                      |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Bluetooth                           |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Canvas 3D                           |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Concurrent                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt D-Bus                               |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Gamepad                             |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Graphical Effects                   |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Help                                |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Image Formats                       |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Location                            |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Mac Extras                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Network Authorization               |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt NFC                                 |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Platform Headers                    |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Positioning                         |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Print Support                       |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Purchasing                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt for Python                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Controls                      |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Extras                        |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Widgets                       |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt SCXML                               |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Sensors                             |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Serial Bus                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Serial Port                         |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Speech                              |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt SVG                                 |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt UI Tools                            |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt WebChannel                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt WebEngine                           |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt WebSockets                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt WebView                             |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Windows Extras                      |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt X11 Extras                          |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt XML                                 |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt XML Patterns                        |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Wayland Compositor                  |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Charts                              |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Data Visualization                  |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Virtual Keyboard                    |  X,R  |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Boot 2 Qt stack                        |       |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt OTA                                 |       |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Device Utilities                       |       |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Debugging Bridge (QDB) Daemon       |       |  X,R  |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Ultralite Controls            |       |       |  X,R  |       |
+-------------------------------------------------------------------------------
+Qt Quick Ultralite                     |       |       |  X,R  |       |
+-------------------------------------------------------------------------------
+Qt Creator                             |   X   |   X   |   X   |       |
+-------------------------------------------------------------------------------
+Qt Designer (Qt Widget Designer)       |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+Qt Quick Designer (Qt Creator plugin)  |   X   |   X   |   X   |       |
+-------------------------------------------------------------------------------
+Qt Linguist                            |   X   |   X   |   X   |       |
+-------------------------------------------------------------------------------
+Qt Assistant                           |   X   |   X   |   X   |       |
+-------------------------------------------------------------------------------
+lupdate                                |   X   |   X   |   X   |       |
+-------------------------------------------------------------------------------
+lrelease                               |   X   |   X   |   X   |       |
+-------------------------------------------------------------------------------
+qmake                                  |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+uic                                    |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+rcc                                    |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+qlalr                                  |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+qdoc                                   |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+qmlscene                               |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+qmlviewer                              |   X   |   X   |       |       |
+-------------------------------------------------------------------------------
+Target toolchains                      |       |   X   |   X   |       |
+-------------------------------------------------------------------------------
+Qt Debugging Bridge (QDB) Host Tools   |       |   X   |       |       |
+-------------------------------------------------------------------------------
+qtconfig-gui                           |       |   X   |       |       |
+-------------------------------------------------------------------------------
+Qt Emulator                            |       |   X   |       |       |
+-------------------------------------------------------------------------------
+qmlinterfacegenerator                  |       |       |   X   |       |
+-------------------------------------------------------------------------------
+qmltocpp                               |       |       |   X   |       |
+-------------------------------------------------------------------------------
+qulfontcompiler                        |       |       |   X   |       |
+-------------------------------------------------------------------------------
+Qt53DStudioRuntime2                    |       |       |       |  X,R  |
+-------------------------------------------------------------------------------
+Qt 3D Studio                           |       |       |       |   X   |
+-------------------------------------------------------------------------------
+Qt Design Studio                       |       |       |       |       |   X
+-------------------------------------------------------------------------------
+
+
+APPENDIX 3: ADDITIONS TO LICENSED SOFTWARE
+In addition to what is provided under the definition of the Licensed Software,
+Parties agree that Licensed Software shall also include the Add-On Products of
+The Qt Company, as mentioned in this Appendix, if included in the
+quote / invoice.
+
+The Modules and/or Tools of the Licensed Software that are included with each
+Add-On Product respectively are marked with 'X' in the below table. Parts of
+the respective Add-On Product that are permitted for distribution in
+object-code form only ("Redistributables") are marked with 'R' in the below
+table.
+
+-------------------------------------------------------------------------------
+            |                          Add-On Product(s)
+Modules /   |------------------------------------------------------------------
+Tools of    |Qt for     |Qt         |Qt Safe  |Qt         |Qt       |Qt
+Licensed    |Automation |Automotive |Renderer |Application|Gammaray |Deployment
+Software    |           |Suite      |         |Manager    |         |Platform
+            |           |           |         |           |         |Package
+-------------------------------------------------------------------------------
+Qt MQTT     |   X,R     |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt KNX      |   X,R     |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt OPC UA   |   X,R     |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt CoAP     |   X,R     |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt Safe     |           |    X,R    |   X,R   |           |         |
+Renderer    |           |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt          |           |           |         |           |         |
+Application |           |    X,R    |         |    X,R    |         |
+Manager     |           |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt IVI      |           |    X,R    |         |           |         |
+-------------------------------------------------------------------------------
+Reference UI|           |    X,R    |         |           |         |
+-------------------------------------------------------------------------------
+Qt GENIVI   |           |    X,R    |         |           |         |
+Extras      |           |           |         |           |         |
+-------------------------------------------------------------------------------
+QML Live    |           |     X     |         |           |         |
+-------------------------------------------------------------------------------
+Qt Creator  |           |     X     |         |           |         |
+Deployment  |           |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt Creator  |           |           |         |           |         |
+Plugin for  |           |           |         |           |         |
+Qt          |           |     X     |         |     X     |         |
+Application |           |           |         |           |         |
+Manager     |           |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt          |           |           |         |           |         |
+Automotive  |           |           |         |           |         |
+Suite       |           |     X     |         |           |         |
+Deployment  |           |           |         |           |         |
+Server      |           |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt Design   |           |     X     |         |           |         |
+Studio      |           |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt 3D Studio|           |     X     |         |           |         |
+-------------------------------------------------------------------------------
+GammaRay    |           |     X     |         |           |    X    |
+-------------------------------------------------------------------------------
+Platform    |           |           |         |           |         |
+adaptations |           |           |         |           |         |
+for         |           |           |         |           |         |    X
+specified   |           |           |         |           |         |
+Deployment  |           |           |         |           |         |
+Platforms   |           |           |         |           |         |
+-------------------------------------------------------------------------------
+Qt for      |           |           |         |           |         |
+Device      |           |     X     |         |           |         |
+Creation    |           |           |         |           |         |
+-------------------------------------------------------------------------------
+
+All the above Redistributables are subject to applicable provisions and
+limitations including but not limited to what is defined in section 3 of the
+Agreement.
+
+
+APPENDIX 4: SMALL BUSINESS AND STARTUP
+The provisions of this Appendix 4 are applicable for Start-up Companies and for
+the Evaluation Term.For the purpose of this Appendix 4, the following
+additional definitions shall be applicable:
+
+"Trial Term" shall mean a period of twelve (12) months.
+
+"Start-up Company" means a company with a maximum annual revenue, including
+funding, equivalent to 100,000 USD (in applicable currency) during a respective
+calendar year, as evidenced by duly audited records of the Licensee and
+approved by The Qt Company.
+
+During the Trial Term, Section 3 shall apply with following modifications
+("Trial Term Modifications"):
+    (i)     Licenses granted under Sections 3.1 and 3.2 shall be free of any
+            charge. For clarity, License for distribution of Devices pursuant
+            to Section 3.3 is subject to applicable License Fee for necessary
+            Distribution Licenses;
+    (ii)    Development License under Section 3.1 is limited to a maximum of
+            three (3) Designated Users; and
+    (iii)   Support is available subject to availability, as judged by The Qt
+            Company at its free and absolute discretion, provided that support
+            will be limited to a maximum of ten (10) tickets during the Trial
+            Term.
+
+Upon expiry of the Trial Term:
+    (a)     This Appendix 4 is terminated, Trial Term Modifications cease to
+            remain in force, Licensee's Development Licenses shall be
+            automatically converted into licenses subject to a License Fee (in
+            the amount specified in the quote or in Appendix 2 and payable with
+            a 30-day payment term) and Licensee's rights and obligations under
+            this Agreement shall continue to remain in force under the standard
+            provisions of the Agreement, unless the Licensee notifies The Qt
+            Company in writing no less than ninety (90) days before such expiry
+            date that Licensee does not agree to such continuance, in which
+            event the Agreement, and all rights of the Licensee thereunder,
+            shall expire; provided however that
+    (b)     in the event the Licensee still qualifies as a Start-up Company,
+            the Licensee has an option ("Option"), instead of what is stated in
+            item a) above, to renew the Trial Term. Renewal is limited to one
+            time, and the total duration of Trial Term is thus 24 months after
+            the effective date. Licensee shall notify The Qt Company in
+            writing, no less than ninety (90) days before the expiry date, if
+            Licensee wish to exercise the Option.
+
+
+APPENDIX 5: NON-COMMERCIAL USE
+The provisions of this Appendix 5 are applicable for non-commercial use of the
+Licensed Software by the Licensee.
+
+For the purpose of this Appendix 5, the following additional definitions
+(replacing the relevant definition of the Agreement, where applicable) shall be
+applicable:
+
+"Demo Units" shall mean (i) hardware development platform, which incorporates
+the Licensed Software along with Licensee's software and/or hardware, and (ii)
+prototype versions of Applications or Devices.
+
+"Designated User(s)" shall mean the employees and students of the Licensee.
+
+"Licensee Products" shall mean Applications and/or Devices.
+
+"Permitted Purpose" shall mean (i) Licensee's internal evaluation and testing
+of Licensed Software, (ii) building Demo Units as well as (iii) educational
+use.
+
+"Term" shall mean a period of twelve (12) months or any such other period as
+may be agreed between the Parties.
+
+For the purpose of this Appendix 5, the following changes shall be agreed with
+respect to relevant Sections of the Agreement:
+    I.      Recital (A) shall be replaced in its entirety to read as follows:
+
+            "(A) Licensee wishes to use the Licensed Software for the Permitted
+            Purpose."
+
+    II.     Section 3.1 shall be replaced in its entirety to read as follows:
+
+            "The Qt Company grants to Licensee a personal, non-exclusive,
+            non-transferable, revocable, royalty-free license, valid for the
+            Term, to use, modify and copy the Licensed Software solely for the
+            Permitted Purpose.
+
+            Licensee may install copies of the Licensed Software on an
+            unlimited number of computers provided that only Designated Users
+            may use the Licensed Software.
+
+            Licensee may demonstrate the Demo Units, provided that such
+            demonstrations must be conducted by Licensee, and the Demo Units
+            must remain in Licensee's possession and under Licensee's control
+            at all times.
+
+            For clarity, this Agreement does not (i) entitle Licensee to use
+            Licensed Software to create Applications or Devices (other than
+            prototypes thereof) or (ii) carry any distribution rights to
+            Licensee, but such rights are subject to and conditional upon
+            conclusion of a separate license agreement with The Qt Company."
+
+    III.    Sections 3.2, 3.3, 8 and 10 shall be deleted.
+
+    IV.     Section 3.4 shall be replaced in its entirety to read as follows:
+
+            "Licensee shall not:
+                - remove or alter any copyright, trademark or other proprietary
+                  rights notice contained in any portion of the Licensed
+                  Software;
+
+                - transfer, publish, sublicense, disclose, display or otherwise
+                  make the Licensed Software available to any third party
+                  (except that Licensee may demonstrate the Demo Units pursuant
+                  to Section 3.1);
+
+                - in any way combine, incorporate or integrate Licensed
+                  Software with, or use Licensed Software for creation of, any
+                  software created with or incorporating Open Source Qt;
+
+            Licensee shall cause all Designated Users who make use of the
+            licenses granted under this Agreement, to be contractually bound to
+            comply with the relevant terms of this Agreement and not to use the
+            Licensed Software beyond the terms hereof. Licensee shall be
+            responsible for any and all actions and omissions of its Designated
+            Users relating to the Licensed Software and use thereof.
+
+            Any use of Licensed Software beyond the provisions of this
+            Agreement is strictly prohibited and requires an additional license
+            from The Qt Company."
+
+    V.      Section 12 shall be replaced in its entirety to read as follows:
+
+            "This Agreement shall enter into force upon due acceptance by both
+            Parties and remain in force for the Term, unless and until
+            terminated pursuant to the terms of Section 12.
+
+            Upon termination of the Agreement, Licensee shall cease using the
+            Licensed Software. All other copies of Licensed Software in the
+            possession or control of Licensee must be erased or destroyed. An
+            officer of Licensee must, upon request, promptly deliver to The Qt
+            Company a written confirmation that this has occurred."
+
+Except for the modifications specified above, this Appendix carries no change
+to the terms of the Agreement which shall remain in full force.
+
+
+
+
+
+========================================================================
+
+OpenUSD License
+
+========================================================================
+
+
+
+                               Modified Apache 2.0 License
+
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor
+      and its affiliates, except as required to comply with Section 4(c) of
+      the License and to reproduce the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+============================================================
+RapidJSON
+============================================================
+
+Tencent is pleased to support the open source community by making RapidJSON available. 
+ 
+Copyright (C) 2015 THL A29 Limited, a Tencent company, and Milo Yip.  All rights reserved.
+
+If you have downloaded a copy of the RapidJSON binary from Tencent, please note that the RapidJSON binary is licensed under the MIT License.
+If you have downloaded a copy of the RapidJSON source code from Tencent, please note that RapidJSON source code is licensed under the MIT License, except for the third-party components listed below which are subject to different license terms.  Your integration of RapidJSON into your own projects may require compliance with the MIT License, as well as the other licenses applicable to the third-party components included within RapidJSON. To avoid the problematic JSON license in your own projects, it's sufficient to exclude the bin/jsonchecker/ directory, as it's the only code under the JSON license.
+A copy of the MIT License is included in this file.
+
+Other dependencies and licenses:
+
+Open Source Software Licensed Under the BSD License:
+--------------------------------------------------------------------
+
+The msinttypes r29 
+Copyright (c) 2006-2013 Alexander Chemeris 
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. 
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+* Neither the name of  copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE REGENTS AND CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Open Source Software Licensed Under the JSON License:
+--------------------------------------------------------------------
+
+json.org 
+Copyright (c) 2002 JSON.org
+All Rights Reserved.
+
+JSON_checker
+Copyright (c) 2002 JSON.org
+All Rights Reserved.
+
+	
+Terms of the JSON License:
+---------------------------------------------------
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+The Software shall be used for Good, not Evil.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+Terms of the MIT License:
+--------------------------------------------------------------------
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+============================================================
+double-conversion
+============================================================
+
+Copyright 2006-2011, the V8 project authors. All rights reserved.
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials provided
+      with the distribution.
+    * Neither the name of Google Inc. nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+============================================================
+OpenEXR/IlmBase/Half
+============================================================
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Copyright (c) 2002, Industrial Light & Magic, a division of Lucas
+// Digital Ltd. LLC
+// 
+// All rights reserved.
+// 
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+// *       Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+// *       Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+// *       Neither the name of Industrial Light & Magic nor the names of
+// its contributors may be used to endorse or promote products derived
+// from this software without specific prior written permission. 
+// 
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+///////////////////////////////////////////////////////////////////////////
+
+============================================================
+libdeflate
+============================================================
+
+Copyright 2016 Eric Biggers
+
+Permission is hereby granted, free of charge, to any person
+obtaining a copy of this software and associated documentation files
+(the "Software"), to deal in the Software without restriction,
+including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software,
+and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+============================================================
+Apple Technical Q&A QA1361 - Detecting the Debugger
+https://developer.apple.com/library/content/qa/qa1361/_index.html
+============================================================
+
+Sample code project: Detecting the Debugger
+Version: 1.0
+
+Abstract: Shows how to determine if code is being run under the debugger.
+
+IMPORTANT:  This Apple software is supplied to you by Apple
+Inc. ("Apple") in consideration of your agreement to the following
+terms, and your use, installation, modification or redistribution of
+this Apple software constitutes acceptance of these terms.  If you do
+not agree with these terms, please do not use, install, modify or
+redistribute this Apple software.
+
+In consideration of your agreement to abide by the following terms, and
+subject to these terms, Apple grants you a personal, non-exclusive
+license, under Apple's copyrights in this original Apple software (the
+"Apple Software"), to use, reproduce, modify and redistribute the Apple
+Software, with or without modifications, in source and/or binary forms;
+provided that if you redistribute the Apple Software in its entirety and
+without modifications, you must retain this notice and the following
+text and disclaimers in all such redistributions of the Apple Software.
+Neither the name, trademarks, service marks or logos of Apple Inc. may
+be used to endorse or promote products derived from the Apple Software
+without specific prior written permission from Apple.  Except as
+expressly stated in this notice, no other rights or licenses, express or
+implied, are granted by Apple herein, including but not limited to any
+patent rights that may be infringed by your derivative works or by other
+works in which the Apple Software may be incorporated.
+ 
+The Apple Software is provided by Apple on an "AS IS" basis.  APPLE
+MAKES NO WARRANTIES, EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION
+THE IMPLIED WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE, REGARDING THE APPLE SOFTWARE OR ITS USE AND
+OPERATION ALONE OR IN COMBINATION WITH YOUR PRODUCTS.
+ 
+IN NO EVENT SHALL APPLE BE LIABLE FOR ANY SPECIAL, INDIRECT, INCIDENTAL
+OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+INTERRUPTION) ARISING IN ANY WAY OUT OF THE USE, REPRODUCTION,
+MODIFICATION AND/OR DISTRIBUTION OF THE APPLE SOFTWARE, HOWEVER CAUSED
+AND WHETHER UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE),
+STRICT LIABILITY OR OTHERWISE, EVEN IF APPLE HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
+
+============================================================
+LZ4
+============================================================
+
+LZ4 - Fast LZ compression algorithm
+Copyright (C) 2011-present, Yann Collet.
+
+BSD 2-Clause License (http://www.opensource.org/licenses/bsd-license.php)
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are
+met:
+
+    * Redistributions of source code must retain the above copyright
+notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above
+copyright notice, this list of conditions and the following disclaimer
+in the documentation and/or other materials provided with the
+distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+You can contact the author at :
+ - LZ4 homepage : http://www.lz4.org
+ - LZ4 source repository : https://github.com/lz4/lz4
+
+============================================================
+stb
+============================================================
+
+stb_image - v2.19 - public domain image loader - http://nothings.org/stb
+                                  no warranty implied; use at your own risk
+
+stb_image_resize - v0.95 - public domain image resizing
+   by Jorge L Rodriguez (@VinoBS) - 2014
+      http://github.com/nothings/stb
+
+stb_image_write - v1.09 - public domain - http://nothings.org/stb/stb_image_write.h
+   writes out PNG/BMP/TGA/JPEG/HDR images to C stdio - Sean Barrett 2010-2015
+                                        no warranty implied; use at your own risk
+
+ALTERNATIVE B - Public Domain (www.unlicense.org)                               
+This is free and unencumbered software released into the public domain.         
+Anyone is free to copy, modify, publish, use, compile, sell, or distribute this 
+software, either in source code form or as a compiled binary, for any purpose,  
+commercial or non-commercial, and by any means.                                 
+In jurisdictions that recognize copyright laws, the author or authors of this   
+software dedicate any and all copyright interest in the software to the public  
+domain. We make this dedication for the benefit of the public at large and to   
+the detriment of our heirs and successors. We intend this dedication to be an   
+overt act of relinquishment in perpetuity of all present and future rights to   
+this software under copyright law.                                              
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR          
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,        
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE         
+AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN          
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION    
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                 
+
+============================================================
+pugixml
+============================================================
+
+MIT License
+
+Copyright (c) 2006-2019 Arseny Kapoulkine
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+============================================================
+Vulkan C++ examples and demos (dome light texture filtering)
+============================================================
+
+The MIT License (MIT)
+
+Copyright (c) 2016 Sascha Willems
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+============================================================
+pbrt (Hammersley Low-Discrepancy Sampling Sequence)
+============================================================
+
+Copyright (c) 1998-2015, Matt Pharr, Greg Humphreys, and Wenzel Jakob.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+============================================================
+Draco
+============================================================
+USD bundles Draco, which is available under the Apache 2.0 license. For details,
+see https://github.com/google/draco/blob/master/README.md.
+
+
+============================================================
+Roboto Fonts
+============================================================
+USD bundles Roboto fonts, which is available under the Apache 2.0 license. 
+For details, see https://fonts.google.com/specimen/Roboto#license
+
+
+============================================================
+Roboto Mono Fonts
+============================================================
+USD bundles Roboto Mono fonts, which is available under the Apache 2.0 license. 
+For details, see https://fonts.google.com/specimen/Roboto+Mono#license
+
+
+============================================================
+Vulkan Memory Allocator
+============================================================
+Copyright (c) 2017-2020 Advanced Micro Devices, Inc. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+
+============================================================
+Spirv Reflect
+============================================================
+Copyright 2017-2018 Google Inc.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+
+============================================================
+khrplatform.h
+============================================================
+Copyright (c) 2008-2018 The Khronos Group Inc.
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and/or associated documentation files (the
+"Materials"), to deal in the Materials without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Materials, and to
+permit persons to whom the Materials are furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Materials.
+
+THE MATERIALS ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+MATERIALS OR THE USE OR OTHER DEALINGS IN THE MATERIALS.
+
+
+============================================================
+surfgrad-bump-standalone-demo
+============================================================
+MIT License
+
+Copyright (c) 2020 mmikk
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+================================================================
+Tessil robin-map
+================================================================
+MIT License
+
+Copyright (c) 2017 Thibaut Goetghebuer-Planchon <tessil@gmx.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+=====
+CLI11
+=====
+
+CLI11 2.3.1 Copyright (c) 2017-2022 University of Cincinnati, developed by Henry
+Schreiner under NSF AWARD 1414736. All rights reserved.
+
+Redistribution and use in source and binary forms of CLI11, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+3. Neither the name of the copyright holder nor the names of its contributors
+   may be used to endorse or promote products derived from this software without
+   specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+================================================================
+The Art of C++ : PEGTL (Parsing Expression Grammar Template Library)
+================================================================
+
+The MIT License (MIT)
+
+Copyright (c) 2007-2020 Dr. Colin Hirsch and Daniel Frey
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================
+invoke.hpp
+================================================================
+
+MIT License
+
+Copyright (C) 2018-2023, by Matvey Cherevko (blackmatov@gmail.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+================================================================
+Doxygen Awesome
+================================================================
+
+MIT License
+
+Copyright (c) 2021 - 2023 jothepro
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+
+
+
+
+========================================================================
+
+OpenVDB License
+
+========================================================================
+
+
+Mozilla Public License Version 2.0
+==================================
+
+1. Definitions
+--------------
+
+1.1. "Contributor"
+    means each individual or legal entity that creates, contributes to
+    the creation of, or owns Covered Software.
+
+1.2. "Contributor Version"
+    means the combination of the Contributions of others (if any) used
+    by a Contributor and that particular Contributor's Contribution.
+
+1.3. "Contribution"
+    means Covered Software of a particular Contributor.
+
+1.4. "Covered Software"
+    means Source Code Form to which the initial Contributor has attached
+    the notice in Exhibit A, the Executable Form of such Source Code
+    Form, and Modifications of such Source Code Form, in each case
+    including portions thereof.
+
+1.5. "Incompatible With Secondary Licenses"
+    means
+
+    (a) that the initial Contributor has attached the notice described
+        in Exhibit B to the Covered Software; or
+
+    (b) that the Covered Software was made available under the terms of
+        version 1.1 or earlier of the License, but not also under the
+        terms of a Secondary License.
+
+1.6. "Executable Form"
+    means any form of the work other than Source Code Form.
+
+1.7. "Larger Work"
+    means a work that combines Covered Software with other material, in
+    a separate file or files, that is not Covered Software.
+
+1.8. "License"
+    means this document.
+
+1.9. "Licensable"
+    means having the right to grant, to the maximum extent possible,
+    whether at the time of the initial grant or subsequently, any and
+    all of the rights conveyed by this License.
+
+1.10. "Modifications"
+    means any of the following:
+
+    (a) any file in Source Code Form that results from an addition to,
+        deletion from, or modification of the contents of Covered
+        Software; or
+
+    (b) any new file in Source Code Form that contains any Covered
+        Software.
+
+1.11. "Patent Claims" of a Contributor
+    means any patent claim(s), including without limitation, method,
+    process, and apparatus claims, in any patent Licensable by such
+    Contributor that would be infringed, but for the grant of the
+    License, by the making, using, selling, offering for sale, having
+    made, import, or transfer of either its Contributions or its
+    Contributor Version.
+
+1.12. "Secondary License"
+    means either the GNU General Public License, Version 2.0, the GNU
+    Lesser General Public License, Version 2.1, the GNU Affero General
+    Public License, Version 3.0, or any later versions of those
+    licenses.
+
+1.13. "Source Code Form"
+    means the form of the work preferred for making modifications.
+
+1.14. "You" (or "Your")
+    means an individual or a legal entity exercising rights under this
+    License. For legal entities, "You" includes any entity that
+    controls, is controlled by, or is under common control with You. For
+    purposes of this definition, "control" means (a) the power, direct
+    or indirect, to cause the direction or management of such entity,
+    whether by contract or otherwise, or (b) ownership of more than
+    fifty percent (50%) of the outstanding shares or beneficial
+    ownership of such entity.
+
+2. License Grants and Conditions
+--------------------------------
+
+2.1. Grants
+
+Each Contributor hereby grants You a world-wide, royalty-free,
+non-exclusive license:
+
+(a) under intellectual property rights (other than patent or trademark)
+    Licensable by such Contributor to use, reproduce, make available,
+    modify, display, perform, distribute, and otherwise exploit its
+    Contributions, either on an unmodified basis, with Modifications, or
+    as part of a Larger Work; and
+
+(b) under Patent Claims of such Contributor to make, use, sell, offer
+    for sale, have made, import, and otherwise transfer either its
+    Contributions or its Contributor Version.
+
+2.2. Effective Date
+
+The licenses granted in Section 2.1 with respect to any Contribution
+become effective for each Contribution on the date the Contributor first
+distributes such Contribution.
+
+2.3. Limitations on Grant Scope
+
+The licenses granted in this Section 2 are the only rights granted under
+this License. No additional rights or licenses will be implied from the
+distribution or licensing of Covered Software under this License.
+Notwithstanding Section 2.1(b) above, no patent license is granted by a
+Contributor:
+
+(a) for any code that a Contributor has removed from Covered Software;
+    or
+
+(b) for infringements caused by: (i) Your and any other third party's
+    modifications of Covered Software, or (ii) the combination of its
+    Contributions with other software (except as part of its Contributor
+    Version); or
+
+(c) under Patent Claims infringed by Covered Software in the absence of
+    its Contributions.
+
+This License does not grant any rights in the trademarks, service marks,
+or logos of any Contributor (except as may be necessary to comply with
+the notice requirements in Section 3.4).
+
+2.4. Subsequent Licenses
+
+No Contributor makes additional grants as a result of Your choice to
+distribute the Covered Software under a subsequent version of this
+License (see Section 10.2) or under the terms of a Secondary License (if
+permitted under the terms of Section 3.3).
+
+2.5. Representation
+
+Each Contributor represents that the Contributor believes its
+Contributions are its original creation(s) or it has sufficient rights
+to grant the rights to its Contributions conveyed by this License.
+
+2.6. Fair Use
+
+This License is not intended to limit any rights You have under
+applicable copyright doctrines of fair use, fair dealing, or other
+equivalents.
+
+2.7. Conditions
+
+Sections 3.1, 3.2, 3.3, and 3.4 are conditions of the licenses granted
+in Section 2.1.
+
+3. Responsibilities
+-------------------
+
+3.1. Distribution of Source Form
+
+All distribution of Covered Software in Source Code Form, including any
+Modifications that You create or to which You contribute, must be under
+the terms of this License. You must inform recipients that the Source
+Code Form of the Covered Software is governed by the terms of this
+License, and how they can obtain a copy of this License. You may not
+attempt to alter or restrict the recipients' rights in the Source Code
+Form.
+
+3.2. Distribution of Executable Form
+
+If You distribute Covered Software in Executable Form then:
+
+(a) such Covered Software must also be made available in Source Code
+    Form, as described in Section 3.1, and You must inform recipients of
+    the Executable Form how they can obtain a copy of such Source Code
+    Form by reasonable means in a timely manner, at a charge no more
+    than the cost of distribution to the recipient; and
+
+(b) You may distribute such Executable Form under the terms of this
+    License, or sublicense it under different terms, provided that the
+    license for the Executable Form does not attempt to limit or alter
+    the recipients' rights in the Source Code Form under this License.
+
+3.3. Distribution of a Larger Work
+
+You may create and distribute a Larger Work under terms of Your choice,
+provided that You also comply with the requirements of this License for
+the Covered Software. If the Larger Work is a combination of Covered
+Software with a work governed by one or more Secondary Licenses, and the
+Covered Software is not Incompatible With Secondary Licenses, this
+License permits You to additionally distribute such Covered Software
+under the terms of such Secondary License(s), so that the recipient of
+the Larger Work may, at their option, further distribute the Covered
+Software under the terms of either this License or such Secondary
+License(s).
+
+3.4. Notices
+
+You may not remove or alter the substance of any license notices
+(including copyright notices, patent notices, disclaimers of warranty,
+or limitations of liability) contained within the Source Code Form of
+the Covered Software, except that You may alter any license notices to
+the extent required to remedy known factual inaccuracies.
+
+3.5. Application of Additional Terms
+
+You may choose to offer, and to charge a fee for, warranty, support,
+indemnity or liability obligations to one or more recipients of Covered
+Software. However, You may do so only on Your own behalf, and not on
+behalf of any Contributor. You must make it absolutely clear that any
+such warranty, support, indemnity, or liability obligation is offered by
+You alone, and You hereby agree to indemnify every Contributor for any
+liability incurred by such Contributor as a result of warranty, support,
+indemnity or liability terms You offer. You may include additional
+disclaimers of warranty and limitations of liability specific to any
+jurisdiction.
+
+4. Inability to Comply Due to Statute or Regulation
+---------------------------------------------------
+
+If it is impossible for You to comply with any of the terms of this
+License with respect to some or all of the Covered Software due to
+statute, judicial order, or regulation then You must: (a) comply with
+the terms of this License to the maximum extent possible; and (b)
+describe the limitations and the code they affect. Such description must
+be placed in a text file included with all distributions of the Covered
+Software under this License. Except to the extent prohibited by statute
+or regulation, such description must be sufficiently detailed for a
+recipient of ordinary skill to be able to understand it.
+
+5. Termination
+--------------
+
+5.1. The rights granted under this License will terminate automatically
+if You fail to comply with any of its terms. However, if You become
+compliant, then the rights granted under this License from a particular
+Contributor are reinstated (a) provisionally, unless and until such
+Contributor explicitly and finally terminates Your grants, and (b) on an
+ongoing basis, if such Contributor fails to notify You of the
+non-compliance by some reasonable means prior to 60 days after You have
+come back into compliance. Moreover, Your grants from a particular
+Contributor are reinstated on an ongoing basis if such Contributor
+notifies You of the non-compliance by some reasonable means, this is the
+first time You have received notice of non-compliance with this License
+from such Contributor, and You become compliant prior to 30 days after
+Your receipt of the notice.
+
+5.2. If You initiate litigation against any entity by asserting a patent
+infringement claim (excluding declaratory judgment actions,
+counter-claims, and cross-claims) alleging that a Contributor Version
+directly or indirectly infringes any patent, then the rights granted to
+You by any and all Contributors for the Covered Software under Section
+2.1 of this License shall terminate.
+
+5.3. In the event of termination under Sections 5.1 or 5.2 above, all
+end user license agreements (excluding distributors and resellers) which
+have been validly granted by You or Your distributors under this License
+prior to termination shall survive termination.
+
+************************************************************************
+*                                                                      *
+*  6. Disclaimer of Warranty                                           *
+*  -------------------------                                           *
+*                                                                      *
+*  Covered Software is provided under this License on an "as is"       *
+*  basis, without warranty of any kind, either expressed, implied, or  *
+*  statutory, including, without limitation, warranties that the       *
+*  Covered Software is free of defects, merchantable, fit for a        *
+*  particular purpose or non-infringing. The entire risk as to the     *
+*  quality and performance of the Covered Software is with You.        *
+*  Should any Covered Software prove defective in any respect, You     *
+*  (not any Contributor) assume the cost of any necessary servicing,   *
+*  repair, or correction. This disclaimer of warranty constitutes an   *
+*  essential part of this License. No use of any Covered Software is   *
+*  authorized under this License except under this disclaimer.         *
+*                                                                      *
+************************************************************************
+
+************************************************************************
+*                                                                      *
+*  7. Limitation of Liability                                          *
+*  --------------------------                                          *
+*                                                                      *
+*  Under no circumstances and under no legal theory, whether tort      *
+*  (including negligence), contract, or otherwise, shall any           *
+*  Contributor, or anyone who distributes Covered Software as          *
+*  permitted above, be liable to You for any direct, indirect,         *
+*  special, incidental, or consequential damages of any character      *
+*  including, without limitation, damages for lost profits, loss of    *
+*  goodwill, work stoppage, computer failure or malfunction, or any    *
+*  and all other commercial damages or losses, even if such party      *
+*  shall have been informed of the possibility of such damages. This   *
+*  limitation of liability shall not apply to liability for death or   *
+*  personal injury resulting from such party's negligence to the       *
+*  extent applicable law prohibits such limitation. Some               *
+*  jurisdictions do not allow the exclusion or limitation of           *
+*  incidental or consequential damages, so this exclusion and          *
+*  limitation may not apply to You.                                    *
+*                                                                      *
+************************************************************************
+
+8. Litigation
+-------------
+
+Any litigation relating to this License may be brought only in the
+courts of a jurisdiction where the defendant maintains its principal
+place of business and such litigation shall be governed by laws of that
+jurisdiction, without reference to its conflict-of-law provisions.
+Nothing in this Section shall prevent a party's ability to bring
+cross-claims or counter-claims.
+
+9. Miscellaneous
+----------------
+
+This License represents the complete agreement concerning the subject
+matter hereof. If any provision of this License is held to be
+unenforceable, such provision shall be reformed only to the extent
+necessary to make it enforceable. Any law or regulation which provides
+that the language of a contract shall be construed against the drafter
+shall not be used to construe this License against a Contributor.
+
+10. Versions of the License
+---------------------------
+
+10.1. New Versions
+
+Mozilla Foundation is the license steward. Except as provided in Section
+10.3, no one other than the license steward has the right to modify or
+publish new versions of this License. Each version will be given a
+distinguishing version number.
+
+10.2. Effect of New Versions
+
+You may distribute the Covered Software under the terms of the version
+of the License under which You originally received the Covered Software,
+or under the terms of any subsequent version published by the license
+steward.
+
+10.3. Modified Versions
+
+If you create software not governed by this License, and you want to
+create a new license for such software, you may create and use a
+modified version of this License if you rename the license and remove
+any references to the name of the license steward (except to note that
+such modified license differs from this License).
+
+10.4. Distributing Source Code Form that is Incompatible With Secondary
+Licenses
+
+If You choose to distribute Source Code Form that is Incompatible With
+Secondary Licenses under the terms of this version of the License, the
+notice described in Exhibit B of this License must be attached.
+
+Exhibit A - Source Code Form License Notice
+-------------------------------------------
+
+  This Source Code Form is subject to the terms of the Mozilla Public
+  License, v. 2.0. If a copy of the MPL was not distributed with this
+  file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+If it is not possible or desirable to put the notice in a particular
+file, then You may include the notice in a location (such as a LICENSE
+file in a relevant directory) where a recipient would be likely to look
+for such a notice.
+
+You may add additional accurate notices of copyright ownership.
+
+Exhibit B - "Incompatible With Secondary Licenses" Notice
+---------------------------------------------------------
+
+  This Source Code Form is "Incompatible With Secondary Licenses", as
+  defined by the Mozilla Public License, v. 2.0.
+
+
+
+========================================================================
+
+Nvidia Omniverse License
+
+========================================================================
+
+
+NVIDIA OMNIVERSE BETA LICENSE AGREEMENT
+This license is a legal agreement between you and NVIDIA Corporation ("NVIDIA") and governs the use of NVIDIA Omniverse - Beta version. By accessing or using Omniverse you are affirming that you have read and agree to this license.
+This license can be accepted only by an adult of legal age of majority in the country in which Omniverse is used. If you are under the legal age of majority, you must ask your parent or legal guardian to consent to this license.
+If you are entering into this license on behalf of a company or other legal entity, you represent that you have the legal authority to bind the entity to this license, in which case “you” will mean the entity you represent.
+If you don’t have the required age or authority to accept this license, or if you don’t accept all the terms and conditions of this license, do not access, download or use Omniverse.
+You agree to use Omniverse only for purposes that are permitted by (a) this license, and (b) any applicable law, regulation or generally accepted practices or guidelines in the relevant jurisdictions.
+1. DEFINITIONS.
+1.1 "Launcher" means a download manager for Omniverse Products.
+1.2 "Nucleus" means a NVIDIA application that enables collaboration services.
+1.3 "Connector" means a NVIDIA plug-in between Omniverse Products and certain third-party content creation tools.
+1.4 "App" means a NVIDIA application, in some cases including tools such as the Kit. An App is typically a user persona specific tool, service or workflow.
+1.5 "Kit" means a NVIDIA toolkit application for the development of applications or services.
+1.6 "Extension" means a NVIDIA plug-in to the Kit that enables new capabilities, workflows, UIs or services.
+1.7 "Content" means a NVIDIA audio asset, 2D asset or 3D asset.
+1.8 “Omniverse Products” means the content that can be downloaded from the Portal such as the Launcher, Nucleus, Connectors, Apps, Kits, Extensions and Content, each as available at NVIDIA’s discretion.
+1.9 “Portal” means the website http://www.nvidia.com/omniverse/ and its subdomains, including (but not limited to) the associated software and services, from which users can obtain Omniverse Products, as available at NVIDIA’s discretion.
+1.10 “Omniverse” means the Portal and Omniverse Products.
+2. LICENSE.
+2.1 GRANT. Subject to the terms of this license, NVIDIA grants you a non-exclusive, non-transferable, non-sublicensable (except as described in this license) license to:
+a. use copies of the Launcher, Nucleus, Connectors, Apps, Kits, Extensions and Content,
+b. configure Omniverse Products using the configuration files provided (as applicable),
+c. modify and create derivative works of source code provided by NVIDIA as part of the Launcher, Nucleus, Connectors, Apps, Kits and Extensions,
+d. modify and create derivative works of the Content,
+e. distribute those Extensions that are identified as samples (unmodified or as modified by you), subject to the distribution requirements below,
+f. distribute snippets of any Extensions, up to 30 lines of code in length, online in public forums for the sole purpose of discussing the content of the snippet, or distribute such snippets in connection with supporting patches and plug-ins for the Extension or other Omniverse Products, so long as it is not to aggregate, recombine, or reconstruct any larger portion of the Extension, subject to the distribution requirements below, and
+g. distribute extensions or applications that you develop using the Kit and/or Extensions, provided that the Kit itself is not distributed and that Extensions are not distributed except as provided in subsections 2(f) or 2(g),
+h. distribute Content (unmodified or as modified by you) as incorporated into your products or services for the purpose of enhancing your work, subject to the distribution requirements below, but not deploy or distribute the Content on a stand-alone basis, and
+i. distribute user generated content that you develop using Omniverse, such as video, audio, stills, models, 3D assets and screen captures.
+2.2 While the beta versions of Omniverse Products obtained under this license may be used commercially and are not subject to fees if used in compliance with the terms of this license, future versions of Omniverse Products may be subject to other license terms and/or fees.
+3. DISTRIBUTION REQUIREMENTS. These are the distribution requirements for you to exercise the distribution grants described above:
+3.1 For Omniverse Products distributed that contain NVIDIA source code, you shall include the following notice: “This software contains source code provided by NVIDIA Corporation.”
+3.2 For Omniverse Products distributed that are not software, you shall include identification of the creator(s) of the Omniverse Products in any reasonable manner.
+3.3 The terms under which you distribute Omniverse Products must be at least as protective as the terms of this license (including, but not limited to, terms relating to the license grant, license restrictions and protection of NVIDIA’s intellectual property rights).
+4. AUTHORIZED USERS. You may allow employees and contractors of your entity or of your subsidiary(ies) to access and use Omniverse from your secure network to perform work on your behalf. If you are an academic institution you may allow users enrolled or employed by the academic institution to access and use the Omniverse from your secure network. You are responsible for the compliance with the terms of this license by your authorized users.
+5. LIMITATIONS. Your license to use Omniverse is restricted as follows:
+5.1 You shall use Omniverse exclusively for authorized and legal purposes, consistent with all applicable laws, regulations and the rights of others.
+5.2 You may not reverse engineer, decompile or disassemble, or remove copyright or other proprietary notices from any portion of the Omniverse Products or copies of the Omniverse Products.
+5.3 Except as expressly provided in this license, you may not copy, sell, rent, sublicense, transfer, distribute, modify or create derivative works of any portion of Omniverse, including (without limitation) in any publicly accessible software repositories.
+5.4 You may not indicate that a product or service developed with Omniverse is sponsored or endorsed by NVIDIA.
+5.5 You may not bypass, disable, or circumvent any technical limitations, encryption, security, digital rights management or authentication mechanism in Omniverse.
+5.6 You may not misuse, disrupt or exploit NVIDIA servers for any unauthorized use, or try to access areas not intended for users, or upload to NVIDIA servers any malware (such as viruses, drop dead device, worm, trojan horse, trap, back door or other software routine of such nature), or use NVIDIA servers for any form of excessive automated bulk activity, or to relay any other form of unsolicited advertising or solicitation.
+5.7 You may not use the Omniverse Products in any manner that would cause them to become subject to an open source software or shareware license. As examples, licenses that require as a condition of use, modification, and/or distribution that the Omniverse Products be (i) disclosed or distributed in source code form; (ii) licensed for the purpose of making derivative works; or (iii) redistributable at no charge.
+5.8 Unless you have an agreement with NVIDIA for this purpose, you may not use the Omniverse Products with any system or application where the use or failure of the system or application can reasonably be expected to threaten or result in personal injury, death, or catastrophic loss. Examples include use in avionics, navigation, military, medical, life support or other life critical applications. NVIDIA does not design, test or manufacture the Omniverse Products for these critical uses and NVIDIA shall not be liable to you or any third party, in whole or in part, for any claims or damages arising from such uses.
+5.9 You agree to defend, indemnify and hold harmless NVIDIA and its affiliates, and their respective employees, contractors, agents, officers and directors, from and against any and all claims, damages, obligations, losses, liabilities, costs or debt, fines, restitutions and expenses (including but not limited to attorney’s fees and costs incident to establishing the right of indemnification) arising out of or related to your use of Omniverse outside of the scope of this license, or not in compliance with its terms.
+6. UPDATES. NVIDIA will at its sole discretion update the Portal, including Omniverse Products that are available
+from the Portal. NVIDIA and you may consent to update over the air your version of the Launcher. NVIDIA may, at its option, make available patches, workarounds or other updates to Omniverse Products, and they are governed by this license unless provided with separate governing terms.
+7. LOG-IN INFORMATION. You are responsible for maintaining your NVIDIA Account log-in information secure for your use only, and for the activities under your account. You agree to notify NVIDIA of any known unauthorized use of your NVIDIA account.
+8. PRE-RELEASE VERSIONS. The Portal and/or Omniverse Products identified as alpha, beta, preview, early access or otherwise as pre-release may not be fully functional, may contain errors or design flaws, and may have reduced or different security, privacy, availability, and reliability standards relative to commercial versions of NVIDIA offerings. You may use a pre-release Omniverse offering at your own risk, understanding that such versions are not intended for use in business-critical systems. NVIDIA may choose not to make available a commercial version of any pre-release Omniverse offering. NVIDIA may also choose to abandon development and terminate the availability of a pre-release Omniverse offering at any time without liability.
+9. THIRD-PARTY COMPONENTS. Omniverse may include third-party components with separate legal notices or terms as may be described in proprietary notices accompanying the Omniverse item. If and to the extent there is a conflict between the terms in this license and the third-party license terms, the third-party terms control only to the extent necessary to resolve the conflict.
+To obtain source code for software provided under licenses that require redistribution of source code, including the GNU General Public License (GPL) and GNU Lesser General Public License (LGPL), contact oss-requests@nvidia.com. This offer is valid for a period of three (3) years from the date of the distribution of this product by NVIDIA CORPORATION.
+10. OWNERSHIP. NVIDIA reserves all rights, title and interest in and to Omniverse not expressly granted to you under this license. NVIDIA and its suppliers hold all rights, title and interest in and to Omniverse, including their respective intellectual property rights. Omniverse is copyrighted and protected by the laws of the United States and other countries, and international treaty provisions.
+11. FEEDBACK. You may, but are not obligated to, provide to NVIDIA suggestions, fixes, modifications, feature requests or other feedback regarding Omniverse (“Feedback”). Feedback, even if designated as confidential by you, shall not create any confidentiality obligation for NVIDIA. NVIDIA and its designees have a perpetual, non-exclusive, worldwide, irrevocable license to use, reproduce, publicly display, modify, create derivative works of, license, sublicense, and otherwise distribute and exploit Feedback as NVIDIA sees fit without payment and without obligation or restriction of any kind on account of intellectual property rights or otherwise.
+12. DATA COLLECTION.
+You hereby acknowledge that the Omniverse software may access and collect data in order to: (a) deliver content or service through Omniverse; and (b) improve NVIDIA products and services. Information collected by the Omniverse software may include: (i) operating system; (ii) installed applications; (iii) usage data such as session duration and user UI interaction; and (iv) diagnostic data, including crash reports.
+Omniverse may contain links to websites and services. NVIDIA encourages you to review the privacy statements on those sites and services that you choose to visit so that you can understand how they may collect, use and share your data. NVIDIA is not responsible for the privacy statements or practices of sites and services controlled
+by other companies or organizations.
+You should review the NVIDIA Privacy Policy, located at https://www.nvidia.com/en-us/about-nvidia/privacy-policy/, which explains NVIDIA’s policy for collecting and using data.
+13. NO WARRANTIES. OMNIVERSE IS PROVIDED AS-IS. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW NVIDIA AND ITS AFFILIATES EXPRESSLY DISCLAIM ALL WARRANTIES OF ANY KIND OR NATURE, WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF MERCHANTABILITY, NON-INFRINGEMENT, OR FITNESS FOR A PARTICULAR PURPOSE. NVIDIA DOES NOT WARRANT THAT OMNIVERSE WILL MEET YOUR REQUIREMENTS OR THAT THE OPERATION THEREOF WILL BE UNINTERRUPTED OR ERROR-FREE, OR THAT ALL ERRORS WILL BE CORRECTED. NVIDIA does not warrant or assume responsibility for the accuracy or completeness of any information, text, graphics, links or other items contained in Omniverse.
+14. LIMITATIONS OF LIABILITY. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW NVIDIA AND ITS AFFILIATES SHALL NOT BE LIABLE FOR ANY SPECIAL, INCIDENTAL, PUNITIVE OR CONSEQUENTIAL DAMAGES, OR FOR ANY LOST PROFITS, PROJECT DELAYS, LOSS OF USE, LOSS OF DATA OR LOSS OF GOODWILL, OR THE COSTS OF PROCURING SUBSTITUTE PRODUCTS, ARISING OUT OF OR IN CONNECTION WITH THIS LICENSE OR THE USE OR PERFORMANCE OF OMNIVERSE, WHETHER SUCH LIABILITY ARISES FROM ANY CLAIM BASED UPON BREACH OF CONTRACT, BREACH OF WARRANTY, TORT (INCLUDING NEGLIGENCE), PRODUCT LIABILITY OR ANY OTHER CAUSE OF ACTION OR THEORY OF LIABILITY, EVEN IF NVIDIA HAS PREVIOUSLY BEEN ADVISED OF, OR COULD REASONABLY HAVE FORESEEN, THE POSSIBILITY OF SUCH DAMAGES. IN NO EVENT WILL NVIDIA’S AND ITS AFFILIATES TOTAL CUMULATIVE LIABILITY UNDER OR ARISING OUT OF THIS LICENSE EXCEED US$10.00. THE NATURE OF THE LIABILITY OR THE NUMBER OF CLAIMS OR SUITS SHALL NOT ENLARGE OR EXTEND THIS LIMIT. The disclaimers, exclusions and limitations of liability set forth in this license form an essential basis of the bargain between the parties, and, absent any such disclaimers, exclusions or limitations of liability, the provisions of the license, including, without limitation, the economic terms, would be substantially different.
+15. TERMINATION. Your rights under this license will terminate automatically without notice from NVIDIA if you fail to comply with any term and condition of this license or if you commence or participate in any legal proceeding against NVIDIA with respect to Omniverse. NVIDIA may terminate this license in whole or in part with advance written notice to you, if NVIDIA decides to no longer provide Omniverse in a country or, in NVIDIA’s sole discretion, the continued use of it is no longer commercially viable. Upon any termination of this license, you agree to promptly discontinue use of affected Omniverse items and destroy all copies of such items in your possession or control. Your prior distributions of Omniverse items in accordance with this license are not affected by the termination of this license. All provisions of this license will survive termination, except for the license granted to you.
+16. APPLICABLE LAW. This license will be governed in all respects by the laws of the United States and of the State of Delaware, without regard to the conflicts of laws principles. The United Nations Convention on Contracts for the International Sale of Goods is specifically disclaimed. You agree to all terms of this license in the English language. The state or federal courts residing in Santa Clara County, California shall have exclusive jurisdiction over any dispute or claim arising out of this license. Notwithstanding this, you agree that NVIDIA shall still be allowed to apply for injunctive remedies or urgent legal relief in any jurisdiction.
+17. NO ASSIGNMENT. This license and your rights and obligations thereunder may not be assigned by you by any means or operation of law without NVIDIA’s permission. Any attempted assignment not approved by NVIDIA in writing shall be void and of no effect. NVIDIA may assign, delegate or transfer this license and its rights and obligations, and if to a non-affiliate you will be notified.
+18. EXPORT. Omniverse is subject to United States export laws and regulations. You agree to comply with all applicable U.S. and international export laws, including the Export Administration Regulations (EAR) administered by the U.S. Department of Commerce and economic sanctions administered by the U.S. Department of Treasury’s Office of Foreign Assets Control (OFAC). These laws include restrictions on destinations, end-users and end-use. By accepting this license, you confirm that you are not currently residing in a country or region currently embargoed by the U.S. and that you are not otherwise prohibited from assessing or using Omniverse.
+19. GOVERNMENT USE. Omniverse is, and shall be treated as being, “Commercial Items” as that term is defined at 48 CFR § 2.101, consisting of “commercial computer software” and “commercial computer software documentation”, respectively, as such terms are used in, respectively, 48 CFR § 12.212 and 48 CFR §§ 227.7202 & 252.227-7014(a)(1). Use, duplication or disclosure by the U.S. Government or a U.S. Government subcontractor is subject to the restrictions in this license pursuant to 48 CFR § 12.212 or 48 CFR § 227.7202. In no event shall the US Government user acquire rights in Omniverse beyond those specified in 48 C.F.R. 52.227-19(b)(1)-(2).
+20. NOTICES. Please direct your legal notices or other correspondence to NVIDIA Corporation, 2788 San Tomas Expressway, Santa Clara, California 95051, United States of America, Attention: Legal Department. If NVIDIA needs to contact you about Omniverse, you consent to receive the notices by email or through Omniverse. You agree that any such notices that NVIDIA sends you electronically will satisfy any legal communication requirements.
+21. ENTIRE AGREEMENT. This license is the final, complete and exclusive agreement between the parties relating to the subject matter of this license and supersedes all prior or contemporaneous understandings and agreements relating to this subject matter, whether oral or written. If any court of competent jurisdiction determines that any provision of this license is illegal, invalid or unenforceable, the remaining provisions will remain in full force and effect. Any amendment or waiver under this license shall be in writing and signed by representatives of both parties.
+22. CHANGES TO THE LICENSE. NVIDIA may make changes to this license from time to time. NVIDIA will publish the new license at https://omniverse.nvidia.com/license/. Updated versions of the NVIDIA privacy policy and NVIDIA account terms will be posted on the applicable NVIDIA website. The updated license terms will be effective when published. Please review the Omniverse license on a regular basis. You understand and agree that your express acceptance of the updated license or your use of Omniverse after the date of publication shall constitute your agreement to the updated Omniverse license. If you do not agree with the terms of the updated license, you must stop using the Portal and stop obtaining Omniverse Products.
+23. LICENSING. If the distribution terms in this license are not suitable for your organization, or for any questions regarding this license, please contact NVIDIA at omniverse-license-questions@nvidia.com. (v. December 7, 2020)

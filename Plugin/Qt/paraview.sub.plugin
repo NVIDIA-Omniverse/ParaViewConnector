@@ -1,0 +1,6 @@
+NAME
+  OmniverseConnectorQt
+DESCRIPTION
+  Qt-dependent part of Omniverse Connector
+REQUIRES_MODULES
+  OmniverseConnector::vtkOmniverseConnector

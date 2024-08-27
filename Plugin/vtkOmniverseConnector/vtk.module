@@ -1,0 +1,8 @@
+NAME
+  OmniverseConnector::vtkOmniverseConnector
+LIBRARY_NAME
+  vtkOmniverseConnector
+DEPENDS
+  VTK::RenderingVolume
+  VTK::RenderingVolumeOpenGL2
+  VTK::IOExport

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg1256"
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   sodipodi:docname="Minus.svg"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1260" />
+  <sodipodi:namedview
+     id="namedview1258"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="10"
+     inkscape:cx="8.05"
+     inkscape:cy="8"
+     inkscape:window-width="1350"
+     inkscape:window-height="1205"
+     inkscape:window-x="3152"
+     inkscape:window-y="121"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="g1262" />
+  <g
+     inkscape:groupmode="layer"
+     inkscape:label="Image"
+     id="g1262">
+    <path
+       style="fill:#464645"
+       d="m 1.1,8.1 v -2 h 7 7 v 2 2 h -7 -7 z"
+       id="path1268" />
+  </g>
+</svg>

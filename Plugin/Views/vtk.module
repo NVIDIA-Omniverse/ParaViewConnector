@@ -1,0 +1,16 @@
+NAME
+  OmniverseConnector::OmniConnectViews
+LIBRARY_NAME
+  OmniConnectViews
+DEPENDS
+  ParaView::RemotingCore
+  ParaView::RemotingServerManager
+  ParaView::RemotingViews
+  ParaView::RemotingSettings
+  VTK::CommonCore
+  OmniverseConnector::vtkOmniverseConnector
+PRIVATE_DEPENDS
+  VTK::FiltersCore
+  VTK::FiltersParallel
+  VTK::FiltersSources
+  VTK::ParallelCore
