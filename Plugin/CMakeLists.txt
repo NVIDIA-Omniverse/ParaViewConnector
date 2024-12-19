@@ -1,3 +1,5 @@
+set(PARAVIEW_VTK_OMNIVERSE_CONNECTOR_BUILD True)
+
 paraview_add_plugin(OmniverseConnector
   REQUIRED_ON_CLIENT
   REQUIRED_ON_SERVER

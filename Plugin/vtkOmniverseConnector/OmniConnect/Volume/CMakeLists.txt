@@ -1,29 +1,5 @@
 message( "-------------------- Begin OmniConnectVolume CmakeLists.txt ----------------------------------------")
 
-# FindBlosc.cmake is broken on windows for static dependencies
-macro(fix_blosc_dependency)
-  if(WIN32 AND BLOSC_USE_STATIC_LIBS)
-    find_package(Blosc REQUIRED) # make sure the package has been imported
-
-    list(APPEND PROP_NAME_LIST IMPORTED_LOCATION IMPORTED_LOCATION_RELEASE IMPORTED_LOCATION_DEBUG)
-
-    foreach (propname ${PROP_NAME_LIST})
-        get_property(BLOSC_imploc
-          TARGET Blosc::blosc
-          PROPERTY ${propname})
-
-        get_filename_component(BLOSC_imploc_dir ${BLOSC_imploc} DIRECTORY)
-        get_filename_component(BLOSC_imploc_name ${BLOSC_imploc} NAME)
-        set(BLOSC_imploc "${BLOSC_imploc_dir}/lib${BLOSC_imploc_name}")
-        message(STATUS "CHANGED BLOSC LIBRARY TO: ${BLOSC_imploc} FOR PROPERTY ${propname}")
-
-        set_property(TARGET Blosc::blosc
-          PROPERTY ${propname} ${BLOSC_imploc})
-    endforeach(propname)
-
-  endif()
-endmacro()
-
 # Boost's iostreams cmake config file tacks on generic z and lzma dep names
 macro(fix_boost_dependency)
   if(NOT WIN32 AND BOOST_USE_STATIC_LIBS)
@@ -58,10 +34,6 @@ endmacro()
 project(OmniConnect_Volume)
 add_library(${PROJECT_NAME} SHARED)
 
-if(NOT CMAKE_BUILD_TYPE) # Otherwise IlmBase::Half does not find debug/release libraries
-  message(FATAL_ERROR "A CMAKE_BUILD_TYPE has to be chosen for correct dependency resolution of OmniConnect_Volume")
-endif()
-
 option(OMNICONNECT_USE_OPENVDB "Enable OpenVDB support for USD device" OFF)
 
 # In case there is no openvdb support, simply compile a stub
@@ -73,7 +45,8 @@ target_sources(${PROJECT_NAME}
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+    $<INSTALL_INTERFACE:include>
 )
 
 target_link_libraries(${PROJECT_NAME}
@@ -86,6 +59,10 @@ target_link_libraries(${PROJECT_NAME}
 ###########
 
 if(${OMNICONNECT_USE_OPENVDB})
+
+  if(NOT CMAKE_BUILD_TYPE) # Otherwise IlmBase::Half does not find debug/release libraries
+    message(FATAL_ERROR "A CMAKE_BUILD_TYPE has to be chosen for correct dependency resolution of OmniConnect_Volume")
+  endif()
 
   # OpenVDB install dir
   
@@ -147,7 +124,6 @@ if(${OMNICONNECT_USE_OPENVDB})
     set(Boost_COMPILER "vc141")
   endif()
 
-  #fix_blosc_dependency()
   fix_boost_dependency()
 
   find_package(OpenVDB REQUIRED)
@@ -175,20 +151,25 @@ if(${OMNICONNECT_USE_OPENVDB})
     target_link_directories(${PROJECT_NAME}
       PRIVATE ${Tbb_LIBRARY_DIRS})
 
-    # Windows-specific OpenVDB settings
-    set_property(TARGET ${PROJECT_NAME} 
-      PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/OmniConnectVolumeWriter.cxx PROPERTIES COMPILE_FLAGS /bigobj)
   else()
-    target_compile_definitions(${PROJECT_NAME} PRIVATE
-      _GLIBCXX_USE_CXX11_ABI=0 )
   endif()
 
 endif() # OMNICONNECT_USE_OPENVDB
 
+if(WIN32)
+  set_property(TARGET ${PROJECT_NAME}
+    PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+else()
+  if(NOT ${USD_DEVICE_USE_CXX11_ABI})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+      _GLIBCXX_USE_CXX11_ABI=0 )
+  endif()
+endif()
+
 install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION "${_paraview_build_plugin_directory}"
+    RUNTIME DESTINATION ${OMNICONNECT_RUNTIME_DESTINATION}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
 

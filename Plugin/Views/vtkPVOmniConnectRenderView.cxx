@@ -242,7 +242,7 @@ void vtkPVOmniConnectRenderView::Initialize()
   vtkOmniConnectSettings chosenSettings = ExplicitConnectionSettings ? *ExplicitConnectionSettings : configSettings;
 
   vtkProcessModule* pm = vtkProcessModule::GetProcessModule();
-  OmniConnectEnvironment omniEnv{ pm->GetPartitionId(), pm->GetNumberOfLocalPartitions() };
+  vtkOmniConnectEnvironment omniEnv{ pm->GetPartitionId(), pm->GetNumberOfLocalPartitions() };
 
   vtkMultiProcessController* controller = vtkMultiProcessController::GetGlobalController();
   if (controller && omniEnv.ProcId > 0)

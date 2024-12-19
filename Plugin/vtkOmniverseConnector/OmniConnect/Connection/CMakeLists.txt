@@ -59,6 +59,8 @@ function(get_omni_dependency
 endfunction()
 
 if(${OMNICONNECT_USE_OMNIVERSE})
+  set(OMNICLIENT_ROOT_DIR "" CACHE PATH "Path to the OmniClient Library")
+  set(OMNIUSDRESOLVER_ROOT_DIR "" CACHE PATH "Path to the Omni Usd Resolver Library")
 
   get_omni_dependency(
     OMNICLIENT_ROOT_DIR
@@ -89,16 +91,20 @@ endif()
 # OmniConnectConnection #
 #####################
 
-target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(${PROJECT_NAME}
+  INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+    $<INSTALL_INTERFACE:include>
+  )
 
 target_sources(${PROJECT_NAME}
   INTERFACE
-    ${CMAKE_CURRENT_LIST_DIR}/OmniConnectConnection.cxx
-    ${CMAKE_CURRENT_LIST_DIR}/OmniConnectConnection.h
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/OmniConnectConnection.cxx>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/OmniConnectConnection.h>
 )
 
 target_link_libraries(${PROJECT_NAME}
-  INTERFACE  
+  INTERFACE
     OmniConnect_Common
 )
 
@@ -110,8 +116,10 @@ if(${OMNICONNECT_USE_OMNIVERSE})
     target_link_directories(${PROJECT_NAME} INTERFACE ${OMNICLIENT_LIB_DIR} ${OMNIUSDRESOLVER_LIB_DIR})
     set(OMNICONNECT_CONNECTION_LINK_LIBS ${OMNICLIENT_SHARED_LIBS} ${OMNIUSDRESOLVER_SHARED_LIBS})
   else()
-    target_compile_definitions(${PROJECT_NAME} INTERFACE
-      _GLIBCXX_USE_CXX11_ABI=0 )
+    if(NOT ${USD_DEVICE_USE_CXX11_ABI})
+      target_compile_definitions(${PROJECT_NAME} INTERFACE
+        _GLIBCXX_USE_CXX11_ABI=0 )
+    endif()
 
     foreach(lib ${OMNICLIENT_SHARED_LIBS})
       find_library(path ${lib} PATHS ${OMNICLIENT_LIB_DIR} NO_DEFAULT_PATH REQUIRED)

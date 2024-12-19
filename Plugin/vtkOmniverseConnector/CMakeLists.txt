@@ -6,11 +6,17 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_subdirectory(OmniConnect)
 
+if(DEFINED PARAVIEW_VTK_OMNIVERSE_CONNECTOR_BUILD)
+  set(OMNIVERSE_CONNECTOR_MODULE_NAME "OmniverseConnector::vtkOmniverseConnector")
+else()
+  set(OMNIVERSE_CONNECTOR_MODULE_NAME "VTK::vtkOmniverseConnector")
+endif()
+
 #################
 # vtkOmniverseConnector #
 #################
 
-vtk_module_add_module(OmniverseConnector::vtkOmniverseConnector
+vtk_module_add_module(${OMNIVERSE_CONNECTOR_MODULE_NAME}
   CLASSES 
     vtkOmniConnectPass
     vtkOmniConnectViewNodeFactory
@@ -47,7 +53,19 @@ vtk_module_add_module(OmniverseConnector::vtkOmniverseConnector
     vtkOmniConnectLogCallback.h
     )
 
-target_link_libraries(vtkOmniverseConnector
+if(DEFINED PARAVIEW_VTK_OMNIVERSE_CONNECTOR_BUILD)
+  vtk_module_definitions(${OMNIVERSE_CONNECTOR_MODULE_NAME}
+    PRIVATE
+      PARAVIEW_VTK_OMNIVERSE_CONNECTOR_BUILD
+    )
+endif()
+
+_vtk_module_install(OmniConnect_Common)
+_vtk_module_install(OmniConnect_Connect)
+_vtk_module_install(OmniConnect_Volume)
+_vtk_module_install(OmniConnect)
+
+vtk_module_link(${OMNIVERSE_CONNECTOR_MODULE_NAME}
   PUBLIC
     OmniConnect
   )

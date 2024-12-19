@@ -38,8 +38,14 @@
 #include "vtkMatrix4x4.h"
 #include <cstring>
 
-const char* vtkOmniConnectGenericPointArrayPrefix = "pv_point_";
-const char* vtkOmniConnectGenericCellArrayPrefix = "pv_cell_";
+#ifdef PARAVIEW_VTK_OMNIVERSE_CONNECTOR_BUILD
+  #define VTK_OMNI_CONNECT_GENERIC_ARRAY_PREFIX "pv_"
+#else
+  #define VTK_OMNI_CONNECT_GENERIC_ARRAY_PREFIX "vtk_"
+#endif
+
+const char* vtkOmniConnectGenericPointArrayPrefix = VTK_OMNI_CONNECT_GENERIC_ARRAY_PREFIX "point_";
+const char* vtkOmniConnectGenericCellArrayPrefix = VTK_OMNI_CONNECT_GENERIC_ARRAY_PREFIX "cell_";
 
 namespace
 {

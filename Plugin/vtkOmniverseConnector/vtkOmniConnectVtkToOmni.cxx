@@ -40,6 +40,12 @@ void GetOmniConnectSettings(const vtkOmniConnectSettings& vtkSettings, OmniConne
   omniConnectSettings.CreateNewOmniSession = vtkSettings.CreateNewOmniSession;
 }
 
+void GetOmniConnectEnvironment(const vtkOmniConnectEnvironment& vtkEnvironment, OmniConnectEnvironment& omniConnectEnvironment)
+{
+  omniConnectEnvironment.NumProcs = vtkEnvironment.NumProcs;
+  omniConnectEnvironment.ProcId = vtkEnvironment.ProcId;
+}
+
 OmniConnectType GetOmniConnectType(vtkDataArray* dataArray)
 {
   static_assert(sizeof(vtkIdType) == sizeof(uint64_t), "vtkIdType is not 64-bit");

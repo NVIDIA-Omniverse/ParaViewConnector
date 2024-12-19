@@ -34,6 +34,7 @@
 
 #include <functional>
 #include <stdint.h>
+#include <ctime>
 
 enum class OmniConnectType
 {
@@ -242,7 +243,7 @@ struct OmniConnectInstancerData
   };
 
   DataMemberId UpdatesToPerform = DataMemberId::ALL;
-  DataMemberId TimeVarying = (DataMemberId)(~((uint32_t)DataMemberId::SHAPEINDICES));
+  DataMemberId TimeVarying = (DataMemberId)(~((uint32_t)DataMemberId::SHAPES));
 
   //Instancer data
   size_t InstancerId = 0; // Id unique to instancers only (sometimes generalized to geomId, but those are not unique)

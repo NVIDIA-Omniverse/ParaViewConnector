@@ -30,7 +30,7 @@
 class vtkRenderer;
 class vtkOpenGLRenderWindow;
 class OmniConnect;
-struct OmniConnectEnvironment;
+struct vtkOmniConnectEnvironment;
 class vtkOmniConnectRendererNodeInternals;
 class vtkOmniConnectImageWriter;
 class vtkInformationStringKey;
@@ -50,7 +50,7 @@ public:
   /**
    * Initialize Omniverse Connector.
    */
-  bool Initialize(const vtkOmniConnectSettings& settings, const OmniConnectEnvironment& environment);
+  bool Initialize(const vtkOmniConnectSettings& settings, const vtkOmniConnectEnvironment& environment);
 
   /**
    * Builds myself.

@@ -36,7 +36,7 @@
 #  define STRNLEN_PORTABLE strnlen_s
 #else
 #  define OmniConnect_DECL
-#  define OmniConnect_INTERFACE
+#  define OmniConnect_INTERFACE __attribute__((visibility("default")))
 #  define STRNLEN_PORTABLE strnlen
 #endif
 

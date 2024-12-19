@@ -57,7 +57,7 @@ class OmniConnectVolumeWriter : public OmniConnectVolumeWriterI
 #endif
 };
 
-extern "C" OmniConnectVolumeWriterI* OmniConnect_Vol_DECL Create_VolumeWriter()
+OmniConnect_Vol_INTERFACE OmniConnectVolumeWriterI* OmniConnect_Vol_DECL Create_VolumeWriter()
 {
   return new OmniConnectVolumeWriter();
 }
@@ -67,6 +67,8 @@ void OmniConnectVolumeWriter::Release()
   delete this;
 }
 
+OmniConnectLogCallback OmniConnectVolumeWriter::LogCallback = nullptr;
+void* OmniConnectVolumeWriter::LogUserData = nullptr;
 
 #ifdef USE_OPENVDB
 
@@ -94,16 +96,13 @@ void OmniConnectVolumeWriter::Release()
   { std::stringstream logStream; \
     logStream << x; \
     std::string logString = logStream.str(); \
-    OmniConnectVolumeWriter::LogCallback( OmniConnectLogLevel::ERR, nullptr, logString.c_str()); } 
+    OmniConnectVolumeWriter::LogCallback( OmniConnectLogLevel::ERR, nullptr, logString.c_str()); }
 
 #define OmniConnectDebugMacro(x) \
   { std::stringstream logStream; \
     logStream << x; \
     std::string logString = logStream.str(); \
-    OmniConnectVolumeWriter::LogCallback( OmniConnectLogLevel::WARNING, nullptr, logString.c_str()); }  
-
-OmniConnectLogCallback OmniConnectVolumeWriter::LogCallback = nullptr;
-void* OmniConnectVolumeWriter::LogUserData = nullptr;
+    OmniConnectVolumeWriter::LogCallback( OmniConnectLogLevel::WARNING, nullptr, logString.c_str()); }
 
 #ifdef FLOAT1_OUTPUT
 using ColorGridOutType = openvdb::FloatGrid;

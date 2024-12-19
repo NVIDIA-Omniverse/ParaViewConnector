@@ -93,7 +93,7 @@ void vtkOmniConnectUsdExporter::WriteData()
       settings.RootLevelFileName.assign(this->FileName+dirEnd, this->FileName+fileNameLen-extLen);
       settings.OutputLocal = true;
 
-      OmniConnectEnvironment omniEnv{ 0, 1 };
+      vtkOmniConnectEnvironment omniEnv{ 0, 1 };
 
       omniConnectPass->Initialize(settings, omniEnv, 0.0);
 

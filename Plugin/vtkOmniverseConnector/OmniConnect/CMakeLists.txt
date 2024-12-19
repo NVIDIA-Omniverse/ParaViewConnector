@@ -8,6 +8,26 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(usdhelpers.cmake)
 
+if(DEFINED PARAVIEW_VTK_OMNIVERSE_CONNECTOR_BUILD)
+  set(OMNICONNECT_RUNTIME_DESTINATION ${_paraview_build_plugin_directory})
+else()
+  set(OMNICONNECT_RUNTIME_DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
+
+##########
+# Python #
+##########
+
+list(PREPEND CMAKE_MODULE_PATH ${Python3_ROOT_DIR})
+find_package(Python3 REQUIRED COMPONENTS Development)
+list(POP_FRONT CMAKE_MODULE_PATH)
+
+set(USD_PYTHON_TARGETS Python3::Module)
+set(PY_SHARED_LIB_DIR "${Python3_RUNTIME_LIBRARY_DIRS}")
+set(USD_PYTHON_LINK_DIRS "${Python3_LIBRARY_DIRS}")
+list(GET Python3_INCLUDE_DIRS 0 Python3_INCLUDE_DIR) # Required for passing pxrConfig.cmake
+list(GET Python3_LIBRARIES 0 Python3_LIBRARY) # Required for passing pxrConfig.cmake
+
 #######
 # USD #
 #######
@@ -34,6 +54,12 @@ else()
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
+  set(USD_ROOT_DIR_CURRENT "${USD_ROOT_DIR_RELEASE}")
+else()
+  set(USD_ROOT_DIR_CURRENT "${USD_ROOT_DIR_DEBUG}")
+endif()
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug")
   if(NOT EXISTS "${USD_ROOT_DIR_DEBUG}/include")
     message(FATAL_ERROR "USD_ROOT_DIR or its /debug subfolder does not have an /include subfolder, so it's not configured correctly at ${USD_ROOT_DIR_DEBUG}")
   endif()
@@ -53,9 +79,19 @@ else()
   endif()
 endif()
 
+if(NOT DEFINED Imath_DIR) # Transitive deps
+  set(Imath_DIR "${USD_ROOT_DIR_CURRENT}/lib64/cmake/Imath")
+  if(NOT EXISTS ${Imath_DIR})
+    set(Imath_DIR "${USD_ROOT_DIR_CURRENT}/lib/cmake/Imath")
+  endif()
+endif()
+if(NOT DEFINED MaterialX_DIR)
+  set(MaterialX_DIR "${USD_ROOT_DIR_CURRENT}/lib/cmake/MaterialX")
+endif()
+
 # Search in config mode
 find_package(pxr REQUIRED
-  PATHS ${USD_ROOT_DIR_RELEASE})
+  PATHS ${USD_ROOT_DIR_CURRENT})
 
 if(NOT (USD_ROOT_DIR_DEBUG STREQUAL USD_ROOT_DIR_RELEASE))
   set(USD_DEBUG_TARGET_CMAKE "${USD_ROOT_DIR_DEBUG}/cmake/pxrTargets-debug.cmake")
@@ -71,17 +107,22 @@ list(APPEND USD_INIT_TARGETS usdGeom usdVol usdShade usdLux usdUtils) # All othe
 flatten_and_cleanup_targets(USD_TARGETS "${USD_INIT_TARGETS}")
 message(STATUS "USD_TARGETS: ${USD_TARGETS}")
 
-##########
-# Python #
-##########
+# Find out whether USD was compiled with or without the CXX11 ABI
+if(NOT WIN32)
+  set(CXX11_COMPILE_OFF OFF)
+  check_file_and_substring(
+    "${USD_ROOT_DIR_CURRENT}/BUILD_INFO/CMakeCache.txt"
+    "-D_GLIBCXX_USE_CXX11_ABI=0"
+    CXX11_COMPILE_OFF)
 
-list(PREPEND CMAKE_MODULE_PATH ${Python_ROOT_DIR})
-find_package(Python REQUIRED COMPONENTS Development)
-list(POP_FRONT CMAKE_MODULE_PATH)
+  if(${CXX11_COMPILE_OFF})
+    set(USE_CXX11_ABI_DEFAULT OFF)
+  else()
+    set(USE_CXX11_ABI_DEFAULT ON)
+  endif()
 
-set(USD_PYTHON_TARGETS Python::Module)
-set(PY_SHARED_LIB_DIR "${Python_RUNTIME_LIBRARY_DIRS}")
-set(USD_PYTHON_LINK_DIRS "${Python_LIBRARY_DIRS}")
+  option(USD_DEVICE_USE_CXX11_ABI "" ${USE_CXX11_ABI_DEFAULT})
+endif()
 
 ##########
 # Boost #
@@ -123,7 +164,8 @@ target_sources(${PROJECT_NAME}
   
 target_include_directories(${PROJECT_NAME} PRIVATE
   PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+    $<INSTALL_INTERFACE:include>
   PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/Mdl
     ${Boost_SEP_INCLUDE_DIR}
@@ -136,8 +178,10 @@ if (WIN32)
   target_link_directories(${PROJECT_NAME} PRIVATE "${USD_PYTHON_LINK_DIRS}" "${USD_LIB_DIR}")
 else()
   set(PLATFORM_LIBS pthread dl stdc++fs)
-  target_compile_definitions(${PROJECT_NAME} PRIVATE _GLIBCXX_USE_CXX11_ABI=0 )
   target_link_libraries(${PROJECT_NAME} PRIVATE general ${PLATFORM_LIBS} )
+  if(NOT ${USD_DEVICE_USE_CXX11_ABI})
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _GLIBCXX_USE_CXX11_ABI=0 )
+  endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
@@ -156,7 +200,7 @@ target_link_libraries(${PROJECT_NAME}
 
 install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION "${_paraview_build_plugin_directory}"
+    RUNTIME DESTINATION ${OMNICONNECT_RUNTIME_DESTINATION}
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   )
 

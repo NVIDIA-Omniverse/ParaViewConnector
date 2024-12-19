@@ -41,6 +41,7 @@ function(flatten_and_cleanup_targets RESULT_TARGETS INIT_TARGETS)
     if((target_processed EQUAL -1) 
       AND NOT (${cur_target} MATCHES ${MATCH_SUFFIX})
       AND NOT (${cur_target} STREQUAL "dl")
+      AND NOT (${cur_target} STREQUAL "m")
       )
       list(APPEND flat_targets ${cur_target})
       
@@ -54,4 +55,19 @@ function(flatten_and_cleanup_targets RESULT_TARGETS INIT_TARGETS)
   endwhile()
 
   set(${RESULT_TARGETS} ${flat_targets} PARENT_SCOPE)
+endfunction()
+
+# Define the function
+function(check_file_and_substring FILE_PATH SUBSTRING OUTPUT_VAR)
+    set(${OUTPUT_VAR} OFF PARENT_SCOPE)
+
+    # Check if the file exists and contains a substring
+    if(EXISTS "${FILE_PATH}")
+        file(READ "${FILE_PATH}" FILE_CONTENTS)
+        string(FIND "${FILE_CONTENTS}" "${SUBSTRING}" SUBSTRING_POSITION)
+
+        if(NOT ${SUBSTRING_POSITION} EQUAL -1)
+            set(${OUTPUT_VAR} ON PARENT_SCOPE)
+        endif()
+    endif()
 endfunction()

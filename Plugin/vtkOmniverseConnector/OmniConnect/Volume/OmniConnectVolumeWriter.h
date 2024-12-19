@@ -35,7 +35,7 @@
 #  endif
 #else
 #    define OmniConnect_Vol_DECL
-#    define OmniConnect_Vol_INTERFACE
+#    define OmniConnect_Vol_INTERFACE __attribute__((visibility("default")))
 #endif
 
 class OmniConnectVolumeWriterI

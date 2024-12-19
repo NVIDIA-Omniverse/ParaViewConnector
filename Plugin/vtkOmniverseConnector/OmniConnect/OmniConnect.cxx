@@ -2735,7 +2735,9 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
   OmniConnectUpdateEvaluator<const OmniConnectInstancerData> updateEval(omniInstancerData);
   TimeEvaluator<OmniConnectInstancerData> timeEval(omniInstancerData, animTimeStep);
 
-  bool simpleSphereInstancer = omniInstancerData.NumShapes == 1 && omniInstancerData.Shapes[0] == OmniConnectInstancerData::SHAPE_SPHERE;
+  bool simpleSphereInstancer = omniInstancerData.NumShapes == 1
+    && omniInstancerData.Shapes[0] == OmniConnectInstancerData::SHAPE_SPHERE
+    && omniInstancerData.ShapeSourceNameSubstr == nullptr;
   bool useGeomPoints = instancerCache.UsesAltUsdPrimType = !Settings.UsePointInstancer && simpleSphereInstancer;
 
   UsdStageRefPtr geomClipStage, geomTopologyStage;

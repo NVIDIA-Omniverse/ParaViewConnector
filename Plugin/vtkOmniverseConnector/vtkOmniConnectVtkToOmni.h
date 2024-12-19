@@ -29,9 +29,12 @@
 
 class vtkDataArray;
 struct vtkOmniConnectSettings;
+struct vtkOmniConnectEnvironment;
 struct OmniConnectSettings;
+struct OmniConnectEnvironment;
 
 void VTKOMNIVERSECONNECTOR_EXPORT GetOmniConnectSettings(const vtkOmniConnectSettings& vtkSettings, OmniConnectSettings& omniConnectSettings);
+void VTKOMNIVERSECONNECTOR_EXPORT GetOmniConnectEnvironment(const vtkOmniConnectEnvironment& vtkEnvironment, OmniConnectEnvironment& omniConnectEnvironment);
 
 OmniConnectType GetOmniConnectType(vtkDataArray* dataArray);
 size_t GetOmniConnectTypeSize(OmniConnectType type);

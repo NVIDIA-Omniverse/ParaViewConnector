@@ -34,20 +34,33 @@
 class vtkOmniConnectViewNodeFactory;
 class vtkOmniConnectRendererNode;
 
+#define OMNI_CONNECT_MEMBER_AND_SETTER(Type, Name)\
+  Type Name;\
+  void Set##Name(const Type& arg) { Name = arg; }
+#define OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(Type, Name, Default)\
+  Type Name = Default;\
+  void Set##Name(const Type& arg) { Name = arg; }
+
 struct VTKOMNIVERSECONNECTOR_EXPORT vtkOmniConnectSettings
 {
-  std::string OmniServer;           // Omniverse server to connect to
-  std::string OmniWorkingDirectory; // Base directory in which the PV session directories are created, containing scene + actor usd files and assets
-  std::string LocalOutputDirectory; // Directory for local output (used in case OutputLocal is enabled)
-  std::string RootLevelFileName;    // When set, a root level USD file will be created of the specified name, that sublayers highest level layer, with the session folder renamed to the same name.
-  bool OutputLocal = true;          // Output to OmniLocalDirectory instead of the Omniverse
-  bool OutputBinary = false;        // Output binary usd files instead of text-based usda
-  OmniConnectAxis UpAxis = OmniConnectAxis::Y;           // Up axis of USD output
-  bool UsePointInstancer = false;   // Either use UsdGeomPointInstancer for point data, or otherwise UsdGeomPoints
-  bool UseStickLines = false;       // Cylinder-based stick output for line geometry (instead of curves)
-  bool UseStickWireframe = false;   // Cylinder-based stick output for triangle wireframes (instead of curves)
-  bool UseMeshVolume = false;       // Output textured UsdGeomMesh with MDL instead of UsdVolVolume with OpenVDBAsset fields
-  bool CreateNewOmniSession = true; // Find a new Omniverse session directory on creation of the connector, or re-use the last opened one
+  OMNI_CONNECT_MEMBER_AND_SETTER(std::string, OmniServer)                  // Omniverse server to connect to
+  OMNI_CONNECT_MEMBER_AND_SETTER(std::string, OmniWorkingDirectory)        // Base directory in which the PV session directories are created, containing scene + actor usd files and assets
+  OMNI_CONNECT_MEMBER_AND_SETTER(std::string, LocalOutputDirectory)        // Directory for local output (used in case OutputLocal is enabled)
+  OMNI_CONNECT_MEMBER_AND_SETTER(std::string, RootLevelFileName)           // When set, a root level USD file will be created of the specified name, that sublayers highest level layer, with the session folder renamed to the same name.
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(bool, OutputLocal, true)          // Output to OmniLocalDirectory instead of the Omniverse
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(bool, OutputBinary, false)        // Output binary usd files instead of text-based usda
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(OmniConnectAxis, UpAxis, OmniConnectAxis::Y)           // Up axis of USD output
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(bool, UsePointInstancer, false)   // Either use UsdGeomPointInstancer for point data, or otherwise UsdGeomPoints
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(bool, UseStickLines, false)       // Cylinder-based stick output for line geometry (instead of curves)
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(bool, UseStickWireframe, false)   // Cylinder-based stick output for triangle wireframes (instead of curves)
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(bool, UseMeshVolume, false)       // Output textured UsdGeomMesh with MDL instead of UsdVolVolume with OpenVDBAsset fields
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(bool, CreateNewOmniSession, true) // Find a new Omniverse session directory on creation of the connector, or re-use the last opened one
+};
+
+struct VTKOMNIVERSECONNECTOR_EXPORT vtkOmniConnectEnvironment
+{
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(int, ProcId, 0)                   // ProcId, >= 0 in case the connector instance is running in a multiprocessor environment
+  OMNI_CONNECT_MEMBER_AND_SETTER_DEFAULT(int, NumProcs, 1)                 // Num of procs
 };
 
 class VTKOMNIVERSECONNECTOR_EXPORT vtkOmniConnectPass : public vtkRenderPass
@@ -60,7 +73,7 @@ public:
   /**
    * Set up the OmniConnect
    */
-  void Initialize(const vtkOmniConnectSettings& settings, const OmniConnectEnvironment& environment, double sceneTime);
+  void Initialize(const vtkOmniConnectSettings& settings, const vtkOmniConnectEnvironment& environment, double sceneTime);
 
   /**
    * Perform rendering according to a render state s.

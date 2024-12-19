@@ -58,7 +58,7 @@ void vtkOmniConnectPass::PrintSelf(ostream& os, vtkIndent indent)
 vtkCxxSetObjectMacro(vtkOmniConnectPass, SceneGraph, vtkOmniConnectRendererNode);
 
 // ----------------------------------------------------------------------------
-void vtkOmniConnectPass::Initialize(const vtkOmniConnectSettings& settings, const OmniConnectEnvironment& environment, double sceneTime)
+void vtkOmniConnectPass::Initialize(const vtkOmniConnectSettings& settings, const vtkOmniConnectEnvironment& environment, double sceneTime)
 {
   this->Settings = settings;
 

@@ -5,12 +5,16 @@ add_library(${PROJECT_NAME} INTERFACE)
 
 target_sources(${PROJECT_NAME}
   INTERFACE
-    ${CMAKE_CURRENT_LIST_DIR}/OmniConnectUtilsInternal.cxx
-    ${CMAKE_CURRENT_LIST_DIR}/OmniConnectUtilsInternal.h
-    ${CMAKE_CURRENT_LIST_DIR}/OmniConnectData.h
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/OmniConnectUtilsInternal.cxx>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/OmniConnectUtilsInternal.h>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/OmniConnectData.h>
 )
 
-target_include_directories(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(${PROJECT_NAME}
+  INTERFACE
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+    $<INSTALL_INTERFACE:include>
+  )
 
 message( "-------------------- End OmniConnectCommon CmakeLists.txt ----------------------------------------")
 

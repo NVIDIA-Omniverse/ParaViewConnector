@@ -101,7 +101,7 @@ int vtkOmniConnectTemporalArrays::RequestData(
     (AllowMeshVertexColors ? TMeshUpdate::COLORS : TMeshUpdate::NONE);
   TInstancerUpdate instancerUpdates = 
     (AllowPointsPositions ? TInstancerUpdate::POINTS : TInstancerUpdate::NONE) |
-    //TInstancerUpdate::SHAPEINDICES | // Updates managed by the polydatamapper as shape type is fixed, never timevarying
+    (AllowPointsPositions ? TInstancerUpdate::SHAPEINDICES : TInstancerUpdate::NONE) | // If number of points can be timevarying, so should this (for varying length of array)
     (AllowPointsIds ? TInstancerUpdate::INSTANCEIDS : TInstancerUpdate::NONE) |
     (AllowPointsScales ? TInstancerUpdate::SCALES : TInstancerUpdate::NONE) |
     (AllowPointsOrientations ? TInstancerUpdate::ORIENTATIONS : TInstancerUpdate::NONE) |

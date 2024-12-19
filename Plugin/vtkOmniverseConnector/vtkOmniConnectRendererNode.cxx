@@ -36,7 +36,11 @@
 
 #include "vtkOpenGLRenderWindow.h"
 #include "vtkOpenGLState.h"
+#if (VTK_MAJOR_VERSION >= 9) && (VTK_MINOR_VERSION >= 4)
+#include "vtk_glad.h"
+#else
 #include "vtk_glew.h"
+#endif
 
 #include <sstream>
 
@@ -153,7 +157,7 @@ void vtkOmniConnectRendererNode::PrintSelf(ostream& os, vtkIndent indent)
 }
 
 //----------------------------------------------------------------------------
-bool vtkOmniConnectRendererNode::Initialize(const vtkOmniConnectSettings& settings, const OmniConnectEnvironment& environment)
+bool vtkOmniConnectRendererNode::Initialize(const vtkOmniConnectSettings& settings, const vtkOmniConnectEnvironment& environment)
 {
   if (this->Connector)
     delete this->Connector;
@@ -164,8 +168,10 @@ bool vtkOmniConnectRendererNode::Initialize(const vtkOmniConnectSettings& settin
   this->UseStickWireframe = settings.UseStickWireframe;
 
   OmniConnectSettings connectSettings;
+  OmniConnectEnvironment connectEnv;
   GetOmniConnectSettings(settings, connectSettings);
-  this->Connector = new OmniConnect(connectSettings, environment, vtkOmniConnectLogCallback::Callback);
+  GetOmniConnectEnvironment(environment, connectEnv);
+  this->Connector = new OmniConnect(connectSettings, connectEnv, vtkOmniConnectLogCallback::Callback);
 
   vtkOmniConnectLogCallback::Callback(OmniConnectLogLevel::STATUS, nullptr, "Initializing Omniverse Connector. \n");
 
