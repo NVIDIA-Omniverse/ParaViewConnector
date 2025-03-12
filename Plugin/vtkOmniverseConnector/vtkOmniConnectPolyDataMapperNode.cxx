@@ -109,6 +109,7 @@ namespace
   //At same time creates a reverse cell index array for obtaining cell quantities for points
   template<typename T>
   void CreateLineIndexBuffer(vtkCellArray *cells,
+    vtkIdType cellOffset,
     std::vector<unsigned int>& indexArray,
     T& reverseArray)
   {
@@ -120,7 +121,7 @@ namespace
       return;
     }
 
-    unsigned int cell_id = 0;
+    unsigned int cell_id = static_cast<unsigned int>(cellOffset);
     for (cells->InitTraversal(); cells->GetNextCell(npts, indices); )
     {
       for (int i = 0; i < npts - 1; ++i)
@@ -142,6 +143,7 @@ namespace
   //back to first.
   template<typename T>
   void CreateTriangleLineIndexBuffer(vtkCellArray *cells,
+    vtkIdType cellOffset,
     std::vector<unsigned int>& indexArray,
     T& reverseArray)
   {
@@ -153,7 +155,7 @@ namespace
       return;
     }
 
-    unsigned int cell_id = 0;
+    unsigned int cell_id = static_cast<unsigned int>(cellOffset);
     for (cells->InitTraversal(); cells->GetNextCell(npts, indices); )
     {
       for (int i = 0; i < npts; ++i)
@@ -169,7 +171,9 @@ namespace
   }
 
   template<typename T>
-  void CreateTriangleIndexBuffer(vtkCellArray* cells, vtkPoints* points,
+  void CreateTriangleIndexBuffer(vtkCellArray* cells,
+    vtkIdType cellOffset,
+    vtkPoints* points,
     std::vector<unsigned int>& indexArray,
     T& reverseArray)
   {
@@ -180,7 +184,7 @@ namespace
     {
       return;
     }
-    unsigned int cell_id = 0;
+    unsigned int cell_id = static_cast<unsigned int>(cellOffset);
     // the following are only used if we have to triangulate a polygon
     // otherwise they just sit at NULL
     vtkPolygon *polygon = NULL;
@@ -315,6 +319,7 @@ namespace
 
   template<typename T>
   void CreateStripIndexBuffer(vtkCellArray *cells,
+    vtkIdType cellOffset,
     std::vector<unsigned int>& indexArray,
     T& reverseArray,
     bool wireframeTriStrips)
@@ -323,7 +328,7 @@ namespace
     {
       return;
     }
-    unsigned int cell_id = 0;
+    unsigned int cell_id = static_cast<unsigned int>(cellOffset);
 
     const vtkIdType *pts = nullptr;
     vtkIdType npts = 0;
@@ -402,6 +407,10 @@ namespace
     prims[2] = poly->GetPolys();
     prims[3] = poly->GetStrips();
 
+    vtkIdType primOffset[4] = {0, prims[0]->GetNumberOfCells(), prims[1]->GetNumberOfCells(), prims[2]->GetNumberOfCells()};
+    primOffset[2] += primOffset[1];
+    primOffset[3] += primOffset[2];
+
     switch (representation)
     {
     case VTK_POINTS:
@@ -422,10 +431,10 @@ namespace
       if (filterPrim == 1)
       {
         if(isSticks == stickLinesEnabled) // Get line data if building sticks with sticks enabled (for lines) or building curves with curves enabled
-          CreateLineIndexBuffer(prims[1], indexArray, indexToCell);
+          CreateLineIndexBuffer(prims[1], primOffset[1], indexArray, indexToCell);
         if (isSticks == stickWireframeEnabled) // Get wireframe data if building sticks with sticks enabled (for wireframe) or building curves with curves enabled
-          CreateTriangleLineIndexBuffer(prims[2], indexArray, indexToCell);
-          CreateStripIndexBuffer(prims[3], indexArray, indexToCell, true);
+          CreateTriangleLineIndexBuffer(prims[2], primOffset[2], indexArray, indexToCell);
+          CreateStripIndexBuffer(prims[3], primOffset[3], indexArray, indexToCell, true);
       }
       break;
     }
@@ -436,12 +445,12 @@ namespace
       if (filterPrim == 1)
       {
         if (isSticks == stickLinesEnabled)
-          CreateLineIndexBuffer(prims[1], indexArray, indexToCell);
+          CreateLineIndexBuffer(prims[1], primOffset[1], indexArray, indexToCell);
       }
       if (filterPrim == 2)
       {
-        CreateTriangleIndexBuffer(prims[2], poly->GetPoints(), indexArray, indexToCell);
-        CreateStripIndexBuffer(prims[3], indexArray, indexToCell, false);
+        CreateTriangleIndexBuffer(prims[2], primOffset[2], poly->GetPoints(), indexArray, indexToCell);
+        CreateStripIndexBuffer(prims[3], primOffset[3], indexArray, indexToCell, false);
       }
       break;
     }

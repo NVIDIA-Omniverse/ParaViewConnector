@@ -367,7 +367,7 @@ void pqOmniConnectSettingsDialog::onOmniLauncherAppInfoRequested(bool success) {
     m_ui.sendToLocalComboBox->addItem("Use Custom");
     m_ui.sendToServerComboBox->addItem("Use Custom");
 
-    QMessageBox::critical(this, "Omniverse: Launcher Not Found", "Unable to find View installation information. Please make sure the Omniverse Launcher is running.", QMessageBox::Ok);
+    //QMessageBox::critical(this, "Omniverse: Launcher Not Found", "Unable to find View installation information. Please make sure the Omniverse Launcher is running.", QMessageBox::Ok);
   }
 
   this->show();
