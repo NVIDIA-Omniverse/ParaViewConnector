@@ -33,6 +33,7 @@
 #include "pqServer.h"
 #include "pqView.h"
 #include "pqActiveObjects.h"
+#include "pqServerManagerObserver.h"
 
 #include "vtkOmniConnectLogCallback.h"
 #include "vtkSMProxySelectionModel.h"
@@ -131,8 +132,13 @@ pqOmniConnectViewsSettingsManager::pqOmniConnectViewsSettingsManager(QObject* pa
   // Listen to connector view's creation and deletion events
   pqApplicationCore* core = pqApplicationCore::instance();
   pqObjectBuilder* builder = core->getObjectBuilder();
-  connect(builder, &pqObjectBuilder::viewCreated, this, &pqOmniConnectViewsSettingsManager::onViewCreated);
-  connect(this, SIGNAL(onConnectEnd(bool)), this, SLOT(connectServerFinished(bool)));
+  QObject::connect(builder, &pqObjectBuilder::viewCreated, this, &pqOmniConnectViewsSettingsManager::onViewCreated);
+  QObject::connect(this, SIGNAL(onConnectEnd(bool)), this, SLOT(connectServerFinished(bool)));
+
+  // Connect to proxyRegistered signal to catch our specific proxy when it becomes available
+  pqServerManagerObserver* observer = core->getServerManagerObserver();
+  QObject::connect(observer, SIGNAL(proxyRegistered(const QString&, const QString&, vtkSMProxy*)),
+                   this, SLOT(onProxyRegistered(const QString&, const QString&, vtkSMProxy*)));
 
   vtkCallbacks.TakeReference(pqOmniConnectViewsSettingsManagerCallbacks::New());
   vtkCallbacks->Initialize(this);
@@ -142,7 +148,7 @@ pqOmniConnectViewsSettingsManager::pqOmniConnectViewsSettingsManager(QObject* pa
   pm->AddObserver(vtkCommand::ConnectionCreatedEvent, vtkCallbacks.Get(), &pqOmniConnectViewsSettingsManagerCallbacks::resetOmniClientState);
   pm->AddObserver(vtkCommand::ConnectionClosedEvent, vtkCallbacks.Get(), &pqOmniConnectViewsSettingsManagerCallbacks::resetConnectionState);
 
-  // Find current connection proxy and initialize invariants
+  // Either the proxies have already been set, or not yet, so just try to reset state now and also allow to wait for onProxyRegistered signal
   vtkCallbacks->resetConnectionState();
   vtkCallbacks->resetOmniClientState();
 }
@@ -156,10 +162,10 @@ QString pqOmniConnectViewsSettingsManager::getActiveViewName()
   // Returns current connector view name. If current view isn't an OV connector view we return null
   pqView* view = pqActiveObjects::instance().activeView();
   if (!view || (view &&!view->getViewProxy())) {
-    return QString::null;
+    return QString();
   }
   QString logName = QString(view->getViewProxy()->GetLogName());
-  return m_viewsSettings.contains(logName) ? logName : QString::null;
+  return m_viewsSettings.contains(logName) ? logName : QString();
 }
 
 bool pqOmniConnectViewsSettingsManager::isOmniViewActive()
@@ -245,7 +251,20 @@ void pqOmniConnectViewsSettingsManager::resetOmniClientState()
 {
   pqServer* server = pqActiveObjects::instance().activeServer();
   vtkSMProxy* connectProxy = server->proxyManager()->GetProxy(vtkPVOmniConnectProxy::OMNICONNECT_GROUP_NAME, vtkPVOmniConnectProxy::OMNICONNECT_PROXY_NAME);
-  m_omniClientEnabled = vtkPVOmniConnectProxy::GetOmniClientEnabled(connectProxy);
+  m_omniClientEnabled = connectProxy ? vtkPVOmniConnectProxy::GetOmniClientEnabled(connectProxy) : false;
+}
+
+void pqOmniConnectViewsSettingsManager::onProxyRegistered(const QString& group, const QString& name, vtkSMProxy* proxy)
+{
+  // Check if this is specifically the OmniverseConnector proxy
+  if (group == QString::fromLatin1(vtkPVOmniConnectProxy::OMNICONNECT_GROUP_NAME) &&
+      name == QString::fromLatin1(vtkPVOmniConnectProxy::OMNICONNECT_PROXY_NAME))
+  {
+    Q_UNUSED(proxy);
+    // The OmniverseConnector proxy is now available
+    vtkCallbacks->resetConnectionState();
+    vtkCallbacks->resetOmniClientState();
+  }
 }
 
 void pqOmniConnectViewsSettingsManager::connectServerFinished(bool success)

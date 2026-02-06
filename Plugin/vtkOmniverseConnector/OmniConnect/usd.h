@@ -40,6 +40,8 @@
 #include <pxr/base/gf/range3f.h>
 #include <pxr/base/gf/quaternion.h>
 #include <pxr/base/gf/rotation.h>
+#include <pxr/base/plug/registry.h>
+#include <pxr/base/plug/plugin.h>
 #include <pxr/usd/usd/attribute.h>
 #include <pxr/usd/usd/notice.h>
 #include <pxr/usd/usd/stage.h>

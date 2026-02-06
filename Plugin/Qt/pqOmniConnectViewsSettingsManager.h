@@ -119,6 +119,7 @@ protected:
   void findConnectorViewSessionInfo(QString& userNameOut, int& sessionNumberOut);
 
 private slots:
+  void onProxyRegistered(const QString& group, const QString& name, vtkSMProxy* proxy);
   void onViewCreated(pqView* view);
   void connectServerFinished(bool success);
 

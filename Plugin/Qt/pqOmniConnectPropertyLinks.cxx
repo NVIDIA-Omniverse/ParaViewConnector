@@ -112,7 +112,7 @@ void pqOmniConnectPropertyLinks::addPropertyLink(QObject* qObject, const char* p
 
 	if (QComboBox* comboBox = qobject_cast<QComboBox*>(qObject)) 
   {
-		m_links.addPropertyLink(qObject, "currentText", SIGNAL(currentIndexChanged(const QString&)), m_proxy, prop);
+		m_links.addPropertyLink(qObject, "currentText", SIGNAL(currentTextChanged(QString)), m_proxy, prop);
     linkedWidget = comboBox;
 	}
 	else if (QLineEdit* lineEdit = qobject_cast<QLineEdit*>(qObject)) 
@@ -122,7 +122,7 @@ void pqOmniConnectPropertyLinks::addPropertyLink(QObject* qObject, const char* p
 	}
   else if (QCheckBox* checkBox = qobject_cast<QCheckBox*>(qObject)) 
   {
-		m_links.addPropertyLink(qObject, "checked", SIGNAL(stateChanged(int)), m_proxy, prop);
+		m_links.addPropertyLink(qObject, "checked", SIGNAL(toggled(bool)), m_proxy, prop);
     linkedWidget = checkBox;
 	}
 

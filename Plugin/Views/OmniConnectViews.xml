@@ -209,7 +209,7 @@
       <IntVectorProperty name="OutputLocal"
           command="SetOutputLocal"
           number_of_elements="1"
-          default_values="0"
+          default_values="1"
           panel_visibility="default">
         <Documentation>
           Output to the Local Output Directory instead of Omniverse when opening an Omniverse Connector renderview.

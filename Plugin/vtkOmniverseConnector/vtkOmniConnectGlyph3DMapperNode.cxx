@@ -37,6 +37,7 @@
 #include "vtkOmniConnectMapperNodeCommon.h"
 #include "vtkOmniConnectRendererNode.h"
 #include "vtkOmniConnectTimeStep.h"
+#include "OmniConnect.h"
 #include "OmniConnectUtilsExternal.h"
 
 //============================================================================
@@ -124,9 +125,10 @@ void vtkOmniConnectGlyph3DMapperNode::GatherCustomPointAttributes(vtkPolyData* p
   vtkOmniConnectGlyph3DMapper* glyphMapper = reinterpret_cast<vtkOmniConnectGlyph3DMapper*>(glm);
 
   vtkOmniConnectRendererNode* rNode = vtkOmniConnectRendererNode::GetRendererNode(this);
+  OmniConnect* connector = rNode->GetOmniConnector();
   vtkOmniConnectTempArrays& tempArrays = rNode->GetTempArrays();
 
-  if(glyphMapper->GetOrient())
+  if(glyphMapper->GetOrient() && connector->GetSettings().UsePointInstancer) // No orientations for UsdGeomPoints, as they do not work the same
   {
     vtkDataArray* orientArray = glyphMapper->GetOrientations(polyData);
     if (orientArray != nullptr && orientArray->GetNumberOfTuples() == omniInstancerData.NumPoints)

@@ -51,12 +51,14 @@
 #include "vtkPolyDataNormals.h"
 #include "vtkPiecewiseFunction.h"
 #include "vtkScalarsToColors.h"
+#include "OmniConnect.h"
 
 #if VTK_MODULE_ENABLE_VTK_RenderingRayTracing
 #include "vtkOSPRayActorNode.h"
 #endif
 
 #include <map>
+#include <unordered_map>
 #include <cstring>
 
 //============================================================================
@@ -915,7 +917,8 @@ namespace
     int curveLength = 0;
     for (size_t i = 0; i < indices.size(); ++i)
     {
-      bool repeatIndex = (i != 0) && indices[i] == indices[i - 1] && (!perCellGenericArrays || tempArrays.IndexToCell[i] == tempArrays.IndexToCell[i-1]); // Repeated if indices and cell (if available) are the same
+      bool repeatIndex = (i != 0) && indices[i] == indices[i - 1] &&
+        ((!perCellGenericArrays && !useCellColors) || tempArrays.IndexToCell[i] == tempArrays.IndexToCell[i-1]); // Repeated if indices and cell (if required from percell colors/genarrays) are the same
       if (!repeatIndex)
       {
         if (((i % 2) == 0) && curveLength != 0) // Start of nonrepeated line segment with nonzero curvelength; store previous curve
@@ -989,6 +992,299 @@ namespace
     }
     if (curveLength != 0) // store remaining curve
       tempArrays.CurveLengths.push_back(curveLength);
+  }
+
+  void OptimizedReorderCurveGeometry(vtkOmniConnectTempArrays& tempArrays, vtkDataArray* points,
+    vtkUnsignedCharArray* colors, vtkDataArray* texcoords, vtkDataArray* scaleArray,
+    vtkPiecewiseFunction* scaleFunction, bool useCellColors)
+  {
+    // Create curves with optimization for longer line segments
+    auto& indices = tempArrays.IndexArray;
+    assert((indices.size() % 2) == 0);
+    size_t numSegments = indices.size() / 2;
+    size_t maxNumVerts = indices.size();
+
+    tempArrays.CurveLengths.resize(0);
+    tempArrays.PointsArray.resize(0);
+    tempArrays.PointsArray.reserve(maxNumVerts * 3);
+    if (colors)
+    {
+      tempArrays.ColorsArray.resize(0);
+      tempArrays.ColorsArray.reserve(maxNumVerts * 4);
+    }
+    if (texcoords)
+    {
+      tempArrays.TexCoordsArray.resize(0);
+      tempArrays.TexCoordsArray.reserve(maxNumVerts * 2);
+    }
+    if (scaleArray)
+    {
+      tempArrays.ScalesArray.resize(0);
+      tempArrays.ScalesArray.reserve(maxNumVerts);
+    }
+    size_t ugaLen = tempArrays.SyncNumGenericArrays();
+    for(int ugaIdx = 0; ugaIdx < ugaLen; ++ugaIdx)
+    {
+      tempArrays.ResetGenericArray(ugaIdx, 0);
+      tempArrays.ReserveGenericArray(ugaIdx, maxNumVerts);
+    }
+
+    // Find out which generic arrays are perpoly (to know whether to repeat vertices with the same index),
+    // but then we store them per vertex instead of per poly (with different values per repeated vertex).
+    // Therefore, this function requires that perpoly generic arrays are converted to vertex layout later on (see AssignGenericArraysToUpdated).
+    bool perCellGenericArrays = tempArrays.HasPerCellGenericArrays();
+
+    if (numSegments == 0)
+      return;
+
+    // Pass 1: Build vertex-to-segments connectivity map
+    tempArrays.VertexToSegments.clear();
+    for (size_t segIdx = 0; segIdx < numSegments; ++segIdx)
+    {
+      unsigned int v0 = indices[segIdx * 2];
+      unsigned int v1 = indices[segIdx * 2 + 1];
+      tempArrays.VertexToSegments[v0].push_back(segIdx);
+      tempArrays.VertexToSegments[v1].push_back(segIdx);
+    }
+
+    // Track processed segments
+    tempArrays.ProcessedSegments.assign(numSegments, false);
+
+    // Track the last vertex index added to detect repeats
+    unsigned int lastVertexIndex = UINT_MAX;
+    size_t lastIndexPos = SIZE_MAX;
+
+    // Helper function to add a vertex to the current curve
+    auto addVertexToCurve = [&](size_t indexPos, size_t segmentIdx) -> void
+    {
+      auto vertIdx = indices[indexPos];
+
+      // Check for repeated vertex (same logic as original)
+      // When perCellGenericArrays exist, we don't skip vertices even with same vertex index
+      // because the cell data might be different
+      bool repeatIndex = (lastVertexIndex != UINT_MAX) &&
+                        (vertIdx == lastVertexIndex) &&
+                        ((!perCellGenericArrays && !useCellColors) || tempArrays.IndexToCell[indexPos] == tempArrays.IndexToCell[lastIndexPos]);
+
+      if (!repeatIndex)
+      {
+        size_t primIdx = segmentIdx;
+
+        assert(vertIdx < points->GetNumberOfTuples());
+        double srcPoint[3];
+        points->GetTuple(vertIdx, srcPoint);
+        tempArrays.PointsArray.push_back(srcPoint[0]);
+        tempArrays.PointsArray.push_back(srcPoint[1]);
+        tempArrays.PointsArray.push_back(srcPoint[2]);
+
+        if (colors)
+        {
+          bool hasAlpha = colors->GetNumberOfComponents() > 3;
+          if (useCellColors)
+          {
+            size_t baseIdx = primIdx * 4;
+            assert(baseIdx < tempArrays.PerPrimColor.size());
+            tempArrays.ColorsArray.push_back(tempArrays.PerPrimColor[baseIdx]);
+            tempArrays.ColorsArray.push_back(tempArrays.PerPrimColor[baseIdx + 1]);
+            tempArrays.ColorsArray.push_back(tempArrays.PerPrimColor[baseIdx + 2]);
+            tempArrays.ColorsArray.push_back(hasAlpha ? tempArrays.PerPrimColor[baseIdx + 3] : 255);
+          }
+          else
+          {
+            assert(vertIdx < colors->GetNumberOfTuples());
+            size_t baseIdx = vertIdx * 4;
+            tempArrays.ColorsArray.push_back(colors->GetValue(baseIdx));
+            tempArrays.ColorsArray.push_back(colors->GetValue(baseIdx + 1));
+            tempArrays.ColorsArray.push_back(colors->GetValue(baseIdx + 2));
+            tempArrays.ColorsArray.push_back(hasAlpha ? colors->GetValue(baseIdx + 3) : 255);
+          }
+        }
+
+        if (texcoords)
+        {
+          assert(vertIdx < texcoords->GetNumberOfTuples());
+          double srcTexCoord[2];
+          texcoords->GetTuple(vertIdx, srcTexCoord);
+          tempArrays.TexCoordsArray.push_back(srcTexCoord[0]);
+          tempArrays.TexCoordsArray.push_back(srcTexCoord[1]);
+        }
+
+        if (scaleArray)
+        {
+          double scaleVal = *scaleArray->GetTuple(vertIdx);
+          if (scaleFunction != nullptr)
+            scaleVal = scaleFunction->GetValue(scaleVal);
+          tempArrays.ScalesArray.push_back(static_cast<float>(scaleVal));
+        }
+
+        for(int ugaIdx = 0; ugaIdx < ugaLen; ++ugaIdx)
+        {
+          size_t srcIdx = tempArrays.UpdatedGenericArrays[ugaIdx].PerPoly ? tempArrays.IndexToCell[indexPos] : vertIdx;
+          size_t dstIdx = tempArrays.ExpandGenericArray(ugaIdx, 1);
+          tempArrays.CopyToGenericArray(ugaIdx, srcIdx, dstIdx, 1);
+        }
+      }
+
+      // Update tracking variables
+      lastVertexIndex = vertIdx;
+      lastIndexPos = indexPos;
+    };
+
+    // Pass 2: Greedily build longer curves
+    for (size_t startSegIdx = 0; startSegIdx < numSegments; ++startSegIdx)
+    {
+      if (tempArrays.ProcessedSegments[startSegIdx])
+        continue;
+
+      // Start a new curve - reset tracking variables
+      lastVertexIndex = UINT_MAX;
+      lastIndexPos = SIZE_MAX;
+      size_t curveStartSize = tempArrays.PointsArray.size() / 3;
+
+      // Build the curve by extending in both directions
+      tempArrays.CurveSegments.clear();
+      tempArrays.SegmentReversed.clear();
+
+      // Start with current segment
+      tempArrays.CurveSegments.push_back(startSegIdx);
+      tempArrays.SegmentReversed.push_back(false);
+      tempArrays.ProcessedSegments[startSegIdx] = true;
+
+      unsigned int v0 = indices[startSegIdx * 2];
+      unsigned int v1 = indices[startSegIdx * 2 + 1];
+
+      // Try to extend forward from v1
+      unsigned int currentEndpoint = v1;
+      while (true)
+      {
+        size_t nextSegment = SIZE_MAX;
+        bool reverseNext = false;
+
+        // Find an unprocessed segment connected to currentEndpoint
+        auto it = tempArrays.VertexToSegments.find(currentEndpoint);
+        if (it != tempArrays.VertexToSegments.end())
+        {
+          for (size_t segIdx : it->second)
+          {
+            if (!tempArrays.ProcessedSegments[segIdx])
+            {
+              nextSegment = segIdx;
+              unsigned int seg_v0 = indices[segIdx * 2];
+              unsigned int seg_v1 = indices[segIdx * 2 + 1];
+
+              if (seg_v0 == currentEndpoint)
+              {
+                reverseNext = false;
+                currentEndpoint = seg_v1;
+              }
+              else if (seg_v1 == currentEndpoint)
+              {
+                reverseNext = true;
+                currentEndpoint = seg_v0;
+              }
+              break;
+            }
+          }
+        }
+
+        if (nextSegment == SIZE_MAX)
+          break;
+
+        tempArrays.CurveSegments.push_back(nextSegment);
+        tempArrays.SegmentReversed.push_back(reverseNext);
+        tempArrays.ProcessedSegments[nextSegment] = true;
+      }
+
+      // Try to extend backward from v0
+      currentEndpoint = v0;
+      tempArrays.BackwardSegments.clear();
+      tempArrays.BackwardReversed.clear();
+
+      while (true)
+      {
+        size_t nextSegment = SIZE_MAX;
+        bool reverseNext = false;
+
+        auto it = tempArrays.VertexToSegments.find(currentEndpoint);
+        if (it != tempArrays.VertexToSegments.end())
+        {
+          for (size_t segIdx : it->second)
+          {
+            if (!tempArrays.ProcessedSegments[segIdx])
+            {
+              nextSegment = segIdx;
+              unsigned int seg_v0 = indices[segIdx * 2];
+              unsigned int seg_v1 = indices[segIdx * 2 + 1];
+
+              if (seg_v1 == currentEndpoint)
+              {
+                reverseNext = false;
+                currentEndpoint = seg_v0;
+              }
+              else if (seg_v0 == currentEndpoint)
+              {
+                reverseNext = true;
+                currentEndpoint = seg_v1;
+              }
+              break;
+            }
+          }
+        }
+
+        if (nextSegment == SIZE_MAX)
+          break;
+
+        tempArrays.BackwardSegments.push_back(nextSegment);
+        tempArrays.BackwardReversed.push_back(reverseNext);
+        tempArrays.ProcessedSegments[nextSegment] = true;
+      }
+
+      // Build the curve by processing segments in two phases (no copying needed)
+
+      // Phase 1: Process backward segments (in reverse order they were found)
+      for (int i = static_cast<int>(tempArrays.BackwardSegments.size()) - 1; i >= 0; --i)
+      {
+        size_t segIdx = tempArrays.BackwardSegments[i];
+        bool reversed = tempArrays.BackwardReversed[i];
+
+        if (!reversed)
+        {
+          addVertexToCurve(segIdx * 2, segIdx);     // v0
+          addVertexToCurve(segIdx * 2 + 1, segIdx); // v1
+        }
+        else
+        {
+          addVertexToCurve(segIdx * 2 + 1, segIdx); // v1
+          addVertexToCurve(segIdx * 2, segIdx);     // v0
+        }
+      }
+
+      // Phase 2: Process forward segments
+      for (size_t i = 0; i < tempArrays.CurveSegments.size(); ++i)
+      {
+        size_t segIdx = tempArrays.CurveSegments[i];
+        bool reversed = tempArrays.SegmentReversed[i];
+
+        if (!reversed)
+        {
+          addVertexToCurve(segIdx * 2, segIdx);     // v0
+          addVertexToCurve(segIdx * 2 + 1, segIdx); // v1
+        }
+        else
+        {
+          addVertexToCurve(segIdx * 2 + 1, segIdx); // v1
+          addVertexToCurve(segIdx * 2, segIdx);     // v0
+        }
+      }
+
+      // Record the curve length
+      size_t curveEndSize = tempArrays.PointsArray.size() / 3;
+      int curveLength = static_cast<int>(curveEndSize - curveStartSize);
+      if (curveLength > 0)
+      {
+        tempArrays.CurveLengths.push_back(curveLength);
+      }
+    }
   }
 
   void GatherPointData(OmniConnectInstancerData& instancerData, vtkOmniConnectTempArrays& tempArrays,
@@ -1136,7 +1432,11 @@ namespace
       tempArrays, mapper, prop, polyData, representation, nullptr, hasTexture,
       1, stickLinesEnabled, stickWireframeEnabled, false);
 
-    ReorderCurveGeometry(tempArrays, points, colors, texcoords, scaleArray, scaleFunction, useCellColors);
+    bool optimizedReorder = false;
+    if(optimizedReorder)
+      OptimizedReorderCurveGeometry(tempArrays, points, colors, texcoords, scaleArray, scaleFunction, useCellColors);
+    else
+      ReorderCurveGeometry(tempArrays, points, colors, texcoords, scaleArray, scaleFunction, useCellColors);
 
     curveData.PointsType = OmniConnectType::FLOAT3;
     curveData.NumPoints = tempArrays.PointsArray.size()/3;
@@ -1177,7 +1477,8 @@ namespace
       }
 
       // Assign generic Arrays
-      tempArrays.AssignGenericArraysToUpdated(false);
+      // For optimized reorder, we convert to vertex layout
+      tempArrays.AssignGenericArraysToUpdated(optimizedReorder);
     }
   }
 

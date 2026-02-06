@@ -33,6 +33,7 @@ PXR_NAMESPACE_USING_DIRECTIVE
 #include <fstream>
 #include <functional>
 #include <memory>
+#include <filesystem>
 
 #include "OmniConnectConnection.h"
 #include "OmniConnectCaches.h"
@@ -384,7 +385,7 @@ public:
 
   void OpenRootLevelStage();
   void OpenMultiSceneStage();
-  void OpenSceneStage();
+  bool OpenSceneStage();
   void CreateDefaultLighting(UsdStageRefPtr& stage);
   void OpenActorStage(OmniConnectActorCache& actorCache);
   void OpenClipAndTopologyStage(const char* clipFilePath, const char* topologyFilePath, UsdStageRefPtr& clipStage, UsdStageRefPtr& topologyStage);
@@ -700,7 +701,7 @@ void OmniConnectInternals::OpenMultiSceneStage()
   }
 }
 
-void OmniConnectInternals::OpenSceneStage()
+bool OmniConnectInternals::OpenSceneStage()
 {
   std::string relScenePath = this->SceneDirectory + this->SceneFileName;
   const char* stageUrl = this->Connection->GetUrl(relScenePath.c_str());
@@ -712,11 +713,13 @@ void OmniConnectInternals::OpenSceneStage()
   if (!this->SceneStage)
   {
     this->SceneStage = UsdStage::CreateNew(stageUrl);
-    assert(this->SceneStage);
+    if(!this->SceneStage)
+      return false;
   }
 
   UsdPrim rootPrim = UsdGeomXform::Define(this->SceneStage, this->SdfRootPrimName).GetPrim();
-  assert(rootPrim);
+  if(!rootPrim)
+    return false;
   this->SceneStage->SetDefaultPrim(rootPrim);
   UsdModelAPI(rootPrim).SetKind(KindTokens->assembly);
 
@@ -772,6 +775,8 @@ void OmniConnectInternals::OpenSceneStage()
 #endif
 
   Connection->ProcessUpdates();
+
+  return true;
 }
 
 void OmniConnectInternals::CreateDefaultLighting(UsdStageRefPtr & stage)
@@ -3595,6 +3600,71 @@ OmniConnect::OmniConnect(const OmniConnectSettings& settings
     Connection = new OmniConnectRemoteConnection();
   
   Internals = new OmniConnectInternals(settings, environment, Connection, logCallback);
+
+  // Initialize USD plugins early
+  InitializeUsdPlugins();
+}
+
+void OmniConnect::InitializeUsdPlugins()
+{
+  // Try to load Omniverse USD Resolver plugin by finding USD's plugin directory
+  PlugRegistry& registry = PlugRegistry::GetInstance();
+
+  // Find a known USD plugin to determine the plugin directory structure
+  PlugPluginPtrVector allPlugins = registry.GetAllPlugins();
+  std::string usdPluginPath;
+
+  // Look for a core USD plugin (like usd) to find the plugin directory
+  for (auto& plugin : allPlugins)
+  {
+    std::string name = plugin->GetName();
+    std::string path = plugin->GetPath();
+
+    // Look for core USD plugins that should always be present
+    if (name == "usd")
+    {
+      usdPluginPath = path;
+      OmniConnectDebugMacro("Found USD plugin reference: " << name << " at " << path);
+      break;
+    }
+  }
+
+  if (!usdPluginPath.empty())
+  {
+      // Parse the USD plugin path to find the plugin directory structure
+      std::filesystem::path usdPath(usdPluginPath);
+      std::filesystem::path installDir = usdPath.parent_path().parent_path();
+      std::filesystem::path resolverPluginDir = installDir / "plugin" / "omni_usd_resolver" / "resources";
+
+      std::string resolverPluginPath = resolverPluginDir.string();
+      OmniConnectDebugMacro("Attempting to register plugins from: " << resolverPluginPath);
+
+      registry.RegisterPlugins(resolverPluginPath);
+
+  }
+  else
+  {
+    OmniConnectDebugMacro("Could not find any USD plugin to determine plugin directory structure");
+  }
+
+#ifndef NDEBUG
+  // DEBUG: List all loaded plugins (refresh after potential registration)
+  PlugPluginPtrVector plugins = registry.GetAllPlugins();
+  OmniConnectDebugMacro("=== USD Plugins (Total: " << plugins.size() << ") ===");
+
+  for (auto& plugin : plugins)
+  {
+    std::string pluginName = plugin->GetName();
+    std::string pluginPath = plugin->GetPath();
+    bool isLoaded = plugin->IsLoaded();
+    OmniConnectDebugMacro("Plugin: " << pluginName << " | Path: " << pluginPath << " | Loaded: " << (isLoaded ? "YES" : "NO"));
+  }
+
+  // DEBUG: Check active resolver
+  ArResolver& resolver = ArGetResolver();
+  std::string resolverType = typeid(resolver).name();
+  OmniConnectDebugMacro("Active resolver type: " << resolverType);
+#endif
 }
 
 const OmniConnectSettings& OmniConnect::GetSettings()
@@ -3611,10 +3681,13 @@ bool OmniConnect::OpenConnection(bool createSession)
   if (ConnectionValid && createSession)
   {
     Internals->InitializeSession();
-    Internals->OpenSceneStage();
-    if (Internals->Environment.ProcId == 0 && Internals->Environment.NumProcs > 1)
-      Internals->OpenMultiSceneStage();
-    Internals->OpenRootLevelStage();
+    ConnectionValid = Internals->OpenSceneStage();
+    if (ConnectionValid)
+    {
+        if (Internals->Environment.ProcId == 0 && Internals->Environment.NumProcs > 1)
+            Internals->OpenMultiSceneStage();
+        Internals->OpenRootLevelStage();
+    }
   }
   return ConnectionValid;
 }

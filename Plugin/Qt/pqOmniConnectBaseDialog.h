@@ -38,7 +38,7 @@ public:
 	pqOmniConnectBaseDialog(QWidget* parent, pqOmniConnectViewsSettingsManager& settingsManager, Qt::WindowFlags f = Qt::WindowFlags{});
 	virtual ~pqOmniConnectBaseDialog();
 
-	void tryServerConnect(bool forceReconnect = false, const QString& host = QString::null);
+	void tryServerConnect(bool forceReconnect = false, const QString& host = QString());
 
 protected:
 	pqOmniConnectViewsSettingsManager& m_settingsManager;

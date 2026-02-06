@@ -138,12 +138,12 @@ void pqOmniConnectFolderPickerDialog::selectFirstChild() {
 	// Choose root item if nothing is selected
 	if (!m_ui.treeView->selectionModel()->hasSelection()) {
 		QModelIndex rootIndex = m_treeModel->indexForTreeItem(m_treeModel->getRootItem());
-		m_ui.treeView->selectionModel()->setCurrentIndex(rootIndex.child(0, 0), QItemSelectionModel::Select);
+		m_ui.treeView->selectionModel()->setCurrentIndex(m_treeModel->index(0, 0, rootIndex), QItemSelectionModel::Select);
 		return;
 	}
 
 	QModelIndex currentIndex = m_ui.treeView->selectionModel()->currentIndex();
-	QModelIndex childIndex = currentIndex.child(0, 0);
+	QModelIndex childIndex = m_treeModel->index(0, 0, currentIndex);
 	if (childIndex.isValid()) {
 		m_ui.treeView->selectionModel()->setCurrentIndex(currentIndex, QItemSelectionModel::Deselect);
 		m_ui.treeView->selectionModel()->setCurrentIndex(childIndex, QItemSelectionModel::Select);
@@ -300,7 +300,7 @@ void pqOmniConnectFolderPickerDialog::getLocalFilesAndFolders(const QString& sea
 		PickerFileInfo info;
 		info.url = fileInfo.fileName().toStdString();
 		info.author = fileInfo.owner().toStdString();
-		info.modifiedTime = fileInfo.lastModified().toTime_t();
+		info.modifiedTime = fileInfo.lastModified().toSecsSinceEpoch();
 		fileList.push_back(info);
 	}
 }

@@ -30,6 +30,7 @@
 #include "OmniConnectCaches.h"
 #include "OmniConnectUsdUtils.h"
 #include "OmniConnectUtilsInternal.h"
+#include "OmniConnectUtilsExternal.h"
 
 #include <string>
 #include <iostream>
@@ -75,8 +76,8 @@ namespace
 
   void WriteMdlFromStrings(OmniConnectConnection* OmniConnect, const char* string0, const char* string1, const char* fileName)
   {
-    size_t strLen0 = std::strlen(string0);
-    size_t strLen1 = std::strlen(string1);
+    size_t strLen0 = STRNLEN_PORTABLE(string0, 65536);
+    size_t strLen1 = STRNLEN_PORTABLE(string1, 65536);
     size_t totalStrLen = strLen0 + strLen1;
     char* Mdl_Contents = new char[totalStrLen];
     std::memcpy(Mdl_Contents, string0, strLen0);

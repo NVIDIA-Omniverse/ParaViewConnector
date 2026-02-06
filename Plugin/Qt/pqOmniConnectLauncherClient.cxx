@@ -120,9 +120,17 @@ void pqOmniConnectLauncherClient::replyFinished(QNetworkReply* reply) {
 		appInfo.latest = installedVersionsObj[LATEST_KEY].toString();
 
 		QJsonArray settingsArray = obj[SETTINGS_KEY].toArray();
-		foreach(const QJsonValue& setting, settingsArray) {
-			QString version = setting[VERSION_KEY].toString();
-			QString launchPath = setting[LAUNCH_KEY].toObject()[PATH_KEY].toString();
+		for (int i = 0; i < settingsArray.size(); ++i)
+		{
+			QJsonValueRef ref = settingsArray[i];
+			if (!ref.isObject())
+			{
+				continue;
+			}
+			QJsonObject jGroup = ref.toObject();
+
+			QString version = jGroup[VERSION_KEY].toString();
+			QString launchPath = jGroup[LAUNCH_KEY].toObject()[PATH_KEY].toString();
 			appInfo.versions << version;
 			appInfo.launchPaths << launchPath;
 

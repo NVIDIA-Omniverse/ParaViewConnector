@@ -12,7 +12,7 @@ See LICENSE.txt and Third-Party_Notices.txt for all applicable licenses.
 
 On Windows and Linux this library builds against:
     - Kitware ParaView (corresponding to git tagged version of this repo)
-    - USD version 23.xx or 24.xx, with (if enabled) OpenVDB 10 or 11.
+    - USD version 25.xx, with (if enabled) OpenVDB 10 or 11.
 
 USD can be built/installed in any of the following ways (depending on desired capabilities):
     - Get prebuilt USD and optional Omniverse packages according to [Downloading the Omniverse libraries](#downloading-the-omniverse-libraries)
@@ -20,17 +20,57 @@ USD can be built/installed in any of the following ways (depending on desired ca
 
 Note that on Linux, GCC only guarantees forward ABI-compatibility, so libraries downloaded from external sources built with newer versions of GCC than the ParaView Connector may not link to it properly.
 
-## Building the ParaView Connector
+## Building the ParaView Connector - Simple Example
+
+For a minimal build with USD support only (on Linux):
+
+```bash
+# Configure with CMake
+cmake -S /path/to/source -B /path/to/build \
+  -D ParaView_DIR=/path/to/paraview/lib/cmake/paraview-<pv_version> \
+  -D USD_ROOT_DIR=/path/to/usd \
+  -D OMNICONNECT_USE_OMNIVERSE=OFF \
+  -D OMNICONNECT_USE_OPENVDB=OFF \
+  -D Qt6_DIR=/path/to/qt/lib/cmake/Qt6 \
+  -D Python3_EXECUTABLE=/path/to/python3/bin/python3 \
+  -D Python3_INCLUDE_DIR=/path/to/python3/include \
+  -D Python3_LIBRARY=/path/to/python3/lib/libpython3.x.so \
+  -D CMAKE_PREFIX_PATH=/path/to/freetype \
+  -D FREETYPE_LIBRARY=/path/to/freetype/lib/libfreetype.so \
+  -D FREETYPE_INCLUDE_DIRS=/path/to/freetype/include \
+  -D FREETYPE_INCLUDE_DIR_ft2build=/path/to/freetype/include \
+  -D FREETYPE_INCLUDE_DIR_freetype2=/path/to/freetype/include \
+  -D INSTALL_USD_DEPS=ON
+
+# Build
+cmake --build /path/to/build --parallel
+
+# Install
+cmake --install /path/to/build --prefix /path/to/install
+```
+
+Replace the paths (`/path/to/paraview`, `/path/to/usd`, `/path/to/qt`, `/path/to/python3`, `/path/to/freetype`) with your actual dependency installation paths, and (`/path/to/source`, `/path/to/build`, `/path/to/install`) with your project paths.
+
+Template build scripts for this simple example are included under `build-template.bat/sh`.
+
+## Building the ParaView Connector - Full Details
 
 Build and install a version of ParaView first, then invoke cmake on this project with the following arguments:
 
     -G <GENERATOR>
     -D ParaView_DIR=<paraview_installation>/lib/cmake/paraview-<pv_version>
-    -D Qt5_DIR=<qt_installation>/lib/cmake/Qt5
+    -D Qt6_DIR=<qt_installation>/lib/cmake/Qt6
+    -D Python3_EXECUTABLE=<python_executable>
+    -D Python3_INCLUDE_DIR=<python_include_dir>
+    -D Python3_LIBRARY=<python_library>
     -D CMAKE_PREFIX_PATH=<freetype_installation>
     -D FREETYPE_LIBRARY=<freetype_library>
+    -D FREETYPE_INCLUDE_DIRS=<freetype_installation>/include
+    -D FREETYPE_INCLUDE_DIR_ft2build=<freetype_installation>/include
+    -D FREETYPE_INCLUDE_DIR_freetype2=<freetype_installation>/include
+    -D USD_ROOT_DIR=<usd_dir>
 
-Where `<freetype_library>` is the full path to either `freetype.lib` or `libfreetype.so`, depending on platform.
+Where `<python_library>` and `<freetype_library>` is the full path to either `python<version>.lib`/`freetype.lib` or `libpython<version>.so`/`libfreetype.so`, depending on platform.
 
 Choose whether you want to build the Omniverse Connector with Omniverse support (`OFF` means USD-only), and/or with OpenVDB support and whether OpenVDB has already been built as part of the USD source tree:
 
@@ -40,20 +80,17 @@ Choose whether you want to build the Omniverse Connector with Omniverse support 
 
 Depending on which components have been turned on or off (see below), this will trigger a number of dependency searches that can be resolved using:
 
-    -D USD_ROOT_DIR=<usd_dir>
     -D OMNICLIENT_ROOT_DIR=<omniclient_dir>
     -D OMNIUSDRESOLVER_ROOT_DIR=<usdresolver_dir>
-    -D Python3_ROOT_DIR=<python-for-usd_dir>
-    -D Python3_FIND_STRATEGY=LOCATION
+    -D BOOST_ROOT=<boost_dir>
     -D OpenVDB_ROOT=<openvdb_dir>
     -D Blosc_ROOT=<blosc_dir>
     -D BLOSC_LIBRARYDIR=<blosc_lib_dir>
     -D ZLIB_ROOT=<zlib_dir>
     -D ZLIB_LIBRARY=<zlib_lib_file>
     -D TBB_ROOT=<tbb_dir>
-    -D BOOST_ROOT=<boost_dir>
 
-where the Blosc and Zlib installations are typically pointing to the OpenVDB directory, assuming those exist as part of the OpenVDB installation. 
+where the Blosc and Zlib installations are typically pointing to the OpenVDB directory, assuming those exist as part of the OpenVDB installation. Boost refers to the dependency of OpenVDB, not USD.
 
 In case of `USE_USD_OPENVDB_BUILD=ON`, all of OpenVDB, Blosc and Zlib dependencies can be left out; they will instead be assumed to exist as part of the USD installation.
 In case of `OMNICONNECT_USE_OPENVDB=OFF`, the OpenVDB, Blosc and Zlib dependencies can be left out, and OpenVDB support will not be available. 

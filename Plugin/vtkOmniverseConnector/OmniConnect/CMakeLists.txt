@@ -54,9 +54,9 @@ else()
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
-  set(USD_ROOT_DIR_CURRENT "${USD_ROOT_DIR_RELEASE}")
-else()
   set(USD_ROOT_DIR_CURRENT "${USD_ROOT_DIR_DEBUG}")
+else()
+  set(USD_ROOT_DIR_CURRENT "${USD_ROOT_DIR_RELEASE}")
 endif()
 
 if(CMAKE_BUILD_TYPE MATCHES "Debug")
@@ -89,9 +89,20 @@ if(NOT DEFINED MaterialX_DIR)
   set(MaterialX_DIR "${USD_ROOT_DIR_CURRENT}/lib/cmake/MaterialX")
 endif()
 
-# Search in config mode
+# Find TBB BEFORE processing USD (USD targets reference TBB::tbb)
+if(DEFINED TBB_ROOT)
+  # Add our custom cmake directory to module path for FindTBB.cmake
+  list(PREPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
+  find_package(TBB REQUIRED COMPONENTS tbb)
+  list(POP_FRONT CMAKE_MODULE_PATH)
+
+  # Disable USD's own TBB finding since we already found it
+  set(PXR_FIND_TBB_IN_CONFIG OFF)
+endif()
+
+# Search in config mode (USD will now skip TBB finding and use our targets)
 find_package(pxr REQUIRED
-  PATHS ${USD_ROOT_DIR_CURRENT})
+  HINTS ${USD_ROOT_DIR_CURRENT})
 
 if(NOT (USD_ROOT_DIR_DEBUG STREQUAL USD_ROOT_DIR_RELEASE))
   set(USD_DEBUG_TARGET_CMAKE "${USD_ROOT_DIR_DEBUG}/cmake/pxrTargets-debug.cmake")
@@ -103,7 +114,7 @@ if(NOT (USD_ROOT_DIR_DEBUG STREQUAL USD_ROOT_DIR_RELEASE))
   endif()
 endif()
 
-list(APPEND USD_INIT_TARGETS usdGeom usdVol usdShade usdLux usdUtils) # All other targets derived from these, in flatten_and_cleanup_targets
+list(APPEND USD_INIT_TARGETS usdGeom usdVol usdShade usdLux usdUtils plug) # All other targets derived from these, in flatten_and_cleanup_targets
 flatten_and_cleanup_targets(USD_TARGETS "${USD_INIT_TARGETS}")
 message(STATUS "USD_TARGETS: ${USD_TARGETS}")
 
@@ -161,7 +172,7 @@ target_sources(${PROJECT_NAME}
     ${OMNICONNECT_MDL_HEADERS}
     usd.h
 )
-  
+
 target_include_directories(${PROJECT_NAME} PRIVATE
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
@@ -172,7 +183,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE
   )
 
 if (WIN32)
-  add_definitions("-DBOOST_ALL_DYN_LINK")
+  target_compile_definitions(${PROJECT_NAME} PRIVATE
+    "-DBOOST_ALL_DYN_LINK") # Make sure no static boost libraries are linked (since multiple components use boost)
+  option(USD_NO_BOOST_PYTHON "Disable auto-linking within OpenUSD to prevent unwanted boost_python dependencies" OFF)
+  if(USD_NO_BOOST_PYTHON)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE
+      "-DBOOST_PYTHON_NO_LIB") # Disable auto-linking to prevent unwanted boost_python dependencies
+  endif()
+
   # Combination of boost and python causes pragma linking issues for both libraries.
   message(STATUS "Python link dirs: ${USD_PYTHON_LINK_DIRS}")
   target_link_directories(${PROJECT_NAME} PRIVATE "${USD_PYTHON_LINK_DIRS}" "${USD_LIB_DIR}")
@@ -185,7 +203,7 @@ else()
 endif()
 
 target_link_libraries(${PROJECT_NAME}
-  PUBLIC  
+  PUBLIC
     OmniConnect_Common
   PRIVATE
     OmniConnect_Volume

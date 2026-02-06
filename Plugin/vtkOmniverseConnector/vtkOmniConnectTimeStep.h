@@ -30,6 +30,7 @@
 
 #include <vector>
 #include <map>
+#include <unordered_map>
 
 class vtkDataObject;
 class vtkDataSet;
@@ -59,6 +60,14 @@ struct vtkOmniConnectTempArrays
   std::vector<std::vector<char>> GenericArrays;
   vtkOmniConnectGenericArrayList UpdatedGenericArrays;
   vtkOmniConnectGenericArrayList DeletedGenericArrays;
+
+  // Reordering optimization containers
+  std::unordered_map<unsigned int, std::vector<size_t>> VertexToSegments;
+  std::vector<bool> ProcessedSegments;
+  std::vector<size_t> CurveSegments;
+  std::vector<bool> SegmentReversed;
+  std::vector<size_t> BackwardSegments;
+  std::vector<bool> BackwardReversed;
 
   size_t GetNumGenericArrays() const { return UpdatedGenericArrays.size(); }
 

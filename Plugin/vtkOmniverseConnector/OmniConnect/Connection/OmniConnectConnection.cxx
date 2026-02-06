@@ -22,6 +22,7 @@
 ###############################################################################*/
 
 #include "OmniConnectConnection.h"
+#include "OmniConnectUtilsExternal.h"
 
 #include <fstream>
 #include <atomic>
@@ -30,6 +31,7 @@
 #include <algorithm>
 #include <cstring>
 #include <vector>
+#include <string>
 
 #ifdef _WIN32
 #include <filesystem>
@@ -423,16 +425,16 @@ bool OmniConnectRemoteConnection::Initialize(const OmniConnectConnectionSettings
       initSuccess = false;
     }
 
-    if (!brokenUrl->host || strlen(brokenUrl->host) == 0)
+    if (!brokenUrl->host || STRNLEN_PORTABLE(brokenUrl->host, 16384) == 0)
     {
       OmniConnectLogMacro(OmniConnectLogLevel::ERR, "Illegal Omniverse server.");
       initSuccess = false;
     }
 
-    if (!brokenUrl->port || strlen(brokenUrl->port) == 0)
+    if (!brokenUrl->port || STRNLEN_PORTABLE(brokenUrl->port, 16384) == 0)
       OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Warning: No port specified for Omniverse server");
 
-    if (!brokenUrl->path || strlen(brokenUrl->path) == 0)
+    if (!brokenUrl->path || STRNLEN_PORTABLE(brokenUrl->path, 16384) == 0)
     {
       OmniConnectLogMacro(OmniConnectLogLevel::ERR, "Illegal Omniverse working directory.");
       initSuccess = false;

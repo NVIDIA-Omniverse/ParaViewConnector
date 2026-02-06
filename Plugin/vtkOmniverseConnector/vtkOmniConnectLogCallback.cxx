@@ -40,7 +40,7 @@ static void ConnectLogCallback(OmniConnectLogLevel level, void* userData, const 
 
   if (logEnabled && message)
   {
-    size_t msglen = strlen(message);
+    size_t msglen = STRNLEN_PORTABLE(message, 65536);
     if (msglen > 0)
     {
       const char* lastcharptr = message + msglen - 1;

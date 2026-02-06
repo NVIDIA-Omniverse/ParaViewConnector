@@ -41,7 +41,7 @@ pqOmniConnectFileLogger::pqOmniConnectFileLogger() {
 		vtkLogger::AddCallback(LOGGER_NAME, loggerCallback, m_textStream, vtkLogger::VERBOSITY_INFO, nullptr, flushCallback);
 
 		if (!vtkLogger::IsEnabled()) {
-			*m_textStream << "logging support is disabled in this build." << endl;
+			*m_textStream << "logging support is disabled in this build." << Qt::endl;
 			m_textStream->flush();
 		}
 	}

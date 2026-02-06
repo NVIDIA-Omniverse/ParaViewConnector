@@ -25,7 +25,7 @@
 
 pqOmniConnectDataItem::pqOmniConnectDataItem(const QList<QVariant> &data, pqOmniConnectDataItem *parentItem)
 {
-	m_url = QString::null;
+	m_url = QString();
 	m_parentItem = parentItem;
 	m_itemData = data;
 	m_local = false;
@@ -85,7 +85,7 @@ bool pqOmniConnectDataItem::insertColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		m_itemData.insert(position, QVariant());
 
-	for (pqOmniConnectDataItem* child : qAsConst(m_childItems))
+	for (pqOmniConnectDataItem* child : std::as_const(m_childItems))
 		child->insertColumns(position, columns);
 
 	return true;
@@ -112,7 +112,7 @@ bool pqOmniConnectDataItem::removeColumns(int position, int columns) {
 	for (int column = 0; column < columns; ++column)
 		m_itemData.removeAt(position);
 
-	for (pqOmniConnectDataItem *child : qAsConst(m_childItems))
+	for (pqOmniConnectDataItem *child : std::as_const(m_childItems))
 		child->removeColumns(position, columns);
 
 	return true;

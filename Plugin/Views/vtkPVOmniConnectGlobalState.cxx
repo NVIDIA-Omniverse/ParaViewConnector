@@ -292,9 +292,9 @@ void vtkPVOmniConnectGlobalState::LoadQtPlugin()
     const std::string& programPath = pm->GetSelfDir();
     std::string qtLibPath = programPath +
 #ifdef _WIN32
-      "/Qt5Core.dll";
+      "/Qt6Core.dll";
 #else
-      "/../lib/libQt5Core.so";
+      "/../lib/libQt6Core.so";
 #endif
 
     vtkLibHandle lib = vtkDynamicLoader::OpenLibrary(qtLibPath.c_str());
@@ -329,7 +329,7 @@ void vtkPVOmniConnectGlobalState::LoadQtPlugin()
         vtkOmniConnectLogCallback::Callback(OmniConnectLogLevel::WARNING, nullptr, "Omniverse Connector Qt plugin failed to load");
     }
     else
-      vtkOmniConnectLogCallback::Callback(OmniConnectLogLevel::WARNING, nullptr, "Qt5Core library not found, skipping Qt support for Omniverse Connector");
+      vtkOmniConnectLogCallback::Callback(OmniConnectLogLevel::WARNING, nullptr, "Qt6Core library not found, skipping Qt support for Omniverse Connector");
   }
 }
 

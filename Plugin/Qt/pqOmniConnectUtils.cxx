@@ -53,30 +53,30 @@ namespace pqOmniConnectUtils {
 		bool success = false;
 		if (file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
 			QTextStream stream(&file);
-			if (appType == AppType::View) {
-				stream << "import omni.view.startup" << endl;
-				stream << "import asyncio" << endl;
-				stream << "import omni.usd" << endl;
-				stream << "from omni.view.startup import get_instance as get_startup_instance" << endl;
-				stream << "startup_window = get_startup_instance()" << endl;
-				stream << "startup_window._close_fn()" << endl;
-				stream << "async def task():" << endl;
-				stream << "    await asyncio.sleep(3)" << endl;
-				stream << "    await omni.usd.get_context().open_stage_async(\"" << usdPath << "\")" << endl;
-				stream << "asyncio.ensure_future(task())" << endl;
+					if (appType == AppType::View) {
+			stream << "import omni.view.startup" << Qt::endl;
+			stream << "import asyncio" << Qt::endl;
+			stream << "import omni.usd" << Qt::endl;
+			stream << "from omni.view.startup import get_instance as get_startup_instance" << Qt::endl;
+			stream << "startup_window = get_startup_instance()" << Qt::endl;
+			stream << "startup_window._close_fn()" << Qt::endl;
+			stream << "async def task():" << Qt::endl;
+			stream << "    await asyncio.sleep(3)" << Qt::endl;
+			stream << "    await omni.usd.get_context().open_stage_async(\"" << usdPath << "\")" << Qt::endl;
+			stream << "asyncio.ensure_future(task())" << Qt::endl;
 			}
-			else {
-				stream << "import asyncio" << endl;
-				stream << "import omni.usd" << endl;
-				stream << "async def task():" << endl;
-				stream << "    await asyncio.sleep(3)" << endl;
-				stream << "    await omni.usd.get_context().open_stage_async(\"" << usdPath << "\")" << endl;
-				stream << "asyncio.ensure_future(task())" << endl;
+					else {
+			stream << "import asyncio" << Qt::endl;
+			stream << "import omni.usd" << Qt::endl;
+			stream << "async def task():" << Qt::endl;
+			stream << "    await asyncio.sleep(3)" << Qt::endl;
+			stream << "    await omni.usd.get_context().open_stage_async(\"" << usdPath << "\")" << Qt::endl;
+			stream << "asyncio.ensure_future(task())" << Qt::endl;
 			}
 			success = stream.status() == QTextStream::Ok;
 		}
 		file.close();
-		return success ? filePath : QString::null;
+		return success ? filePath : QString();
 	}
 
 	/****************************

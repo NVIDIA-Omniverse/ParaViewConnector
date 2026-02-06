@@ -122,6 +122,7 @@ public:
 
 protected:
 
+  void InitializeUsdPlugins();
   void DeleteActorFromScene(size_t actorId);
 
   bool ConnectionValid = false;

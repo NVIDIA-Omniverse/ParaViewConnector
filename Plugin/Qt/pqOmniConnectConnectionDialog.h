@@ -51,5 +51,6 @@ Q_SIGNALS:
 private:
 	vtkSMProxy* m_connector;
 	std::string m_host;
-	QFutureWatcher<bool> m_watcher;
+	QFutureWatcher<void> m_watcher;
+	bool m_connectionResult;
 };

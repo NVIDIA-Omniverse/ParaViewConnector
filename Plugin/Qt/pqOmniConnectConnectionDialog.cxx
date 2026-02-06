@@ -38,7 +38,8 @@
 pqOmniConnectConnectionDialog::pqOmniConnectConnectionDialog(const pqOmniConnectViewsSettingsManager* settingsManager, const std::string& host) :
 	QDialog(nullptr),
 	m_connector(settingsManager->getConnector()),
-	m_host(host)
+	m_host(host),
+	m_connectionResult(false)
 {
 	setAttribute(Qt::WA_DeleteOnClose);
 	setModal(true);
@@ -71,7 +72,9 @@ bool pqOmniConnectConnectionDialog::openConnection()
 void pqOmniConnectConnectionDialog::openConnectionAsync() 
 {
 	pqOmniConnectUtils::Spinner::setState(true, false);
-	QFuture<bool> future = QtConcurrent::run(this, &pqOmniConnectConnectionDialog::openConnection);
+	QFuture<void> future = QtConcurrent::run([this]() { 
+		m_connectionResult = this->openConnection(); 
+	});
 	m_watcher.setFuture(future);
 }
 
@@ -91,7 +94,7 @@ void pqOmniConnectConnectionDialog::onFutureFinished()
 		}
 	}
 	else {
-		if (m_watcher.future().result()) {
+		if (m_connectionResult) {
 			OMNI_LOG_INFO("Connection to Nucleus at %s established.", m_host.c_str());
 			emit onConnectEnd(true);
 		}

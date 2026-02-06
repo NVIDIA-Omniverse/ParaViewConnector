@@ -86,7 +86,7 @@ IF(PARAVIEW_USE_QT)
   set(resource_files
     Resources/omniComponents.qrc)
 
-  find_package(Qt5 REQUIRED QUIET COMPONENTS Network)
+  find_package(Qt6 REQUIRED QUIET COMPONENTS Network)
 
   set(CMAKE_AUTOMOC 1)
   set(CMAKE_AUTORCC 1)
@@ -121,7 +121,7 @@ target_link_libraries(OmniverseConnectorQt
   PRIVATE 
     OmniverseConnector::vtkOmniverseConnector
     OmniverseConnector::OmniConnectViews
-    Qt5::Network)
+    Qt6::Network)
 
 message( "-------------------- End OmniverseConnectorQt CmakeLists.txt ----------------------------------------")
 

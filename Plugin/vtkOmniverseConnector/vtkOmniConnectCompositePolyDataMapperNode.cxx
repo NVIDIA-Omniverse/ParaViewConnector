@@ -26,8 +26,7 @@
 #include "vtkActor.h"
 #include "vtkCompositeDataDisplayAttributes.h"
 #include "vtkCompositePolyDataMapper.h"
-#include "vtkMultiBlockDataSet.h"
-#include "vtkMultiPieceDataSet.h"
+#include "vtkDataObjectTree.h"
 #include "vtkOmniConnectActorNode.h"
 #include "vtkOmniConnectRendererNode.h"
 #include "vtkOmniConnectTimeStep.h"
@@ -186,22 +185,19 @@ void vtkOmniConnectCompositePolyDataMapperNode::RenderBlock(vtkOmniConnectRender
   // block.
   flat_index++;
 
-  vtkMultiBlockDataSet* mbds = vtkMultiBlockDataSet::SafeDownCast(dobj);
-  vtkMultiPieceDataSet* mpds = vtkMultiPieceDataSet::SafeDownCast(dobj);
-  if (mbds || mpds)
+  if (auto dataObjTree = vtkDataObjectTree::SafeDownCast(dobj))
   {
-    unsigned int numChildren = mbds ? mbds->GetNumberOfBlocks() : mpds->GetNumberOfPieces();
-    for (unsigned int cc = 0; cc < numChildren; cc++)
+    for (unsigned int i = 0, numChildren = dataObjTree->GetNumberOfChildren(); i < numChildren; ++i)
     {
-      vtkDataObject* child = mbds ? mbds->GetBlock(cc) : mpds->GetPiece(cc);
-      if (child == nullptr)
+      if (auto child = dataObjTree->GetChild(i))
       {
-        // speeds things up when dealing with nullptr blocks (which is common with
-        // AMRs).
-        flat_index++;
-        continue;
+        this->RenderBlock(rNode, aNode, baseMapper, actor, child, cda, flat_index, material_index);
       }
-      this->RenderBlock(rNode, aNode, baseMapper, actor, child, cda, flat_index, material_index);
+      else
+      {
+        // speeds things up when dealing with nullptr blocks (which is common with AMRs).
+        flat_index++;
+      }
     }
   }
   else if (dobj)
