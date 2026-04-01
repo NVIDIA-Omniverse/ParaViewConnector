@@ -150,6 +150,7 @@ protected:
 
   OmniConnectRemoteConnectionInternals* Internals;
   bool ConnectionInitialized = false;
+  bool FolderOperationsSupported = false;
 
   static int ConnectionLogLevel;
 };

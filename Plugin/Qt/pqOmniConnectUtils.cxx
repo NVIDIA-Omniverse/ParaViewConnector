@@ -99,4 +99,18 @@ namespace pqOmniConnectUtils {
 		return QString("%1/settings.ini").arg(baseFolderPath());
 	}
 
+	/****************************
+	* ServerUtils
+	****************************/
+	QString ServerUtils::formatServerUrlWithProtocol(const QString& serverUrl) {
+		if (serverUrl.contains("://")) {
+			// Server already contains a protocol prefix
+			return serverUrl;
+		}
+		else {
+			// Add omniverse:// protocol prefix
+			return QString("omniverse://%1").arg(serverUrl);
+		}
+	}
+
 } // namespace

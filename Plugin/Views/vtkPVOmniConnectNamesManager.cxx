@@ -197,23 +197,38 @@ void vtkPVOmniConnectNamesManager::SetActorName(vtkView* view, vtkPVDataRepresen
     std::string coreName;
     if (!isInputActorName && siReprNameEnd)
     {
-      // Use the representation type as a postfix to the name
-      // Generally, siReprName is assumed to be '<DataType>#<reprStrConst>/<Representation><reprStrConst>'
-      // So search for the start of the second reprStrConst as the end, and the / as the start of the actual
-      // representation name. 
-      const char* reprTypeStr = siReprNameEnd ? siReprNameEnd + reprStrLen : nullptr;
-      const char* reprTypeStrEnd = reprTypeStr ? strstr(reprTypeStr, reprStrConst) : nullptr;
-      while (reprTypeStr != reprTypeStrEnd && *reprTypeStr != '/')
-        ++reprTypeStr;
+      const char* reprTypeStr = nullptr;
+      const char* reprTypeStrEnd = nullptr;
+
+      const char* altreprStrConst = "representations,";
+      size_t altreprStrLen = strlen(altreprStrConst);
+      const char* altreprStrEnd = strstr(siReprName, altreprStrConst);
+      if(altreprStrEnd)
+      {
+        // In this case, siReprName is assumed to be '<DataType> (<address>)[<altreprStrConst> <Representation><reprStrConst>]'
+        reprTypeStr = altreprStrEnd + altreprStrLen;
+        reprTypeStrEnd = (siReprNameEnd >= reprTypeStr) ? siReprNameEnd : nullptr;
+      }
+      else
+      {
+        // Use the representation type as a postfix to the name
+        // Generally, siReprName is assumed to be '<DataType>#<reprStrConst>/<Representation><reprStrConst>'
+        // So search for the start of the second reprStrConst as the end, and the / as the start of the actual
+        // representation name.
+        reprTypeStr = siReprNameEnd ? siReprNameEnd + reprStrLen : nullptr;
+        reprTypeStrEnd = reprTypeStr ? strstr(reprTypeStr, reprStrConst) : nullptr;
+        while (reprTypeStr != reprTypeStrEnd && *reprTypeStr != '/')
+          ++reprTypeStr;
+      }
 
       if(suggestedName)
         coreName.assign(suggestedName);
       else
         coreName.assign(siReprName, siReprNameEnd);
 
-      if(reprTypeStrEnd != reprTypeStr)
+      if(reprTypeStrEnd && reprTypeStrEnd != reprTypeStr)
       {
-        // reprTypeStr is still on the '/', but that will automatically be replaced with '_'
+        // reprTypeStr is still on the '/' or ' ', but that will automatically be replaced with '_'
         coreName.append(reprTypeStr, reprTypeStrEnd - reprTypeStr);
       }
     }

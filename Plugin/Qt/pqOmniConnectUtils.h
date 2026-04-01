@@ -54,4 +54,10 @@ namespace pqOmniConnectUtils {
 		static void createPathIfMissing(const QString& folderPath);
 	};
 
+	// Server URL formatting utilities
+	class ServerUtils {
+	public:
+		static QString formatServerUrlWithProtocol(const QString& serverUrl);
+	};
+
 } // namespace

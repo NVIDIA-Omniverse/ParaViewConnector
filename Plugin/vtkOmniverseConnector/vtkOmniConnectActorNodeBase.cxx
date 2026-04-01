@@ -325,6 +325,7 @@ void vtkOmniConnectActorNodeBase::ConnectorRender(bool prepass)
     this->TransformChanged = false;
     this->TextureChanged = false;
     this->GeometryChanged = false;
+    this->InputDataChanged = false;
 
     //Visibility changes
     if (this->VisibilityChanged)

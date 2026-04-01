@@ -114,7 +114,7 @@ if(NOT (USD_ROOT_DIR_DEBUG STREQUAL USD_ROOT_DIR_RELEASE))
   endif()
 endif()
 
-list(APPEND USD_INIT_TARGETS usdGeom usdVol usdShade usdLux usdUtils plug) # All other targets derived from these, in flatten_and_cleanup_targets
+list(APPEND USD_INIT_TARGETS usdGeom usdVol usdShade usdRender usdLux usdUtils plug) # All other targets derived from these, in flatten_and_cleanup_targets
 flatten_and_cleanup_targets(USD_TARGETS "${USD_INIT_TARGETS}")
 message(STATUS "USD_TARGETS: ${USD_TARGETS}")
 

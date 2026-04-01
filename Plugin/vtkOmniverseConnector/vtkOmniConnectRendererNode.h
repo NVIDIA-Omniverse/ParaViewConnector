@@ -133,6 +133,11 @@ public:
   void FlushSceneUpdates();
 
   /**
+   * Synchronize USD camera with current VTK camera
+   */
+  void SyncCameraToUSD();
+
+  /**
    * Set the progress notifier
    */
   void SetProgressNotifier(vtkAlgorithm* progressNotifier);

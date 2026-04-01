@@ -110,42 +110,42 @@ function (setup_client_library_target omniclient_root_dir)
 
 endfunction()
 
-function (setup_carb_from_omniclient_target omniclient_root_dir)
-
-  # check if a carb target exists already and if not define it
-  if (NOT TARGET carbonite::carb)
-    add_library(carbonite::carb SHARED IMPORTED)
-    set_property(TARGET carbonite::carb APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG RELEASE RELWITHDEBINFO)
-    if(WIN32)
-      set_target_properties(carbonite::carb PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
-        INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
-        IMPORTED_LOCATION_DEBUG "${omniclient_root_dir}/debug/carb.dll"
-        IMPORTED_LOCATION_RELEASE "${omniclient_root_dir}/release/carb.dll"
-        IMPORTED_LOCATION_RELWITHDEBINFO "${omniclient_root_dir}/release/carb.dll")
-    else()
-      set_target_properties(carbonite::carb PROPERTIES
-        INTERFACE_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
-        INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
-        IMPORTED_LOCATION_DEBUG "${omniclient_root_dir}/debug/libcarb.so"
-        IMPORTED_LOCATION_RELEASE "${omniclient_root_dir}/release/libcarb.so"
-        IMPORTED_LOCATION_RELWITHDEBINFO "${omniclient_root_dir}/release/libcarb.so")
-    endif()
-  endif()
-
-endfunction()
-
-function (setup_omni_trace_from_omniclient_target omniclient_root_dir)
-
-    # check if a omni-trace target exists already and if not define it
-    if (NOT TARGET omni::trace)
-        add_library(omni::trace INTERFACE IMPORTED)
-        set_target_properties(omni::trace PROPERTIES
-            INTERFACE_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
-            INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include")
-    endif()
-
-endfunction()
+#function (setup_carb_from_omniclient_target omniclient_root_dir)
+#
+#  # check if a carb target exists already and if not define it
+#  if (NOT TARGET carbonite::carb)
+#    add_library(carbonite::carb SHARED IMPORTED)
+#    set_property(TARGET carbonite::carb APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG RELEASE RELWITHDEBINFO)
+#    if(WIN32)
+#      set_target_properties(carbonite::carb PROPERTIES
+#        INTERFACE_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
+#        INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
+#        IMPORTED_LOCATION_DEBUG "${omniclient_root_dir}/debug/carb.dll"
+#        IMPORTED_LOCATION_RELEASE "${omniclient_root_dir}/release/carb.dll"
+#        IMPORTED_LOCATION_RELWITHDEBINFO "${omniclient_root_dir}/release/carb.dll")
+#    else()
+#      set_target_properties(carbonite::carb PROPERTIES
+#        INTERFACE_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
+#        INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
+#        IMPORTED_LOCATION_DEBUG "${omniclient_root_dir}/debug/libcarb.so"
+#        IMPORTED_LOCATION_RELEASE "${omniclient_root_dir}/release/libcarb.so"
+#        IMPORTED_LOCATION_RELWITHDEBINFO "${omniclient_root_dir}/release/libcarb.so")
+#    endif()
+#  endif()
+#
+#endfunction()
+#
+#function (setup_omni_trace_from_omniclient_target omniclient_root_dir)
+#
+#    # check if a omni-trace target exists already and if not define it
+#    if (NOT TARGET omni::trace)
+#        add_library(omni::trace INTERFACE IMPORTED)
+#        set_target_properties(omni::trace PROPERTIES
+#            INTERFACE_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include"
+#            INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${omniclient_root_dir}/include")
+#    endif()
+#
+#endfunction()
 
 function(remove_usd_resolver_misc_deps)
   # Remove carbonite::carb and omni::trace from omniusdresolver::omni_usd_resolver dependencies

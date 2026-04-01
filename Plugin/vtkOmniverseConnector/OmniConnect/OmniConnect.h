@@ -41,7 +41,7 @@ public:
   ~OmniConnect();
 
   const OmniConnectSettings& GetSettings();
-  
+
   //
   // Omniverse/local output setup
   //
@@ -68,9 +68,9 @@ public:
 
   bool CreateActor(size_t actorId, const char* actorName);
   void DeleteActor(size_t actorId);
-  
+
   void SetMaterialBinding(size_t actorId, size_t geomId, size_t materialId, OmniConnectGeomType geomType);
-  
+
   size_t GetNumSceneToAnimTimes(size_t actorId);
   void RestoreSceneToAnimTimes(double* sceneToAnimTimes, size_t numSceneToAnimTimes); // Returns sceneToAnimTimes for actorId from last call to GetNumSceneToAnimTimes
   void SetSceneToAnimTime(size_t actorId, double sceneTime, const double* sceneToAnimTimes, size_t numSceneToAnimTimes); // Requires that all "animtime" timesteps of the sceneToAnimTimes tuple have already been added with UpdateMesh/Instancer.
@@ -86,9 +86,9 @@ public:
   void UpdateTexture(size_t actorId, size_t texId, OmniConnectSamplerData& samplerData, bool timeVarying, double animTimeStep);
   void DeleteTexture(size_t actorId, size_t texId);
   void SetGeomVisibility(size_t actorId, size_t geomId, OmniConnectGeomType geomType, bool visible, double animTimeStep = -1); //Either for all timesteps (default parameter), or at a specific timestep.
-  void UpdateMesh(size_t actorId, double animTimeStep, OmniConnectMeshData& meshData, size_t materialId, 
+  void UpdateMesh(size_t actorId, double animTimeStep, OmniConnectMeshData& meshData, size_t materialId,
     OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga);
-  void UpdateInstancer(size_t actorId, double animTimeStep, OmniConnectInstancerData& instancerData, size_t materialId, 
+  void UpdateInstancer(size_t actorId, double animTimeStep, OmniConnectInstancerData& instancerData, size_t materialId,
     OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga);
   void UpdateCurve(size_t actorId, double animTimeStep, OmniConnectCurveData& curveData, size_t materialId,
     OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga);
@@ -113,6 +113,17 @@ public:
 
   // Gets set whenever an existing geom's primtype gets changed (maintained per-actor)
   bool GetAndResetGeomTypeChanged(size_t actorId);
+
+  //
+  // Camera synchronization from external source (e.g., VTK/ParaView)
+  //
+
+  // Cache camera parameters from external source (does not write to USD)
+  void SetCameraCacheFromTransform(const double position[3], const double focalPoint[3],
+    const double viewUp[3], double viewAngle, const double clippingRange[2]);
+
+  // Apply cached camera parameters to USD camera and save
+  void ApplyCachedCameraToUSD();
 
   //
   // Static parameter interface

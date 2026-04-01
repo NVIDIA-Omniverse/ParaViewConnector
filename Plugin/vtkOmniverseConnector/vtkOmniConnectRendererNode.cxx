@@ -30,6 +30,7 @@
 #include "vtkOmniConnectTimeStep.h"
 #include "vtkObjectFactory.h"
 #include "vtkRenderer.h"
+#include "vtkCamera.h"
 #include "OmniConnect.h"
 #include "vtkInformationStringKey.h"
 #include "vtkPolyDataNormals.h"
@@ -97,7 +98,7 @@ public:
     {
       vtkViewNode* childNode = vtkViewNode::SafeDownCast(child);
       vtkOmniConnectActorNodeBase* actorNode = GetActorNodeBase(childNode);
-      if (actorNode && actorNode->HasConnectorContent() && 
+      if (actorNode && actorNode->HasConnectorContent() &&
         actorNode->GetVtkProp3D() && actorNode->GetVtkProp3D()->GetVisibility())
       {
         this->NumActorNodes++;
@@ -138,7 +139,7 @@ vtkStandardNewMacro(vtkOmniConnectRendererNode);
 //----------------------------------------------------------------------------
 vtkOmniConnectRendererNode::vtkOmniConnectRendererNode()
   : Internals(new vtkOmniConnectRendererNodeInternals)
-{ 
+{
 }
 
 //----------------------------------------------------------------------------
@@ -223,13 +224,16 @@ void vtkOmniConnectRendererNode::Render(bool prepass)
   {
     return;
   }
-  
+
+  // Capture/cache VTK camera parameters at every render (no USD write yet)
+  this->SyncCameraToUSD();
+
   double sceneTimeStep = this->SceneTime;
   if (prepass)
   {
     this->Internals->SceneFlushAndReset(this->Connector);
 
-    //Reset progress notifier, get the default text, and reset the internal running progress counter. 
+    //Reset progress notifier, get the default text, and reset the internal running progress counter.
     //Also, count the number of participating actors.
     if (this->ProgressNotifier)
     {
@@ -245,7 +249,7 @@ void vtkOmniConnectRendererNode::Render(bool prepass)
     this->Internals->SceneFlushAndReset(this->Connector);
 
     if (this->ProgressNotifier)
-    { 
+    {
       this->ProgressNotifier->UpdateProgress(0.0);
       this->ProgressNotifier->SetProgressText(this->Internals->DefaultProgressText);
       this->Internals->DefaultProgressText = nullptr;
@@ -357,6 +361,33 @@ void vtkOmniConnectRendererNode::FlushSceneUpdates()
 }
 
 //------------------------------------------------------------------------------
+void vtkOmniConnectRendererNode::SyncCameraToUSD()
+{
+  if (!this->Connector)
+    return;
+
+  vtkRenderer* ren = this->GetRenderer();
+  if (!ren)
+    return;
+
+  vtkCamera* cam = ren->GetActiveCamera();
+  if (!cam)
+    return;
+
+  // Get VTK camera parameters
+  double position[3], focalPoint[3], viewUp[3];
+  cam->GetPosition(position);
+  cam->GetFocalPoint(focalPoint);
+  cam->GetViewUp(viewUp);
+  double viewAngle = cam->GetViewAngle();
+  double clippingRange[2];
+  cam->GetClippingRange(clippingRange);
+
+  // Cache parameters (no USD write)
+  this->Connector->SetCameraCacheFromTransform(position, focalPoint, viewUp, viewAngle, clippingRange);
+}
+
+//------------------------------------------------------------------------------
 void vtkOmniConnectRendererNode::SetProgressNotifier(vtkAlgorithm* progressNotifier)
 {
   this->ProgressNotifier = progressNotifier;
@@ -374,7 +405,7 @@ void vtkOmniConnectRendererNode::SetActorProgress(double actorPercentage, bool s
 {
   if (actorPercentage == 0.0)
     this->Internals->NumActorsProcessed++;
-  
+
   double percentageActorsComplete = (double)this->Internals->NumActorsProcessed / (double)this->Internals->NumActorNodes;
   if (showInGui && this->ProgressNotifier)
   {

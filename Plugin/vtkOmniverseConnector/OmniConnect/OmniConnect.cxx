@@ -28,6 +28,11 @@ PXR_NAMESPACE_USING_DIRECTIVE
 
 #include <assert.h>
 #include <string>
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 #include <iostream>
 #include <fstream>
@@ -44,6 +49,15 @@ PXR_NAMESPACE_USING_DIRECTIVE
 #include "OmniConnectDiagnosticMgrDelegate.h"
 #include "OmniConnectUtilsInternal.h"
 
+// Camera and render product resolution settings
+namespace {
+  constexpr int RENDER_PRODUCT_WIDTH = 1280;
+  constexpr int RENDER_PRODUCT_HEIGHT = 720;
+  constexpr float RENDER_PRODUCT_ASPECT_RATIO = static_cast<float>(RENDER_PRODUCT_WIDTH) / static_cast<float>(RENDER_PRODUCT_HEIGHT);
+  constexpr float CAMERA_VERTICAL_APERTURE = 24.0f; // mm (Super 35mm standard)
+  constexpr float CAMERA_HORIZONTAL_APERTURE = CAMERA_VERTICAL_APERTURE * RENDER_PRODUCT_ASPECT_RATIO;
+}
+
 //#define FORCE_OMNI_CLIP_UPDATES_WITH_DUMMY
 //#define FORCE_OMNI_CLIP_UPDATES_WITH_SUBLAYERS
 //#define TOPOLOGY_AS_SUBLAYER
@@ -52,13 +66,13 @@ PXR_NAMESPACE_USING_DIRECTIVE
   { std::stringstream logStream; \
     logStream << x; \
     std::string logString = logStream.str(); \
-    OmniConnectInternals::LogCallback( OmniConnectLogLevel::ERR, nullptr, logString.c_str()); } 
+    OmniConnectInternals::LogCallback( OmniConnectLogLevel::ERR, nullptr, logString.c_str()); }
 
 #define OmniConnectDebugMacro(x) \
   { std::stringstream logStream; \
     logStream << x; \
     std::string logString = logStream.str(); \
-    OmniConnectInternals::LogCallback( OmniConnectLogLevel::WARNING, nullptr, logString.c_str()); }  
+    OmniConnectInternals::LogCallback( OmniConnectLogLevel::WARNING, nullptr, logString.c_str()); }
 
 const char* OmniMaterialRelativePath = "materials/";
 const char* OmniGeomRelativePath = "geometries/";
@@ -183,7 +197,7 @@ namespace
   {
     if(stage->GetPrimAtPath(path))
         stage->RemovePrim(path); // This can happen in very specific instances where a primtype is changed at runtime (generally not supported, but admitted for pointinstancer <-> points in case of glyphs)
-    return PrimType::Define(stage, path); 
+    return PrimType::Define(stage, path);
   }
 
   UsdGeomPrimvar GetPrimvarForType(UsdGeomPrimvarsAPI& primvarAPI, const TfToken& nameToken, const SdfValueTypeName& valueTypeName)
@@ -229,7 +243,7 @@ namespace
       topPrimvarsApi.RemovePrimvar(nameToken);
     }
 
-    // Set interpolation 
+    // Set interpolation
     if(!actPrimvar)
       actPrimvar = actorPrimvarsApi.CreatePrimvar(nameToken, valueTypeName);
 
@@ -238,8 +252,8 @@ namespace
 
     // Not strictly necessary for USD, but cleaner output
     if (timeEval.TimeVarying) // Create requires this branch
-    { 
-      actPrimvar.GetAttr().Clear(); 
+    {
+      actPrimvar.GetAttr().Clear();
     }
     else if (clipPrimvar)
     {
@@ -423,7 +437,7 @@ public:
     bool performsUpdate, bool timeVaryingUpdate, const UsdTimeCode& timeCode);
   bool UpdateActorGeom(OmniConnectActorCache& actorCache, OmniConnectMeshCache& meshCache, const OmniConnectMeshData& omniMeshData, double animTimeStep,
     OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga);
-  bool UpdateActorGeom(OmniConnectActorCache& actorCache, OmniConnectInstancerCache& instancerCache, OmniConnectInstancerData& omniInstancerData, double animTimeStep, 
+  bool UpdateActorGeom(OmniConnectActorCache& actorCache, OmniConnectInstancerCache& instancerCache, OmniConnectInstancerData& omniInstancerData, double animTimeStep,
     OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga);
   bool UpdateActorGeom(OmniConnectActorCache& actorCache, OmniConnectCurveCache& curveCache, const OmniConnectCurveData& omniCurveData, double animTimeStep,
     OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga);
@@ -452,13 +466,20 @@ public:
   template<typename CacheType> void RestoreClipActivesAndPaths(const OmniConnectActorCache& actorCache, CacheType& geomCache);
   void RetimeSceneToAnimClips(const VtVec2dArray& sceneClipTimes, const VtVec2dArray& animClipActives, VtVec2dArray& newAnimClipActives);
   template<typename CacheType> void RetimeActorGeoms(OmniConnectActorCache& actorCache, UsdStageRefPtr& scenestage, const VtVec2dArray& sceneClipTimes, VtVec2dArray& newAnimClipActives);
-  void SetClipValues(OmniConnectActorCache& actorCache, UsdStageRefPtr& scenestage, UsdPrim& actorPrim, 
+  void SetClipValues(OmniConnectActorCache& actorCache, UsdStageRefPtr& scenestage, UsdPrim& actorPrim,
     const double* sceneToAnimTimes, size_t numSceneToAnimTimes);
 #ifdef FORCE_OMNI_CLIP_UPDATES_WITH_DUMMY
   void AttachAsSublayer(UsdStageRefPtr& stage, std::string& fileName, bool attach);
 #endif
   void SetActorVisibility(OmniConnectActorCache& actorCache, bool visible, double animTimeStep);
   template<typename CacheType> void SetGeomVisibility(OmniConnectActorCache& actorCache, size_t geomId, bool visible, double animTimeStep);
+
+  // Camera and render product management
+  void CreateSceneCamera(UsdStageRefPtr& sceneStage);
+  void CreateRenderProduct(UsdStageRefPtr& sceneStage);
+  void UpdateCameraCacheFromTransform(const double position[3], const double focalPoint[3],
+    const double viewUp[3], double viewAngle, const double clippingRange[2]);
+  void ApplyCachedCameraToUSD();
 
   OmniConnectActorCache* GetCachedActorCache(size_t actorId);
 
@@ -533,11 +554,21 @@ public:
   std::string MatScopeName;
   std::string TexScopeName;
   std::string LightScopeName;
+  std::string CameraScopeName;
+  std::string CameraName;
+  std::string RenderScopeName;
+  std::string RenderProductName;
+  std::string RenderVarName;
   SdfPath SdfRootPrimName;
   SdfPath SdfActScopeName;
   SdfPath SdfMatScopeName;
   SdfPath SdfTexScopeName;
   SdfPath SdfLightScopeName;
+  SdfPath SdfCameraScopeName;
+  SdfPath SdfCameraName;
+  SdfPath SdfRenderScopeName;
+  SdfPath SdfRenderProductName;
+  SdfPath SdfRenderVarName;
 
 #ifdef USE_MDL_MATERIALS
   OmniConnectMdlNames MdlNames;
@@ -550,6 +581,15 @@ public:
   // Cached OmniConnectActorCache pointer
   size_t CurrentCachedActorId = size_t(-1);
   OmniConnectActorCache* CachedActorCache;
+
+  // Camera initialization and cached parameters
+  bool CameraInitialized = false;
+  bool CachedCameraValid = false;
+  double CachedCameraPosition[3] = {0.0, 0.0, 0.0};
+  double CachedCameraFocalPoint[3] = {0.0, 0.0, 0.0};
+  double CachedCameraViewUp[3] = {0.0, 0.0, 1.0};
+  double CachedCameraViewAngle = 30.0;
+  double CachedCameraClippingRange[2] = {0.1, 1000.0};
 
 #ifdef FORCE_OMNI_CLIP_UPDATES_WITH_DUMMY
   std::vector<UsdStageRefPtr> DummyStages;
@@ -571,7 +611,7 @@ int OmniConnectInternals::FindSessionNumber()
   int maxSessionNr = Connection->MaxSessionNr();
 
   maxSessionNr = std::max(0, maxSessionNr + Settings.CreateNewOmniSession); //Increase maximum found session number by one, or use last created session.
- 
+
   return maxSessionNr;
 }
 
@@ -584,14 +624,14 @@ void OmniConnectInternals::InitializeSession()
   this->SessionDirectory = (hasRootFileName ? this->Settings.RootLevelFileName : ("Session_" + std::to_string(this->SessionNumber))) + "/";
 
   this->UsdExtension = this->Settings.OutputBinary ? ".usd" : ".usda";
-  
+
   bool folderMayExist = !this->Settings.CreateNewOmniSession;
 
   Connection->CreateFolder("", true);
 
   if (this->Environment.ProcId == 0)
   {
-    //Connection->RemoveFolder(this->SessionDirectory.c_str()); 
+    //Connection->RemoveFolder(this->SessionDirectory.c_str());
     Connection->CreateFolder(this->SessionDirectory.c_str(), folderMayExist);
     if(this->Environment.NumProcs > 1)
       OmniConnectDebugMacro("Initializing multiprocess session --- Main proc session folder creation done.");
@@ -628,11 +668,21 @@ void OmniConnectInternals::InitializeSession()
   this->MatScopeName = this->RootPrimName + "/Looks";
   this->TexScopeName = this->RootPrimName + "/Textures";
   this->LightScopeName = this->RootPrimName + "/Lights";
+  this->CameraScopeName = this->RootPrimName + "/Cameras";
+  this->CameraName = this->CameraScopeName + "/Camera";
+  this->RenderScopeName = "/Render";
+  this->RenderProductName = this->RenderScopeName + "/RGBDCamera";
+  this->RenderVarName = this->RenderProductName + "/ldrColor";
   this->SdfRootPrimName = SdfPath(this->RootPrimName);
   this->SdfActScopeName = SdfPath(this->ActScopeName);
   this->SdfMatScopeName = SdfPath(this->MatScopeName);
   this->SdfTexScopeName = SdfPath(this->TexScopeName);
   this->SdfLightScopeName = SdfPath(this->LightScopeName);
+  this->SdfCameraScopeName = SdfPath(this->CameraScopeName);
+  this->SdfCameraName = SdfPath(this->CameraName);
+  this->SdfRenderScopeName = SdfPath(this->RenderScopeName);
+  this->SdfRenderProductName = SdfPath(this->RenderProductName);
+  this->SdfRenderVarName = SdfPath(this->RenderVarName);
   this->SceneFileName = "FullScene" + this->UsdExtension;
   this->MultiSceneFileName = "MultiScene" + this->UsdExtension;
   if(hasRootFileName)
@@ -672,7 +722,7 @@ void OmniConnectInternals::OpenMultiSceneStage()
   std::string relScenePath = this->SessionDirectory + this->MultiSceneFileName;
   const char* stageUrl = this->Connection->GetUrl(relScenePath.c_str());
   this->MultiSceneStageUrl = stageUrl;
-  
+
   if(!this->Settings.CreateNewOmniSession)
     this->MultiSceneStage = UsdStage::Open(stageUrl);
 
@@ -735,6 +785,9 @@ bool OmniConnectInternals::OpenSceneStage()
   {
     CreateDefaultLighting(this->SceneStage);
   }
+
+  // Create camera and render product for scene visualization
+  CreateSceneCamera(this->SceneStage);
 
   if (UsdSaveEnabled)
   {
@@ -811,8 +864,8 @@ void OmniConnectInternals::OpenActorStage(OmniConnectActorCache& actorCache)
   actorCache.Stage = UsdStage::CreateNew(stageUrl); // Always try to create a new stage first, since a new actor may be created regardless of whether createnewsession or not
   actorCache.UsdOutputFileUrl = stageUrl;
 
-  //In case the stage already existed or didn't get deleted properly, it can be opened again. 
-  if (!actorCache.Stage) 
+  //In case the stage already existed or didn't get deleted properly, it can be opened again.
+  if (!actorCache.Stage)
   {
     actorCache.Stage = UsdStage::Open(stageUrl);
     assert(actorCache.Stage);
@@ -836,7 +889,7 @@ void OmniConnectInternals::OpenActorStage(OmniConnectActorCache& actorCache)
 void OmniConnectInternals::OpenClipAndTopologyStage(const char* clipFilePath, const char* topologyFilePath, UsdStageRefPtr& clipStage, UsdStageRefPtr& topologyStage)
 {
   const char* stageUrl = this->Connection->GetUrl(clipFilePath);
-  
+
   OmniConnectDiagnosticMgrDelegate::SetOutputEnabled(false);
   clipStage = UsdStage::Open(stageUrl); // Try to open first: clip stage timestep may be revisited, or process may have been killed earlier
   OmniConnectDiagnosticMgrDelegate::SetOutputEnabled(true);
@@ -856,7 +909,7 @@ void OmniConnectInternals::OpenClipAndTopologyStage(const char* clipFilePath, co
   if (!topologyStage)
   {
     topologyStage = UsdStage::CreateNew(stageUrl);
-    assert(topologyStage);  
+    assert(topologyStage);
   }
 }
 
@@ -870,6 +923,168 @@ OmniConnectActorCache* OmniConnectInternals::GetCachedActorCache(size_t actorId)
     actorId = this->CurrentCachedActorId;
   }
   return this->CachedActorCache;
+}
+
+void OmniConnectInternals::CreateSceneCamera(UsdStageRefPtr& sceneStage)
+{
+  if (CameraInitialized)
+    return;
+
+  // Create Cameras scope under root
+  UsdGeomScope cameraScope = UsdGeomScope::Define(sceneStage, this->SdfCameraScopeName);
+  if (!cameraScope)
+  {
+    OmniConnectErrorMacro("Failed to create Cameras scope");
+    return;
+  }
+
+  // Create camera under the Cameras scope
+  UsdGeomCamera sceneCamera = UsdGeomCamera::Define(sceneStage, this->SdfCameraName);
+  if (!sceneCamera)
+  {
+    OmniConnectErrorMacro("Failed to create scene camera");
+    return;
+  }
+
+  // Set reasonable defaults
+  sceneCamera.CreateProjectionAttr().Set(UsdGeomTokens->perspective);
+  sceneCamera.CreateFocalLengthAttr().Set(50.0f);
+
+  // Set aperture to match render product aspect ratio
+  sceneCamera.CreateHorizontalApertureAttr().Set(CAMERA_HORIZONTAL_APERTURE);
+  sceneCamera.CreateVerticalApertureAttr().Set(CAMERA_VERTICAL_APERTURE);
+
+  sceneCamera.CreateClippingRangeAttr().Set(GfVec2f(0.1f, 10000.0f));
+
+  // Set initial position (will be updated when bounds are available)
+  GfMatrix4d identityMatrix(1.0);
+  identityMatrix.SetTranslateOnly(GfVec3d(0, 0, 10));
+  UsdGeomXformable xformable(sceneCamera.GetPrim());
+  xformable.ClearXformOpOrder();
+  UsdGeomXformOp transformOp = xformable.AddTransformOp();
+  transformOp.Set(identityMatrix, UsdTimeCode::Default());
+
+  CameraInitialized = true;
+
+  // Create render product
+  CreateRenderProduct(sceneStage);
+}
+
+void OmniConnectInternals::CreateRenderProduct(UsdStageRefPtr& sceneStage)
+{
+  UsdGeomScope renderScope = UsdGeomScope::Define(sceneStage, this->SdfRenderScopeName);
+
+  if (!renderScope)
+  {
+    OmniConnectErrorMacro("Failed to create Render scope");
+    return;
+  }
+
+  UsdRenderProduct renderProduct = UsdRenderProduct::Define(sceneStage, this->SdfRenderProductName);
+
+  if (!renderProduct)
+  {
+    OmniConnectErrorMacro("Failed to create RenderProduct");
+    return;
+  }
+
+  UsdRenderVar renderVar = UsdRenderVar::Define(sceneStage, this->SdfRenderVarName);
+
+  if (renderVar)
+  {
+    // Set sourceName as a string attribute
+    renderVar.CreateSourceNameAttr().Set(VtValue("LdrColor"));
+  }
+
+  UsdRelationship cameraRel = renderProduct.GetPrim().CreateRelationship(
+    UsdRenderTokens->camera, false);
+  cameraRel.SetTargets({this->SdfCameraName});
+
+  UsdRelationship orderedVarsRel = renderProduct.GetPrim().CreateRelationship(
+    UsdRenderTokens->orderedVars, false);
+  orderedVarsRel.SetTargets({this->SdfRenderVarName});
+
+  UsdAttribute resolutionAttr = renderProduct.GetPrim().CreateAttribute(
+    UsdRenderTokens->resolution, SdfValueTypeNames->Int2, false, SdfVariabilityUniform);
+  resolutionAttr.Set(GfVec2i(RENDER_PRODUCT_WIDTH, RENDER_PRODUCT_HEIGHT));
+}
+
+void OmniConnectInternals::UpdateCameraCacheFromTransform(const double position[3], const double focalPoint[3],
+  const double viewUp[3], double viewAngle, const double clippingRange[2])
+{
+  // Always cache the camera parameters (never write to USD from this method)
+  if (position && focalPoint && viewUp && clippingRange)
+  {
+    CachedCameraPosition[0] = position[0];
+    CachedCameraPosition[1] = position[1];
+    CachedCameraPosition[2] = position[2];
+
+    CachedCameraFocalPoint[0] = focalPoint[0];
+    CachedCameraFocalPoint[1] = focalPoint[1];
+    CachedCameraFocalPoint[2] = focalPoint[2];
+
+    CachedCameraViewUp[0] = viewUp[0];
+    CachedCameraViewUp[1] = viewUp[1];
+    CachedCameraViewUp[2] = viewUp[2];
+
+    CachedCameraViewAngle = viewAngle;
+
+    CachedCameraClippingRange[0] = clippingRange[0];
+    CachedCameraClippingRange[1] = clippingRange[1];
+
+    CachedCameraValid = true;
+  }
+}
+
+void OmniConnectInternals::ApplyCachedCameraToUSD()
+{
+  if (!CameraInitialized || !CachedCameraValid || !SceneStage)
+    return;
+
+  // Get the camera from the stage using the path
+  UsdGeomCamera sceneCamera = UsdGeomCamera::Get(SceneStage, this->SdfCameraName);
+  if (!sceneCamera)
+  {
+    OmniConnectErrorMacro("Failed to get scene camera for update");
+    return;
+  }
+
+  // Convert VTK camera to USD camera transform
+  GfVec3d pos(CachedCameraPosition[0], CachedCameraPosition[1], CachedCameraPosition[2]);
+  GfVec3d focal(CachedCameraFocalPoint[0], CachedCameraFocalPoint[1], CachedCameraFocalPoint[2]);
+  GfVec3d up(CachedCameraViewUp[0], CachedCameraViewUp[1], CachedCameraViewUp[2]);
+
+  // Create view matrix using SetLookAt
+  GfMatrix4d viewMatrix;
+  viewMatrix.SetLookAt(pos, focal, up);
+
+  // USD camera transform is the inverse of the view matrix
+  GfMatrix4d cameraXform = viewMatrix.GetInverse();
+
+  // Apply transform
+  UsdGeomXformable xformable(sceneCamera.GetPrim());
+  xformable.ClearXformOpOrder();
+  UsdGeomXformOp transformOp = xformable.AddTransformOp();
+  transformOp.Set(cameraXform, UsdTimeCode::Default());
+
+  // Apertures are fixed to match the render product resolution aspect ratio
+  sceneCamera.GetVerticalApertureAttr().Set(CAMERA_VERTICAL_APERTURE);
+  sceneCamera.GetHorizontalApertureAttr().Set(CAMERA_HORIZONTAL_APERTURE);
+
+  // Convert VTK view angle to USD focal length
+  // VTK's viewAngle is vertical FOV, use vertical aperture for calculation
+  if (CachedCameraViewAngle > 0.0)
+  {
+    float fovRadians = (float)CachedCameraViewAngle * (float)M_PI / 180.0f;
+    float focalLength = CAMERA_VERTICAL_APERTURE / (2.0f * tan(fovRadians / 2.0f));
+    sceneCamera.GetFocalLengthAttr().Set(focalLength);
+  }
+
+  // Set clipping range
+  if (CachedCameraClippingRange[0] > 0.0 && CachedCameraClippingRange[1] > CachedCameraClippingRange[0])
+  {
+    sceneCamera.GetClippingRangeAttr().Set(GfVec2f((float)CachedCameraClippingRange[0], (float)CachedCameraClippingRange[1]));
+  }
 }
 
 UsdShadeOutput OmniConnectInternals::CreateUsdPreviewSurface(OmniConnectActorCache& actorCache, OmniConnectMatCache& matCache, UsdShadeShader& shader, bool newMat)
@@ -911,7 +1126,7 @@ void OmniConnectInternals::ResetUsdPreviewSurface(UsdShadeShader& shader)
   shader.GetInput(OmniConnectTokens->diffuseColor).GetAttr().Clear();
   shader.GetInput(OmniConnectTokens->specularColor).GetAttr().Clear();
   shader.GetInput(OmniConnectTokens->roughness).GetAttr().Clear();
-  shader.GetInput(OmniConnectTokens->opacity).GetAttr().Clear(); 
+  shader.GetInput(OmniConnectTokens->opacity).GetAttr().Clear();
   shader.GetInput(OmniConnectTokens->metallic).GetAttr().Clear();
   shader.GetInput(OmniConnectTokens->ior).GetAttr().Clear();
   shader.GetInput(OmniConnectTokens->emissiveColor).GetAttr().Clear();
@@ -983,7 +1198,7 @@ void OmniConnectInternals::UpdateActorMaterial(OmniConnectActorCache& actorCache
 
   auto matCachePair = actorCache.GetMatCache(matId);
   UsdStageRefPtr& stage = actorCache.Stage;
-  
+
   OmniConnectMatCache& matCache = matCachePair.second;
   bool newMatCache = matCachePair.first;
 
@@ -1018,7 +1233,7 @@ void OmniConnectInternals::UpdateActorMaterial(OmniConnectActorCache& actorCache
   {
     if(!omniMatData.VolumeMaterial)
     {
-      UsdShadeOutput shaderOutput = CreateUsdPreviewSurface(actorCache, matCache, shader, newMat);   
+      UsdShadeOutput shaderOutput = CreateUsdPreviewSurface(actorCache, matCache, shader, newMat);
       material.CreateSurfaceOutput().ConnectToSource(shaderOutput);
     }
 
@@ -1077,7 +1292,7 @@ void OmniConnectInternals::UpdateActorMaterial(OmniConnectActorCache& actorCache
   {
 #ifdef USE_INDEX_MATERIALS
     UpdateUsdIndexVolumeShader(actorCache, matCache, texCache, omniMatData, indexShader, animTimeStep);
-#endif    
+#endif
   }
 }
 
@@ -1165,7 +1380,7 @@ void OmniConnectInternals::UpdateTexture(OmniConnectActorCache& actorCache, size
 }
 
 void OmniConnectInternals::DeleteTexture(OmniConnectActorCache& actorCache
-  , size_t texCacheIdx 
+  , size_t texCacheIdx
 )
 {
   auto& texCacheEntry = actorCache.TexCaches[texCacheIdx];
@@ -1184,7 +1399,7 @@ void OmniConnectInternals::DeleteTexture(OmniConnectActorCache& actorCache
   actorCache.Stage->RemovePrim(texCache.TexturePrimPath);
 }
 
-void OmniConnectInternals::UpdateGenericArrays(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi, 
+void OmniConnectInternals::UpdateGenericArrays(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi,
   OmniConnectGenericArray* genericArrays, size_t numGenericArrays, double animTimeStep)
 {
   TimeEvaluator<bool> timeEval(false, animTimeStep);
@@ -1212,7 +1427,7 @@ void OmniConnectInternals::UpdateGenericArrays(UsdGeomPrimvarsAPI& actorPrimvars
       case OmniConnectType::LONG: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->Int64Array); ASSIGN_ARRAY_TO_PRIMVAR_MACRO(VtInt64Array); break; }
       case OmniConnectType::ULONG: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->UInt64Array); ASSIGN_ARRAY_TO_PRIMVAR_MACRO(VtUInt64Array); break; }
       case OmniConnectType::FLOAT: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->FloatArray); ASSIGN_ARRAY_TO_PRIMVAR_MACRO(VtFloatArray); break; }
-      case OmniConnectType::DOUBLE: 
+      case OmniConnectType::DOUBLE:
       {
         if(ConvertGenericArraysDoubleToFloat)
         {
@@ -1271,25 +1486,25 @@ void OmniConnectInternals::UpdateGenericArrays(UsdGeomPrimvarsAPI& actorPrimvars
       }
 
       case OmniConnectType::UCHAR2:
-      case OmniConnectType::UCHAR3: 
+      case OmniConnectType::UCHAR3:
       case OmniConnectType::UCHAR4: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->UCharArray); ASSIGN_ARRAY_TO_PRIMVAR_FLATTEN_MACRO(VtUCharArray); break; }
       case OmniConnectType::CHAR2:
-      case OmniConnectType::CHAR3: 
+      case OmniConnectType::CHAR3:
       case OmniConnectType::CHAR4: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->UCharArray); ASSIGN_ARRAY_TO_PRIMVAR_FLATTEN_MACRO(VtUCharArray); break; }
       case OmniConnectType::USHORT2:
       case OmniConnectType::USHORT3:
       case OmniConnectType::USHORT4: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->UIntArray); ASSIGN_ARRAY_TO_PRIMVAR_CONVERT_FLATTEN_MACRO(VtUIntArray, short); break; }
       case OmniConnectType::SHORT2:
-      case OmniConnectType::SHORT3: 
+      case OmniConnectType::SHORT3:
       case OmniConnectType::SHORT4: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->IntArray); ASSIGN_ARRAY_TO_PRIMVAR_CONVERT_FLATTEN_MACRO(VtIntArray, unsigned short); break; }
       case OmniConnectType::UINT2:
-      case OmniConnectType::UINT3: 
+      case OmniConnectType::UINT3:
       case OmniConnectType::UINT4: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->UIntArray); ASSIGN_ARRAY_TO_PRIMVAR_FLATTEN_MACRO(VtUIntArray); break; }
       case OmniConnectType::LONG2:
-      case OmniConnectType::LONG3: 
+      case OmniConnectType::LONG3:
       case OmniConnectType::LONG4: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->Int64Array); ASSIGN_ARRAY_TO_PRIMVAR_FLATTEN_MACRO(VtInt64Array); break; }
       case OmniConnectType::ULONG2:
-      case OmniConnectType::ULONG3: 
+      case OmniConnectType::ULONG3:
       case OmniConnectType::ULONG4: {GET_PRIMVAR_BY_NAME_MACRO(SdfValueTypeNames->UInt64Array); ASSIGN_ARRAY_TO_PRIMVAR_FLATTEN_MACRO(VtUInt64Array); break; }
 
       default: {OmniConnectErrorMacro("Generic Array update does not support type: " << genericArrays[i].DataType) break; }
@@ -1297,7 +1512,7 @@ void OmniConnectInternals::UpdateGenericArrays(UsdGeomPrimvarsAPI& actorPrimvars
   }
 }
 
-void OmniConnectInternals::DeleteGenericArrays(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi, 
+void OmniConnectInternals::DeleteGenericArrays(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi,
   OmniConnectGenericArray* genericArrays, size_t numGenericArrays, double)
 {
   for (int i = 0; i < numGenericArrays; ++i)
@@ -1412,7 +1627,7 @@ void OmniConnectInternals::UpdateGeom(OmniConnectActorCache* actorCache, double 
   CacheType& geomCache = geomCachePair.second;
   bool newGeomCache = geomCachePair.first;
 
-  // In case of reopening an existing scene, make sure that the geom cache's clip actives and paths 
+  // In case of reopening an existing scene, make sure that the geom cache's clip actives and paths
   // are synchronized with any existing files before adding to them
   if(newGeomCache && !Settings.CreateNewOmniSession)
   {
@@ -1424,7 +1639,7 @@ void OmniConnectInternals::UpdateGeom(OmniConnectActorCache* actorCache, double 
 
   if (newGeom)
   {
-    // Under the assumption that timesteps are generally added in sequence starting from 0, 
+    // Under the assumption that timesteps are generally added in sequence starting from 0,
     // the 0 timestep is added to set invisibility for all timesteps up until animTimeStep
     UsdGeomImageable geomIm = UsdGeomImageable::Get(actorCache->Stage, geomCache.SdfGeomPath);
     assert(geomIm);
@@ -1444,7 +1659,7 @@ template<typename CacheType>
 bool OmniConnectInternals::RemoveGeomAtTime(OmniConnectActorCache* actorCache, double animTimeStep, size_t geomId)
 {
   std::map<size_t, CacheType>& geomCaches = actorCache->GetGeomCaches<CacheType>();
-  
+
   auto geomCacheIt = geomCaches.find(geomId);
   if (geomCacheIt == geomCaches.end())
     return true; // Actor is not there anymore, so the geom doesn't exist either.
@@ -1547,7 +1762,7 @@ void OmniConnectInternals::GetActorGeomPrimsAndStages(OmniConnectActorCache& act
     if(UsdSaveEnabled && saveTopGeom)
       geomTopologyStage->Save();
 
-#ifdef FORCE_OMNI_CLIP_UPDATES_WITH_SUBLAYER      
+#ifdef FORCE_OMNI_CLIP_UPDATES_WITH_SUBLAYER
     actorCache.Stage->GetRootLayer()->InsertSubLayerPath(geomClipFile);
 #endif
 
@@ -1613,7 +1828,7 @@ void OmniConnectInternals::InitializeGeom(UsdGeomPointInstancer& points, UsdStag
   points.CreateProtoIndicesAttr();
   points.CreateVelocitiesAttr();
   points.CreateAngularVelocitiesAttr();
-  points.CreateInvisibleIdsAttr(); 
+  points.CreateInvisibleIdsAttr();
 }
 
 void OmniConnectInternals::InitializeGeom(UsdGeomPoints& points, UsdStageRefPtr& geomStage, OmniConnectInstancerCache& instancerCache, bool setDefaultValues)
@@ -1667,7 +1882,7 @@ void OmniConnectInternals::InitializeGeom(UsdVolVolume& volume, UsdStageRefPtr& 
 
   //using FieldInfoType = std::pair<const SdfPath&, const TfToken&>;
   //FieldInfoType fieldInfo[2] =
-  //{ 
+  //{
   //  FieldInfoType(volumeCache.OvdbDensityFieldPath, OmniConnectTokens->density),
   //  FieldInfoType(volumeCache.OvdbDiffuseFieldPath, OmniConnectTokens->diffuse)
   //};
@@ -1675,7 +1890,7 @@ void OmniConnectInternals::InitializeGeom(UsdVolVolume& volume, UsdStageRefPtr& 
   //for (int i = 0; i < 1; ++i) // The update stage now takes care of all fields
   //{
   //  InitializeVolumeField(geomStage, fieldInfo[i].first, fieldInfo[i].second, setDefaultValues);
-  //  
+  //
   //  if(setDefaultValues)
   //    volume.CreateFieldRelationship(fieldInfo[i].second, fieldInfo[i].first);
   //}
@@ -1752,12 +1967,12 @@ void OmniConnectInternals::InitializeGeom(UsdGeomMesh& volMesh, UsdStageRefPtr& 
     VtArray<int> faceVertexIndices({ 0, 1, 3, 2, 0, 4, 5, 1, 1, 5, 6, 3, 2, 3, 6, 7, 0, 2, 7, 4, 4, 7, 6, 5 });
     volMesh.GetFaceVertexIndicesAttr().Set(faceVertexIndices);
     VtVec2fArray texCoords({
-      GfVec2f(1, 0), GfVec2f(0, 0), GfVec2f(0, 1), GfVec2f(1, 1), 
-      GfVec2f(1, 0), GfVec2f(1, 1), GfVec2f(0, 1), GfVec2f(0, 0), 
-      GfVec2f(1, 0), GfVec2f(0, 0), GfVec2f(0, 1), GfVec2f(1, 1), 
-      GfVec2f(1, 0), GfVec2f(0, 0), GfVec2f(0, 1), GfVec2f(1, 1), 
-      GfVec2f(1, 0), GfVec2f(1, 1), GfVec2f(0, 1), GfVec2f(0, 0), 
-      GfVec2f(1, 0), GfVec2f(1, 1), GfVec2f(0, 1), GfVec2f(0, 0) 
+      GfVec2f(1, 0), GfVec2f(0, 0), GfVec2f(0, 1), GfVec2f(1, 1),
+      GfVec2f(1, 0), GfVec2f(1, 1), GfVec2f(0, 1), GfVec2f(0, 0),
+      GfVec2f(1, 0), GfVec2f(0, 0), GfVec2f(0, 1), GfVec2f(1, 1),
+      GfVec2f(1, 0), GfVec2f(0, 0), GfVec2f(0, 1), GfVec2f(1, 1),
+      GfVec2f(1, 0), GfVec2f(1, 1), GfVec2f(0, 1), GfVec2f(0, 0),
+      GfVec2f(1, 0), GfVec2f(1, 1), GfVec2f(0, 1), GfVec2f(0, 0)
     });
     primvarApi.GetPrimvar(OmniConnectTokens->st).Set(texCoords);
     VtVec3fArray normals({
@@ -1782,9 +1997,9 @@ void OmniConnectInternals::InitializeGeom(UsdGeomMesh& volMesh, UsdStageRefPtr& 
 
 namespace
 {
-  
+
   template<typename UsdGeomType, typename MemFncClassType>
-  void SyncTimeVaryingAttribute(const UsdAttribute& actAttrib, const UsdAttribute& clipAttrib, UsdGeomType& topGeom, 
+  void SyncTimeVaryingAttribute(const UsdAttribute& actAttrib, const UsdAttribute& clipAttrib, UsdGeomType& topGeom,
     bool timeVarying, const UsdTimeCode& timeCode, const TfToken& primvarName,
     UsdAttribute (MemFncClassType::*topAttribCreateFun)(VtValue const&, bool) const)
   {
@@ -1799,7 +2014,7 @@ namespace
       clipAttrib.ClearAtTime(timeCode);
   }
 
-  void SyncTimeVaryingInput(UsdShadeShader& actShader, UsdShadeShader& clipShader, UsdShadeShader& topShader, 
+  void SyncTimeVaryingInput(UsdShadeShader& actShader, UsdShadeShader& clipShader, UsdShadeShader& topShader,
     bool timeVarying, const UsdTimeCode& timeCode, const TfToken& inputName, const char* inputNameStr, const SdfValueTypeName& primvarType)
   {
     UsdAttribute actAttrib = actShader.GetInput(inputName).GetAttr();
@@ -1816,7 +2031,7 @@ namespace
       clipAttrib.ClearAtTime(timeCode);
   }
 
-  void SyncTimeVaryingPrimvar(const UsdGeomPrimvar& actPrimvar, const UsdGeomPrimvar& clipPrimvar, UsdGeomPrimvarsAPI& topPrimvarsApi, 
+  void SyncTimeVaryingPrimvar(const UsdGeomPrimvar& actPrimvar, const UsdGeomPrimvar& clipPrimvar, UsdGeomPrimvarsAPI& topPrimvarsApi,
     bool timeVarying, const UsdTimeCode& timeCode, const TfToken& primvarName, const SdfValueTypeName& primvarType)
   {
     if (timeVarying)
@@ -1839,7 +2054,7 @@ namespace
     bool performsUpdate = updateEval.PerformsUpdate(DMI::POINTS);
     bool timeVaryingUpdate = timeEval.IsTimeVarying(DMI::POINTS);
 
-    // SyncTimeVaryingAttribute() 
+    // SyncTimeVaryingAttribute()
     if (timeVaryingUpdate)
       UsdGeomCreatePointsAttribute(topGeom);
     else
@@ -1851,7 +2066,7 @@ namespace
       UsdGeomGetPointsAttribute(clipGeom).ClearAtTime(timeEval.TimeCode);
     //~SyncTimeVaryingAttribute()
 
-    SyncTimeVaryingAttribute(actGeom.GetExtentAttr(), clipGeom.GetExtentAttr(), topGeom, 
+    SyncTimeVaryingAttribute(actGeom.GetExtentAttr(), clipGeom.GetExtentAttr(), topGeom,
       timeVaryingUpdate, timeEval.TimeCode, OmniConnectTokens->extent, &UsdGeomType::CreateExtentAttr);
 
     if (performsUpdate)
@@ -1900,7 +2115,7 @@ namespace
 
     SyncTimeVaryingAttribute(actGeom.GetNormalsAttr(), clipGeom.GetNormalsAttr(), topGeom,
       timeVaryingUpdate, timeEval.TimeCode, OmniConnectTokens->normals, &UsdGeomType::CreateNormalsAttr);
-      
+
     if (performsUpdate)
     {
       UsdGeomType& outGeom = timeVaryingUpdate ? clipGeom : actGeom;
@@ -1935,7 +2150,7 @@ namespace
   }
 
   template<typename GeomDataType>
-  void UpdateUsdGeomTexCoords(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi, 
+  void UpdateUsdGeomTexCoords(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi,
     const GeomDataType& omniGeomData, uint64_t numPrims, OmniConnectUpdateEvaluator<const GeomDataType>& updateEval, TimeEvaluator<GeomDataType>& timeEval)
   {
     using DMI = typename GeomDataType::DataMemberId;
@@ -1980,7 +2195,7 @@ namespace
   }
 
   template<typename GeomDataType>
-  void UpdateUsdGeomColors(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi, 
+  void UpdateUsdGeomColors(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi,
     const GeomDataType& omniGeomData, uint64_t numPrims, OmniConnectUpdateEvaluator<const GeomDataType>& updateEval, TimeEvaluator<GeomDataType>& timeEval
 #if defined(USE_MDL_MATERIALS) && USE_CUSTOM_POINT_SHADER
     , bool isPointsGeom = false
@@ -2344,7 +2559,7 @@ namespace
         GfVec3f defaultNormal(1, 0, 0);
         VtVec3fArray usdNormals(omniGeomData.NumPoints, defaultNormal);
         normalsAttribute.Set(usdNormals, timeCode);
-      } 
+      }
     }
   }
 
@@ -2567,7 +2782,7 @@ namespace
           case OmniConnectInstancerData::SHAPE_CYLINDER:
           {
             protoShapePath = instancerCache.SdfProtoPath.AppendPath(instancerCache.RelCylinderPath);
-            UsdGeomCylinder geomCylinder = UsdGeomCylinder::Define(actorCache.Stage, protoShapePath);   
+            UsdGeomCylinder geomCylinder = UsdGeomCylinder::Define(actorCache.Stage, protoShapePath);
             UsdGeomXformOp rotateOp = geomCylinder.AddRotateXOp();
             rotateOp.Set(90.0f);
             UsdGeomXformOp scaleOp = geomCylinder.AddScaleOp();
@@ -2603,7 +2818,7 @@ namespace
             float coneRadius = omniInstancerData.ShapeDims[2];
             {
               SdfPath cylinderPath = protoShapePath.AppendPath(instancerCache.RelCylinderPath);
-              UsdGeomCylinder geomCylinder = UsdGeomCylinder::Define(actorCache.Stage, cylinderPath);  
+              UsdGeomCylinder geomCylinder = UsdGeomCylinder::Define(actorCache.Stage, cylinderPath);
 
               UsdGeomXformOp rotateOp = geomCylinder.AddRotateYOp();
               rotateOp.Set(90.0f);
@@ -2643,7 +2858,7 @@ namespace
             refMesh.MakeInvisible();
             //(in)active controls visibility for traversal, in essence an alternative "delete"
             //overMesh.SetActive(true);
-            //actorCache.Stage->GetPrimAtPath(meshPath).SetActive(false); 
+            //actorCache.Stage->GetPrimAtPath(meshPath).SetActive(false);
 
             protoShapePath = overMeshPath;
             break;
@@ -2895,7 +3110,7 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
 
   performsUpdate = updateEval.PerformsUpdate(DMI::DATA);
   timeVaryingUpdate = timeEval.IsTimeVarying(DMI::DATA);
-  
+
   UsdTimeCode timeCode = timeEval.Eval(DMI::DATA);
 
   // Geometry-space coordinates (as if the volume were a pointset with the following min and max values)
@@ -2931,16 +3146,16 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
     UsdShadeShader volClipShader = UsdShadeShader::Get(geomClipStage, volumeCache.MeshVolShadPath);
     UsdShadeShader volTopShader = UsdShadeShader::Get(geomTopologyStage, volumeCache.MeshVolShadPath);
 
-    SyncTimeVaryingInput(volActShader, volClipShader, volTopShader, timeVaryingUpdate, timeCode, 
+    SyncTimeVaryingInput(volActShader, volClipShader, volTopShader, timeVaryingUpdate, timeCode,
       OmniConnectTokens->volume_density_texture, "inputs:volume_density_texture", SdfValueTypeNames->Asset);
 #endif
 
     if (performsUpdate)
     {
       VtVec3fArray points({
-        GfVec3f(minX, minY, minZ), GfVec3f(maxX, minY, minZ), 
-        GfVec3f(minX, minY, maxZ), GfVec3f(maxX, minY, maxZ), 
-        GfVec3f(minX, maxY, minZ), GfVec3f(maxX, maxY, minZ), 
+        GfVec3f(minX, minY, minZ), GfVec3f(maxX, minY, minZ),
+        GfVec3f(minX, minY, maxZ), GfVec3f(maxX, minY, maxZ),
+        GfVec3f(minX, maxY, minZ), GfVec3f(maxX, maxY, minZ),
         GfVec3f(maxX, maxY, maxZ), GfVec3f(minX, maxY, maxZ)
       });
       volOutGeom.GetPointsAttr().Set(points, timeCode);
@@ -2991,7 +3206,7 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
       OmniConnectGenericArray& genArr = deletedGenericArrays[arrIdx];
 
       volumeCache.ResetTempFieldPathAndTokens(genArr.Name);
-      
+
       MANAGE_SET_AND_LINK_VOLUME_FIELD(volumeCache.TempFieldPath, volumeCache.TempFieldRelToken, volumeCache.TempFieldGridToken, false);
     }
   }
@@ -3010,7 +3225,7 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
 
     geomOutPrim.GetExtentAttr().Set(extentArray, timeCode); // Always timevarying
 
-    // Write VDB data 
+    // Write VDB data
     VolumeWriter->ToVDB(omniVolumeData,
       updatedGenericArrays, numUga);
 
@@ -3049,7 +3264,7 @@ void OmniConnectInternals::ManageSetAndLinkOpenVDBAsset(UsdStageRefPtr& actorSta
   if(createField)
       SyncTimeVaryingAttribute(ovdbDiffuseFieldAct.GetFilePathAttr(), ovdbDiffuseFieldClip.GetFilePathAttr(), ovdbDiffuseFieldTop,
         timeVaryingUpdate, timeCode, OmniConnectTokens->filePath, &UsdVolOpenVDBAsset::CreateFilePathAttr);
-  
+
   if (performsUpdate)
   {
     // Set: File path attribute
@@ -3295,7 +3510,7 @@ void OmniConnectInternals::SetTimeStepCodes(UsdStageRefPtr& stage, double newTim
   {
     prevEditTarget = stage->GetEditTarget();
     stage->SetEditTarget(UsdEditTarget(stage->GetRootLayer()));
-  }  
+  }
 
   // Set the time codes if they expand the range
   double oldStartTime = stage->GetStartTimeCode();
@@ -3418,14 +3633,14 @@ void OmniConnectInternals::RestoreClipActivesAndPaths(const OmniConnectActorCach
 
 void OmniConnectInternals::RetimeSceneToAnimClips(const VtVec2dArray& sceneClipTimes, const VtVec2dArray& animClipActives, VtVec2dArray& newAnimClipActives)
 {
-  // Retime according to the old clipactives.  
+  // Retime according to the old clipactives.
   // Find for every entry s{stagetime, cliptime} in sceneClipTimes the tuple a{stagetime, assetindex} in animClipActives with s.cliptime == a.stagetime, and take its assetindex.
   // Note that to make sure that for every s{}, there is an a{} such that s.cliptime == a.stagetime, invidual anim geometry should have already been updated accordingly.
   // However, if geometry is not updated due to it being empty or removed for a timestep, we just point to asset 0 and thereby defer to other mechanisms (such as visibility, see actornodebase).
   for (int clipIdx = 0; clipIdx < sceneClipTimes.size(); ++clipIdx)
   {
     double clipTime = sceneClipTimes[clipIdx][1];
-    double assetIndex = 0; 
+    double assetIndex = 0;
     for (int activeIdx = 0; activeIdx < animClipActives.size(); ++activeIdx)
     {
       if (clipTime == animClipActives[activeIdx][0])
@@ -3470,33 +3685,33 @@ void OmniConnectInternals::RetimeActorGeoms(OmniConnectActorCache& actorCache, U
   }
 }
 
-void OmniConnectInternals::SetClipValues(OmniConnectActorCache& actorCache, UsdStageRefPtr& scenestage, UsdPrim& actorPrim, 
+void OmniConnectInternals::SetClipValues(OmniConnectActorCache& actorCache, UsdStageRefPtr& scenestage, UsdPrim& actorPrim,
   const double* sceneToAnimTimes, size_t numSceneToAnimTimes)
 {
   //WITHIN THE SCENE STAGE ONLY; defines a value clip around mesh/instancer GROUPS, in combination with overriding the "actives" attribute of the individual mesh/instancer PRIM value clips,
-  //to enforce a different timing according to "sceneToAnimTimes" for a particular ACTOR. Value clips within the ACTOR STAGE are left unchanged, 
+  //to enforce a different timing according to "sceneToAnimTimes" for a particular ACTOR. Value clips within the ACTOR STAGE are left unchanged,
   //and only used for reading actor-space timing information, required for composing the scene-based retiming in the SCENE STAGE.
 
   const GfVec2d* gfSceneAnimTimes = reinterpret_cast<const GfVec2d*>(sceneToAnimTimes);
   VtVec2dArray& sceneClipTimes = actorCache.TempClipTimes;
   sceneClipTimes.assign(gfSceneAnimTimes, gfSceneAnimTimes + numSceneToAnimTimes);
 
-  // Set timing for mesh/instancer groups in the scene stage for this actor. Only one clip is active at all times, which has already been set; 
-  // the retiming takes care of all the NON-mesh/instancer attributes in that clip.  
+  // Set timing for mesh/instancer groups in the scene stage for this actor. Only one clip is active at all times, which has already been set;
+  // the retiming takes care of all the NON-mesh/instancer attributes in that clip.
   UsdClipsAPI actorClipsApi(actorPrim);
   actorClipsApi.SetClipTimes(sceneClipTimes);
 
-  // The value clips for the individual meshes/instancers has to be OVERRIDDEN in the scene stage, 
+  // The value clips for the individual meshes/instancers has to be OVERRIDDEN in the scene stage,
   // with the FLATTENED values of the scenetime->assetindex evaluation.
-  // This is because the individual geoms define the lowest-level value clip (the first parent) of the geometry, 
+  // This is because the individual geoms define the lowest-level value clip (the first parent) of the geometry,
   // which fully determines the retiming.
-  // So the "times" in the value clip are not touched, but the "actives" array is simply overridden from actortime->assetindex 
+  // So the "times" in the value clip are not touched, but the "actives" array is simply overridden from actortime->assetindex
   // in the actor stage to scenetime->actortime->assetindex = scenetime->assetindex in the scene stage.
-  // Given a scenetime->actortime pair, one requirement is that the mesh/instancer clip information at actortime 
+  // Given a scenetime->actortime pair, one requirement is that the mesh/instancer clip information at actortime
   // has already been added to the actor stage.
   VtVec2dArray& newAnimClipActives = actorCache.TempNewClipActives;
   newAnimClipActives.resize(sceneClipTimes.size());
-  
+
   RetimeActorGeoms<OmniConnectMeshCache>(actorCache, scenestage, sceneClipTimes, newAnimClipActives);
   RetimeActorGeoms<OmniConnectInstancerCache>(actorCache, scenestage, sceneClipTimes, newAnimClipActives);
   RetimeActorGeoms<OmniConnectCurveCache>(actorCache, scenestage, sceneClipTimes, newAnimClipActives);
@@ -3529,7 +3744,7 @@ void OmniConnectInternals::SetActorVisibility(OmniConnectActorCache& actorCache,
   {
     meshVisAttrib = actorPrim.CreateVisibilityAttr();
   }
-  
+
   TfToken visibleToken = visible ? UsdGeomTokens->inherited : UsdGeomTokens->invisible;
   UsdTimeCode timeCode = animTimeStep == -1 ? UsdTimeCode::Default() : UsdTimeCode(animTimeStep);
   meshVisAttrib.Set(visibleToken, timeCode);
@@ -3598,7 +3813,7 @@ OmniConnect::OmniConnect(const OmniConnectSettings& settings
     Connection = new OmniConnectLocalConnection();
   else
     Connection = new OmniConnectRemoteConnection();
-  
+
   Internals = new OmniConnectInternals(settings, environment, Connection, logCallback);
 
   // Initialize USD plugins early
@@ -3717,7 +3932,7 @@ OmniConnectUrlInfoList OmniConnect::GetUrlInfoList(const char* serverUrl) const
 
 bool OmniConnect::CreateFolder(const char* url)
 {
-  if (this->ConnectionValid) 
+  if (this->ConnectionValid)
   {
     return this->Connection->CreateFolder(url, true, false);
   }
@@ -3736,7 +3951,7 @@ void OmniConnect::SetAuthMessageBoxCallback(void* userData, OmniConnectAuthCallb
   this->Connection->SetAuthMessageBoxCallback(userData, callback);
 }
 
-void OmniConnect::CancelOmniClientAuth(uint32_t authHandle) 
+void OmniConnect::CancelOmniClientAuth(uint32_t authHandle)
 {
   this->Connection->CancelOmniClientAuth(authHandle);
 }
@@ -3752,7 +3967,7 @@ bool OmniConnect::OmniClientEnabled() {
 OmniConnect::~OmniConnect()
 {
   CloseConnection();
-  
+
   delete Internals;
   delete Connection;
 }
@@ -3765,7 +3980,7 @@ bool OmniConnect::CreateActor(size_t actorId, const char* actorName)
   {
     LIVE_WORKFLOW_DISABLED_SCOPE;
 
-    actorCache.SetPathsAndNames(actorId, actorName, Internals->SceneDirectory, 
+    actorCache.SetPathsAndNames(actorId, actorName, Internals->SceneDirectory,
       Internals->RootPrimName, Internals->ActScopeName, Internals->MatScopeName, Internals->TexScopeName,
       Internals->UsdExtension.c_str(), Internals->Environment);
 
@@ -3823,13 +4038,13 @@ void OmniConnect::DeleteActor(size_t actorId)
     Internals->RemoveAllActorGeoms<OmniConnectCurveCache>(actorCache);
     Internals->RemoveAllActorGeoms<OmniConnectVolumeCache>(actorCache);
 
-    std::string usdFileToRemove(std::move(actorCache.UsdOutputFilePath)); 
+    std::string usdFileToRemove(std::move(actorCache.UsdOutputFilePath));
     //SdfLayerHandle rootLayer = actorCache.Stage->GetRootLayer();
     //rootLayer->Clear(); //No way to explicitly destroy the layer, so we just clear and handle reopening in OpenActorStage.
     //rootLayer->Save();
 
     actorCache.Stage.Reset(); // Clean up the stage refptr manually (maybe not required due to next step)
-    Internals->ActorCacheMap.erase(cacheIt); // erase the stage pointer before removing the physical file    
+    Internals->ActorCacheMap.erase(cacheIt); // erase the stage pointer before removing the physical file
 
     //Explicitly remove usd file, but only do this in case a stage can truly be unloaded (see CreateNew() in OpenActorStage)
     Connection->RemoveFile(usdFileToRemove.c_str());
@@ -3918,16 +4133,16 @@ void OmniConnect::DeleteTexture(size_t actorId, size_t texId)
   actorCache->TexCaches.pop_back();
 }
 
-void OmniConnect::UpdateMesh(size_t actorId, double animTimeStep, OmniConnectMeshData& meshData, size_t materialId, 
+void OmniConnect::UpdateMesh(size_t actorId, double animTimeStep, OmniConnectMeshData& meshData, size_t materialId,
   OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga)
 {
   OmniConnectActorCache* actorCache = this->Internals->GetCachedActorCache(actorId);
 
-  this->Internals->UpdateGeom<OmniConnectMeshCache>(actorCache, animTimeStep, meshData, meshData.MeshId, materialId, 
+  this->Internals->UpdateGeom<OmniConnectMeshCache>(actorCache, animTimeStep, meshData, meshData.MeshId, materialId,
     updatedGenericArrays, numUga, deletedGenericArrays, numDga);
 }
 
-void OmniConnect::UpdateInstancer(size_t actorId, double animTimeStep, OmniConnectInstancerData& instancerData, size_t materialId, 
+void OmniConnect::UpdateInstancer(size_t actorId, double animTimeStep, OmniConnectInstancerData& instancerData, size_t materialId,
   OmniConnectGenericArray* updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga)
 {
   OmniConnectActorCache* actorCache = this->Internals->GetCachedActorCache(actorId);
@@ -3936,7 +4151,7 @@ void OmniConnect::UpdateInstancer(size_t actorId, double animTimeStep, OmniConne
     updatedGenericArrays, numUga, deletedGenericArrays, numDga);
 }
 
-void OmniConnect::UpdateCurve(size_t actorId, double animTimeStep, OmniConnectCurveData & curveData, size_t materialId, 
+void OmniConnect::UpdateCurve(size_t actorId, double animTimeStep, OmniConnectCurveData & curveData, size_t materialId,
   OmniConnectGenericArray * updatedGenericArrays, size_t numUga, OmniConnectGenericArray * deletedGenericArrays, size_t numDga)
 {
   OmniConnectActorCache* actorCache = this->Internals->GetCachedActorCache(actorId);
@@ -3945,7 +4160,7 @@ void OmniConnect::UpdateCurve(size_t actorId, double animTimeStep, OmniConnectCu
     updatedGenericArrays, numUga, deletedGenericArrays, numDga);
 }
 
-void OmniConnect::UpdateVolume(size_t actorId, double animTimeStep, OmniConnectVolumeData & volumeData, size_t materialId, 
+void OmniConnect::UpdateVolume(size_t actorId, double animTimeStep, OmniConnectVolumeData & volumeData, size_t materialId,
   OmniConnectGenericArray * updatedGenericArrays, size_t numUga, OmniConnectGenericArray* deletedGenericArrays, size_t numDga)
 {
   OmniConnectActorCache* actorCache = this->Internals->GetCachedActorCache(actorId);
@@ -4040,7 +4255,7 @@ size_t OmniConnect::GetNumSceneToAnimTimes(size_t actorId)
 
   return Internals->RetrieveSceneToAnimTimesFromUsd(actorPrim);
 }
-  
+
 void OmniConnect::RestoreSceneToAnimTimes(double* sceneToAnimTimes, size_t numSceneToAnimTimes)
 {
   Internals->CopySceneToAnimTimes(sceneToAnimTimes, numSceneToAnimTimes);
@@ -4072,6 +4287,9 @@ void OmniConnect::SetSceneToAnimTime(size_t actorId, double sceneTime, const dou
 void OmniConnect::FlushActorUpdates(size_t actorId)
 {
   OmniConnectActorCache* actorCache = this->Internals->GetCachedActorCache(actorId);
+
+  // Apply cached camera parameters to USD
+  Internals->ApplyCachedCameraToUSD();
 
   if (UsdSaveEnabled)
   {
@@ -4125,7 +4343,7 @@ void OmniConnect::SetUpdateOmniContents(bool update)
   if (!ConnectionValid || UsdSaveEnabled == update)
     return;
 
-  // In case the results should be synchronized with the omniverse again, 
+  // In case the results should be synchronized with the omniverse again,
   // flush contents of all actor stages created so far and the session stage to omniverse.
   if (update)
   {
@@ -4140,9 +4358,9 @@ void OmniConnect::SetUpdateOmniContents(bool update)
   Internals->UsdSaveEnabled = UsdSaveEnabled = update;
 }
 
-void OmniConnect::SetConvertGenericArraysDoubleToFloat(bool convert) 
-{ 
-  Internals->ConvertGenericArraysDoubleToFloat = convert; 
+void OmniConnect::SetConvertGenericArraysDoubleToFloat(bool convert)
+{
+  Internals->ConvertGenericArraysDoubleToFloat = convert;
   Internals->VolumeWriter->SetConvertDoubleToFloat(convert);
 }
 
@@ -4161,4 +4379,29 @@ bool OmniConnect::GetAndResetGeomTypeChanged(size_t actorId)
     cacheIt->second.GeomTypeChanged = false;
   }
   return result;
+}
+
+void OmniConnect::SetCameraCacheFromTransform(const double position[3], const double focalPoint[3],
+  const double viewUp[3], double viewAngle, const double clippingRange[2])
+{
+  if (!ConnectionValid || !Internals)
+    return;
+
+  // Always cache only (never write to USD from this method)
+  Internals->UpdateCameraCacheFromTransform(position, focalPoint, viewUp, viewAngle, clippingRange);
+}
+
+void OmniConnect::ApplyCachedCameraToUSD()
+{
+  if (!ConnectionValid || !Internals)
+    return;
+
+  // Apply cached camera to USD
+  Internals->ApplyCachedCameraToUSD();
+
+  // Save the scene stage to persist camera changes
+  if (UsdSaveEnabled && Internals->SceneStage)
+  {
+    Internals->SceneStage->Save();
+  }
 }

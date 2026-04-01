@@ -184,7 +184,8 @@ void pqOmniConnectFolderPickerDialog::createFolder() {
 	}
 	else {
 		// Create folder on Onmiverse Nucleus
-		QString path = QString("omniverse://%1%2/%3").arg(this->m_settingsManager.getSettings().OmniServer).arg(m_ui.projectFolderLineEdit->text()).arg(m_ui.folderNameLineEdit->text());
+		QString serverUrl = pqOmniConnectUtils::ServerUtils::formatServerUrlWithProtocol(this->m_settingsManager.getSettings().OmniServer);
+		QString path = QString("%1%2/%3").arg(serverUrl).arg(m_ui.projectFolderLineEdit->text()).arg(m_ui.folderNameLineEdit->text());
 		if (vtkPVOmniConnectProxy::CreateFolder(this->m_settingsManager.getConnector(), path.toStdString().c_str())) 
 		{
 			onTreeCurrentItemChanged(currentIndex, currentIndex);
@@ -213,11 +214,11 @@ void pqOmniConnectFolderPickerDialog::onTreeCurrentItemChanged(const QModelIndex
 	}
 	else {
 		const pqOmniConnectViewSettings& settings = m_settingsManager.getSettings();
-		QString prefix = QString("omniverse://%1").arg(settings.OmniServer);
-		QString path = item->getUrl().replace(prefix, "Omniverse");
+		QString prefix = pqOmniConnectUtils::ServerUtils::formatServerUrlWithProtocol(settings.OmniServer);
+		QString path = item->getUrl();
 		m_ui.pathLineEdit->setText(path);
 
-		m_projectFolder = path.replace("Omniverse", "");
+		m_projectFolder = path.replace(prefix, "");
 		m_ui.projectFolderLineEdit->setText(m_projectFolder);
 	}
 }
@@ -343,10 +344,11 @@ void pqOmniConnectFolderPickerDialog::loadContent() {
 
 	// Omniverse root
 	if (!m_omniRootItem && m_settingsManager.getOmniClientEnabled() && pqOmniConnectBaseDialog::isConnectionValid()) {
-		m_omniRootItem = m_treeModel->addItem("Omniverse", nullptr);
 
 		const pqOmniConnectViewSettings& settings = m_settingsManager.getSettings();
-		QString url = QString("omniverse://%1").arg(settings.OmniServer);
+		QString url = pqOmniConnectUtils::ServerUtils::formatServerUrlWithProtocol(settings.OmniServer);
+
+		m_omniRootItem = m_treeModel->addItem(url, nullptr);
 		m_omniRootItem->setUrl(url);
 		m_omniRootItem->setLocal(false);
 	}

@@ -71,7 +71,7 @@ namespace fs = std::filesystem;
   }                                                                            \
   catch (...)                                                                  \
   {                                                                            \
-    OmniConnectLogMacro(OmniConnectLogLevel::ERR, "OMNICONNECTCONNECTION UNKOWN EXCEPTION\n");           \
+    OmniConnectLogMacro(OmniConnectLogLevel::ERR, "OMNICONNECTCONNECTION UNKNOWN EXCEPTION\n");           \
     return a;                                                                  \
   }
 
@@ -264,7 +264,7 @@ int OmniConnectRemoteConnection::NumInitializedConnInstances = 0;
 int OmniConnectRemoteConnection::ConnectionLogLevel = 0;
 
 OmniConnectRemoteConnection::OmniConnectRemoteConnection()
-  : Internals(new OmniConnectRemoteConnectionInternals())
+  : Internals(new OmniConnectRemoteConnectionInternals()), FolderOperationsSupported(false)
 {
 }
 
@@ -344,7 +344,7 @@ namespace
 
   OmniClientResult IsValidServerConnection(const char* serverUrl)
   {
-    struct ServerInfoContect : public DefaultContext
+    struct ServerInfoContext : public DefaultContext
     {
       std::string retVersion;
     } context;
@@ -352,17 +352,14 @@ namespace
     omniClientWait( omniClientGetServerInfo(serverUrl, &context,
       [](void* userData, OmniClientResult result, OmniClientServerInfo const * info) OMNICLIENT_NOEXCEPT
       {
-        ServerInfoContect& context = *(ServerInfoContect*)(userData);
+        ServerInfoContext& context = *(ServerInfoContext*)(userData);
 
-        if (context.result != eOmniClientResult_Ok)
+        context.result = result;
+        if (result == eOmniClientResult_Ok && info->version)
         {
-          context.result = result;
-          if (result == eOmniClientResult_Ok && info->version)
-          {
-            context.retVersion = info->version;
-          }
-          context.done = true;
+          context.retVersion = info->version;
         }
+        context.done = true;
       }));
 
     return context.result;
@@ -415,7 +412,20 @@ bool OmniConnectRemoteConnection::Initialize(const OmniConnectConnectionSettings
   if (initSuccess)
   {
     // Check for Url validity for its various components
-    std::string serverUrl = "omniverse://" + Settings.HostName + "/";
+    std::string serverUrl;
+    if (Settings.HostName.find("://") != std::string::npos)
+    {
+      // HostName already contains a protocol prefix
+      serverUrl = Settings.HostName;
+      if (serverUrl.back() != '/') {
+        serverUrl += "/";
+      }
+    }
+    else
+    {
+      // Add omniverse:// protocol prefix
+      serverUrl = "omniverse://" + Settings.HostName + "/";
+    }
     std::string rawUrl = serverUrl + Settings.WorkingDirectory;
     OmniClientUrl* brokenUrl = omniClientBreakUrl(rawUrl.c_str());
 
@@ -549,9 +559,14 @@ int OmniConnectRemoteConnection::MaxSessionNr() const
 
 bool OmniConnectRemoteConnection::CreateFolder(const char* dirName, bool mayExist, bool combineBaseUrl) const
 {
+  // If folder operations are not supported, just return true (no-op)
+  if (!FolderOperationsSupported)
+    return true;
+
   DefaultContext context;
 
   const char* dirUrl = combineBaseUrl ? this->GetUrl(dirName) : dirName;
+  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Creating folder: " << dirUrl);
   omniClientWait( omniClientCreateFolder(dirUrl, &context,
     [](void* userData, OmniClientResult result) OMNICLIENT_NOEXCEPT
     {
@@ -567,9 +582,14 @@ bool OmniConnectRemoteConnection::CreateFolder(const char* dirName, bool mayExis
 
 bool OmniConnectRemoteConnection::RemoveFolder(const char* dirName) const
 {
+  // If folder operations are not supported, just return true (no-op)
+  if (!FolderOperationsSupported)
+    return true;
+
   DefaultContext context;
 
   const char* dirUrl = this->GetUrl(dirName);
+  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Removing folder: " << dirUrl);
   omniClientWait( omniClientDelete(dirUrl, &context,
     [](void* userData, OmniClientResult result) OMNICLIENT_NOEXCEPT
     {
@@ -585,11 +605,12 @@ bool OmniConnectRemoteConnection::RemoveFolder(const char* dirName) const
 bool OmniConnectRemoteConnection::WriteFile(const char* data, size_t dataSize, const char* filePath, bool binary) const
 {
   (void)binary;
-  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Copying data to: " << filePath);
 
   DefaultContext context;
 
   const char* fileUrl = this->GetUrl(filePath);
+  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Copying data to: " << fileUrl);
+
   OmniClientContent omniContent{ (void*)data, dataSize, nullptr };
   omniClientWait( omniClientWriteFile(fileUrl, &omniContent, &context, [](void* userData, OmniClientResult result) OMNICLIENT_NOEXCEPT
     {
@@ -599,6 +620,7 @@ bool OmniConnectRemoteConnection::WriteFile(const char* data, size_t dataSize, c
     })
   );
 
+  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Copying data to: " << fileUrl << " completed with result: " << omniResultToString(context.result));
   return context.result == eOmniClientResult_Ok || context.result == eOmniClientResult_OkLatest;
 }
 
@@ -643,19 +665,16 @@ const char* OmniConnectRemoteConnection::GetOmniUser(const char* serverUrl) cons
     {
       UserInfoContext& context = *(UserInfoContext*)(userData);
 
-      if (context.result != eOmniClientResult_Ok)
+      context.result = result;
+      if (result == eOmniClientResult_Ok && info->username)
       {
-        context.result = result;
-        if (result == eOmniClientResult_Ok && info)
-        {
-          context.internals->OmniUser = info->username;
-        }
-        else
-        {
-          context.internals->OmniUser = "Guest";
-        }
-        context.done = true;
+        context.internals->OmniUser = info->username;
       }
+      else
+      {
+        context.internals->OmniUser = "Guest";
+      }
+      context.done = true;
     })
   );
   return Internals->OmniUser.c_str();
@@ -696,7 +715,7 @@ OmniConnectUrlInfoList OmniConnectRemoteConnection::GetOmniConnectUrlInfoList(co
               OmniConnectUrlStrings urlStrings;
               urlStrings.Url = entries[i].relativePath;
               urlStrings.Author = (entries[i].modifiedBy == nullptr) ? "" : entries[i].modifiedBy;
-              urlStrings.Etag;
+              urlStrings.Etag = "";
 
               // skip some system files
               OmniConnectUrlInfo localInfo;
@@ -756,8 +775,99 @@ void OmniConnectRemoteConnection::CancelOmniClientAuth(uint32_t authHandle)
 
 bool OmniConnectRemoteConnection::CheckWritePermissions()
 {
-  bool success = this->CreateFolder("", true);
-  return success;
+  bool fileWriteSuccess = false;
+  bool fileDeleteSuccess = false;
+  bool folderCreateSuccess = false;
+  bool folderDeleteSuccess = false;
+
+  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Check write permissions");
+
+  // Test file operations (required for permissions)
+  const char* testData = "OmniConnect Write Permission Test";
+  fileWriteSuccess = this->WriteFile(testData, strlen(testData), "_WriteTest_File.txt", false);
+  if (fileWriteSuccess)
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "File write successful");
+    // Clean up the test file
+    fileDeleteSuccess = this->RemoveFile("_WriteTest_File.txt");
+    if (fileDeleteSuccess)
+    {
+      OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "File deletion successful");
+    }
+    else
+    {
+      OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "File deletion failed");
+    }
+  }
+  else
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::ERR, "File write failed");
+  }
+
+  // Test folder operations (informational only - doesn't affect permissions test)
+  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Testing folder operations support...");
+
+  DefaultContext folderContext;
+  const char* testFolderUrl = this->GetUrl("_WriteTest_Folder");
+  omniClientWait( omniClientCreateFolder(testFolderUrl, &folderContext,
+    [](void* userData, OmniClientResult result) OMNICLIENT_NOEXCEPT
+    {
+      auto& context = *(DefaultContext*)(userData);
+      context.result = result;
+      context.done = true;
+    })
+  );
+
+  folderCreateSuccess = folderContext.result == eOmniClientResult_Ok || folderContext.result == eOmniClientResult_OkLatest 
+    || folderContext.result == eOmniClientResult_ErrorAlreadyExists;
+
+  if (folderCreateSuccess)
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Folder creation successful");
+
+    // Try to clean up the test folder
+    DefaultContext deleteContext;
+    omniClientWait( omniClientDelete(testFolderUrl, &deleteContext,
+      [](void* userData, OmniClientResult result) OMNICLIENT_NOEXCEPT
+      {
+        auto& context = *(DefaultContext*)(userData);
+        context.result = result;
+        context.done = true;
+      })
+    );
+
+    folderDeleteSuccess = deleteContext.result == eOmniClientResult_Ok || deleteContext.result == eOmniClientResult_OkLatest;
+    if (folderDeleteSuccess)
+    {
+      OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Folder deletion successful");
+    }
+    else
+    {
+      OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Folder deletion failed");
+    }
+  }
+  else
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Folder creation failed");
+  }
+
+  // Set folder operations support flag
+  FolderOperationsSupported = folderCreateSuccess && folderDeleteSuccess;
+
+  bool permissionSuccess = fileWriteSuccess && fileDeleteSuccess;
+
+  if (permissionSuccess)
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Write permissions: PASS");
+  }
+  else
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::ERR, "Write permissions: FAIL");
+  }
+
+  OmniConnectLogMacro(OmniConnectLogLevel::STATUS, "Folder operations supported: " << (FolderOperationsSupported ? "YES" : "NO"));
+
+  return permissionSuccess;
 }
 
 void OmniConnectRemoteConnection::SetConnectionLogLevel(int logLevel)

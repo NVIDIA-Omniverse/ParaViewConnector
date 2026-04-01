@@ -54,6 +54,7 @@ void pqOmniConnectBaseDialog::tryServerConnect(bool forceReconnect, const QStrin
 		}
 		tempSettings.OutputLocal = false; // attempt to connect to Nucleus
 		tempSettings.CreateNewOmniSession = false; // don't create new session folder
+		tempSettings.OmniWorkingDirectory = ""; // don't use existing working directory, since the server may be different
 
 		OMNI_LOG_INFO("Connecting to Nucleus at %s ...", tempSettings.OmniServer.toStdString().c_str());
 

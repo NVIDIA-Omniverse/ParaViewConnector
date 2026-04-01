@@ -102,7 +102,8 @@ QString pqOmniConnectViewSettings::getUsdPath() const
     usdPath = QString("%1/Session_%2/%3").arg(outputDirectory).arg(QString::number(SessionNumber)).arg(fileName);
   }
   else {
-    usdPath = QString("omniverse://%1%2/Session_%3/%4").arg(OmniServer).arg(outputDirectory).arg(QString::number(SessionNumber)).arg(fileName);
+    QString serverUrl = pqOmniConnectUtils::ServerUtils::formatServerUrlWithProtocol(OmniServer);
+    usdPath = QString("%1%2/Session_%3/%4").arg(serverUrl).arg(outputDirectory).arg(QString::number(SessionNumber)).arg(fileName);
   }
   return usdPath;
 }
@@ -421,7 +422,8 @@ void pqOmniConnectViewsSettingsManager::findConnectorViewSessionInfo(QString& us
   if(m_connectionValid)
   {
     sessionNumberOut = vtkPVOmniConnectProxy::GetLatestSessionNumber(m_connector);
-    QString serverUrl = QString("omniverse://%1/").arg(QString::fromStdString(m_currentSettings.OmniServer.toStdString()));
+    QString serverUrlFormatted = pqOmniConnectUtils::ServerUtils::formatServerUrlWithProtocol(m_currentSettings.OmniServer);
+    QString serverUrl = QString("%1/").arg(serverUrlFormatted);
     userNameOut = QString::fromStdString(vtkPVOmniConnectProxy::GetUser(m_connector, serverUrl.toStdString().c_str()));
   }
 }

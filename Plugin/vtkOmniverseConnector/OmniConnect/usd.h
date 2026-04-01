@@ -60,10 +60,15 @@
 #include <pxr/usd/usdGeom/scope.h>
 #include <pxr/usd/usdGeom/metrics.h>
 #include <pxr/usd/usdGeom/basisCurves.h>
+#include <pxr/usd/usdGeom/camera.h>
+#include <pxr/usd/usdGeom/bboxCache.h>
 #include <pxr/usd/usdVol/volume.h>
 #include <pxr/usd/usdVol/openVDBAsset.h>
 #include <pxr/usd/usdLux/distantLight.h>
 #include <pxr/usd/usdLux/shapingAPI.h>
+#include <pxr/usd/usdRender/product.h>
+#include <pxr/usd/usdRender/var.h>
+#include <pxr/usd/usdRender/tokens.h>
 #include <pxr/usd/sdf/layer.h>
 #include <pxr/usd/sdf/path.h>
 #include <pxr/usd/usdShade/material.h>
