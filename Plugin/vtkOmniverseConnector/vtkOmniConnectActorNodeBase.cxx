@@ -285,7 +285,7 @@ void vtkOmniConnectActorNodeBase::ConnectorBuild(bool prepass, vtkOmniConnectRen
 
       //In case we reopened an existing session, the scene to anim times have to be restored on the actor cache
       std::vector<double>& sceneToAnimTimes = Internals->ConnectActorCache->GetSceneToAnimationTimes();
-      if(sceneToAnimTimes.size() == 0 && !connector->GetSettings().CreateNewOmniSession)
+      if(sceneToAnimTimes.empty() && !connector->GetSettings().CreateNewOmniSession)
       {
         size_t numSceneToAnimTimes = connector->GetNumSceneToAnimTimes(actorId);
         if(numSceneToAnimTimes > 0)
