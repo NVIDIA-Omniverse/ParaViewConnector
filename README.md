@@ -6,7 +6,80 @@ This project can be used purely to output USD files to local disk without any fu
 
 ## License
 
-See LICENSE.txt and Third-Party_Notices.txt for all applicable licenses.
+NVIDIA-attributed connector source is available under [MIT](LICENSE.txt).
+Third-party components retain their own terms; see
+[Third-Party_Notices.txt](Third-Party_Notices.txt) and the component map below.
+
+## Contributing
+
+This project is currently not accepting contributions.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Components and dependency licenses
+
+Builds consume externally installed SDKs and libraries. Versions and installed
+binaries depend on the selected configuration. This map describes the source
+and notices in this repository; it is not a bill of materials for every build.
+
+### Source and direct dependencies
+
+| Component | License and notice path | Use and modifications |
+|---|---|---|
+| Connector source in `Plugin/` | [MIT](LICENSE.txt) | ParaView/VTK integration, USD export and optional Omniverse connectivity. Upstream-attributed files retain their own terms. |
+| ParaView | [ParaView license and notices](LICENSES/paraview-LICENSE.txt) | External host application and SDK. No ParaView source patch set is included. |
+| VTK | VTK BSD-style terms in [LICENSES/paraview-LICENSE.txt](LICENSES/paraview-LICENSE.txt) | External rendering/pipeline API with connector-specific integration classes. Example provenance needs confirmation; see [review notes](docs/licensing-provenance.md). |
+| Qt | [Qt License Agreement](LICENSES/qt-LICENSE.txt); [LGPL-3.0 text](LICENSES/LICENSE.LGPLv3) | External UI library. Apply the terms of the actual Qt distribution; both notices being present does not identify that choice. Qt source is not vendored. |
+| OpenUSD | Modified Apache 2.0 and bundled notices: `usd-license.txt`, `usd.py312.windows-x86_64.stock.debug-LICENSE.txt`, `usd.py312.windows-x86_64.stock.release-LICENSE.txt` in [archive][license-archive] | External scene-description SDK. Local CMake adjusts imported include/link interfaces; no OpenUSD source patch set is included. |
+| Python / CPython | PSF and historical notices: `python-LICENSE.txt`, `cpython-LICENSE.txt` in [archive][license-archive] | External development/link dependencies for USD and interpreter for the optional VTK example. No Python source is vendored. |
+| Omniverse Client Library | Package terms and dependency notices: `omniverse client library-LICENSES.txt` and nested `omniverse client library-LICENSES.zip` in [archive][license-archive] | External Omniverse connectivity. The index is not a license grant; obtain the applicable library terms with the package. No client-library source is vendored. |
+| Omniverse USD Resolver | NVIDIA agreements identified by `omni_usd_resolver-LICENSE.md` in [archive][license-archive] | External resolver for Omniverse paths. Local CMake adjusts imported targets; resolver source is not vendored. |
+| OpenVDB | MPL-2.0: OpenVDB section in [Third-Party_Notices.txt](Third-Party_Notices.txt), `openvdb-LICENSE.txt` in [archive][license-archive] | Optional external volume-output library. Copied [FindOpenVDB](Plugin/vtkOmniverseConnector/OmniConnect/Volume/cmake/FindOpenVDB.cmake), [OpenVDBUtils](Plugin/vtkOmniverseConnector/OmniConnect/Volume/cmake/OpenVDBUtils.cmake) and [FindTBB](Plugin/vtkOmniverseConnector/OmniConnect/cmake/FindTBB.cmake) helpers retain upstream attribution. FindOpenVDB has local history changes; exact import revisions and patch scope need maintainer confirmation. |
+| Boost | BSL-1.0: `boost-LICENSE.md`, `boost-LICENSE_1_0.txt` in [archive][license-archive] | External USD/OpenVDB dependency, including iostreams. Local CMake adjusts link settings; Boost source is not vendored. |
+| TBB | Apache-2.0: `tbb-LICENSE.txt` in [archive][license-archive] | External USD/OpenVDB threading dependency. Located by the copied OpenVDB helper; TBB library source is not vendored. |
+| Blosc | MIT: `c-blosc-LICENSE.txt` in [archive][license-archive] | Optional external OpenVDB compression dependency; no source is vendored. |
+| zlib | zlib license: `zlib-LICENSE.txt` in [archive][license-archive] | Optional external OpenVDB compression dependency; no source is vendored. |
+| Imath | BSD-3-Clause: `imath-LICENSE.md` in [archive][license-archive] | External math dependency located through USD; no source is vendored. |
+| MaterialX | Apache-2.0: `materialx-LICENSE.txt` in [archive][license-archive] | External dependency located through USD; no source is vendored. |
+| FreeType | [Upstream FTL / GPLv2 choices](https://freetype.org/license.html); notice from the selected package | External font dependency referenced in build instructions. No FreeType source or separate notice is included here; confirm terms and notices before redistributing the package. |
+
+### Other package notices
+
+[LICENSES/omniverse-paraview-connector-LICENSES.txt](LICENSES/omniverse-paraview-connector-LICENSES.txt)
+indexes the [license archive][license-archive]. The additional entries below
+are package notices, not proof that each component is linked or shipped.
+Dependency source and downstream patch histories are not included here;
+release maintainers must verify the selected package versions and modifications.
+
+| Component and archive entry | License described by notice | Use evidenced here |
+|---|---|---|
+| Alembic — `alembic-LICENSE.txt` | BSD-style Alembic terms and Boost notices | Package notice only; no direct connector target identified. |
+| Draco — `draco-LICENSE.txt` | Apache-2.0 | Package notice only; no direct connector target identified. |
+| FastLZ — `fastlz-LICENSE.txt` | MIT | Compression-library notice; no direct connector target identified. |
+| fmt — `fmt-LICENSE.txt` | MIT | Formatting-library notice; no direct connector target identified. |
+| h5py — `h5py-LICENSE.txt` | BSD-3-Clause | Python/HDF5 notice; no direct connector target identified. |
+| libffi — `libffi-LICENSE.txt` | MIT | Foreign-function-interface notice; no direct connector target identified. |
+| libjpeg-turbo — `libjpeg-turbo-LICENSE.md` | IJG, BSD-3-Clause and zlib terms by component | Image-codec notice; no direct connector target identified. |
+| libpng — `libpng-LICENSE.txt` | PNG Reference Library license terms | Image-codec notice; no direct connector target identified. |
+| libtiff — `libtiff-LICENSE.md` | libtiff permissive license | Image-codec notice; no direct connector target identified. |
+| LZ4 — `lz4-LICENSE.txt` | BSD-2-Clause | Compression-library notice; no direct connector target identified. |
+| OpenEXR — `openexr-LICENSE.md` | BSD-3-Clause | Image-library notice; no direct connector target identified. |
+| OpenImageIO — `openimageio-LICENSE.md` | Apache-2.0 | Image-library notice; no direct connector target identified. |
+| OpenSSL — `openssl-LICENSE.txt` | Apache-2.0 | TLS/cryptography notice; no direct connector target identified. |
+| OpenSubdiv — `opensubdiv-LICENSE.txt` | Modified Apache 2.0 terms | Subdivision-library notice; no direct connector target identified. |
+| pybind11 — `pybind11-LICENSE.txt` | BSD-3-Clause | Python-binding notice; no direct connector target identified. |
+| Snappy — `snappy-LICENSE.txt` | BSD-3-Clause | Compression-library notice; no direct connector target identified. |
+| stdint — `stdint-LICENSE.txt` | BSD-style terms in the included notice | Compatibility-header notice; no direct connector target identified. |
+| XZ Utils — `xz-LICENSE.txt`, `PACKAGE-LICENSE.txt` | 0BSD for liblzma; additional per-file terms in the notices | Compression notices; selected components determine applicable terms. |
+| repo_nv — `repo_nv-LICENSE.txt` | NVIDIA proprietary terms | Build-tool notice; no direct connector runtime target identified. |
+| Connector binary package — `omniverse-paraview-connector-LICENSE.txt` | NVIDIA proprietary package notice | Existing binary-package notice retained verbatim. It does not replace root MIT terms for public source; reconcile it with the actual binary distribution terms. |
+
+Preserve third-party notices with redistributed source or binaries. Record
+selected versions, original revisions and local patches in the release
+inventory. [Provenance notes](docs/licensing-provenance.md) list the unresolved
+file-origin questions.
+
+[license-archive]: LICENSES/omniverse-paraview-connector-LICENSES.zip
 
 ## Prerequisites
 
