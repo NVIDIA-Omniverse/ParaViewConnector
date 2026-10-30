@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -29,6 +30,8 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <cstdint>
+#include <vector>
 
 class OmniConnectRemoteConnectionInternals;
 
@@ -38,6 +41,16 @@ struct OmniConnectConnectionSettings
   std::string WorkingDirectory;
   bool CheckWritePermissions;
 };
+
+struct OmniConnectLiveSessionInfo
+{
+  std::string Url;
+  std::string Name;
+  std::string Owner;
+  uint64_t ModifiedTimestamp = 0;
+};
+
+using OmniConnectLiveSessionInfoList = std::vector<OmniConnectLiveSessionInfo>;
 
 class OmniConnectConnection
 {
@@ -60,6 +73,11 @@ public:
   virtual bool RemoveFile(const char* filePath) const = 0;
   
   virtual bool ProcessUpdates() = 0;
+
+  virtual bool ListLiveSessions(const char* baseLayerUrl, OmniConnectLiveSessionInfoList& sessions) const;
+  virtual bool CreateLiveSession(const char* baseLayerUrl, const char* sessionName, std::string& sessionUrl) const;
+  virtual bool JoinLiveSession(const char* sessionUrl, const char* applicationName);
+  virtual void LeaveLiveSession();
 
   virtual const char* GetOmniUser(const char* serverUrl) const = 0;
   virtual OmniConnectUrlInfoList GetOmniConnectUrlInfoList(const char* serverUrl) = 0;
@@ -131,6 +149,11 @@ public:
   bool RemoveFile(const char* filePath) const override;
 
   bool ProcessUpdates() override;
+
+  bool ListLiveSessions(const char* baseLayerUrl, OmniConnectLiveSessionInfoList& sessions) const override;
+  bool CreateLiveSession(const char* baseLayerUrl, const char* sessionName, std::string& sessionUrl) const override;
+  bool JoinLiveSession(const char* sessionUrl, const char* applicationName) override;
+  void LeaveLiveSession() override;
 
   const char* GetOmniUser(const char* serverUrl) const override;
   OmniConnectUrlInfoList GetOmniConnectUrlInfoList(const char* serverUrl) override;

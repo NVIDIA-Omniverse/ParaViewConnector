@@ -6,7 +6,81 @@ This project can be used purely to output USD files to local disk without any fu
 
 ## License
 
-See LICENSE.txt and Third-Party_Notices.txt for all applicable licenses.
+NVIDIA-attributed connector source is available under [MIT](LICENSE.txt).
+Third-party components retain their own terms; see
+[Third-Party_Notices.txt](Third-Party_Notices.txt) and the component map below.
+
+## Contributing
+
+This project is currently not accepting contributions.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Components and dependency licenses
+
+Builds consume externally installed SDKs and libraries. Versions and installed
+binaries depend on the selected configuration. This map describes the source
+and notices in this repository; it is not a bill of materials for every build.
+
+### Source and direct dependencies
+
+| Component | License and notice path | Use and modifications |
+|---|---|---|
+| Connector source in `Plugin/` | [MIT](LICENSE.txt) | ParaView/VTK integration, USD export and optional Omniverse connectivity. Upstream-attributed files retain their own terms. |
+| ParaView | [ParaView license and notices](LICENSES/paraview-LICENSE.txt) | External host application and SDK. No ParaView source patch set is included. |
+| VTK | VTK BSD-style terms in [LICENSES/paraview-LICENSE.txt](LICENSES/paraview-LICENSE.txt) | External rendering/pipeline API with connector-specific integration classes. Example provenance needs confirmation; see [review notes](docs/licensing-provenance.md). |
+| Qt | [Qt License Agreement](LICENSES/qt-LICENSE.txt); [LGPL-3.0 text](LICENSES/LICENSE.LGPLv3) | External UI library. Apply the terms of the actual Qt distribution; both notices being present does not identify that choice. Qt source is not vendored. |
+| OpenUSD | Modified Apache 2.0 and bundled notices: `usd-license.txt`, `usd.py312.windows-x86_64.stock.debug-LICENSE.txt`, `usd.py312.windows-x86_64.stock.release-LICENSE.txt` in [archive][license-archive] | External scene-description SDK. Local CMake adjusts imported include/link interfaces; no OpenUSD source patch set is included. |
+| Python / CPython | PSF and historical notices: `python-LICENSE.txt`, `cpython-LICENSE.txt` in [archive][license-archive] | External development/link dependencies for USD and interpreter for the optional VTK example. No Python source is vendored. |
+| Omniverse Client Library | Package terms and dependency notices: `omniverse client library-LICENSES.txt` and nested `omniverse client library-LICENSES.zip` in [archive][license-archive] | External Omniverse connectivity. The index is not a license grant; obtain the applicable library terms with the package. No client-library source is vendored. |
+| Omniverse USD Resolver | NVIDIA agreements identified by `omni_usd_resolver-LICENSE.md` in [archive][license-archive] | External resolver for Omniverse paths. Local CMake adjusts imported targets; resolver source is not vendored. |
+| SpecTree (`omni_usd_live`) | Terms and notices supplied with the selected SpecTree package; no separate SpecTree notice is included in this repository's archive | External USD file-format plugin required for live sync. Connector CMake installs its runtime and plugin resources; SpecTree source is not vendored. Confirm package terms and include its notices in the final release inventory. |
+| OpenVDB | MPL-2.0: OpenVDB section in [Third-Party_Notices.txt](Third-Party_Notices.txt), `openvdb-LICENSE.txt` in [archive][license-archive] | Optional external volume-output library. Copied [FindOpenVDB](Plugin/vtkOmniverseConnector/OmniConnect/Volume/cmake/FindOpenVDB.cmake), [OpenVDBUtils](Plugin/vtkOmniverseConnector/OmniConnect/Volume/cmake/OpenVDBUtils.cmake) and [FindTBB](Plugin/vtkOmniverseConnector/OmniConnect/cmake/FindTBB.cmake) helpers retain upstream attribution. FindOpenVDB has local history changes; exact import revisions and patch scope need maintainer confirmation. |
+| Boost | BSL-1.0: `boost-LICENSE.md`, `boost-LICENSE_1_0.txt` in [archive][license-archive] | External USD/OpenVDB dependency, including iostreams. Local CMake adjusts link settings; Boost source is not vendored. |
+| TBB | Apache-2.0: `tbb-LICENSE.txt` in [archive][license-archive] | External USD/OpenVDB threading dependency. Located by the copied OpenVDB helper; TBB library source is not vendored. |
+| Blosc | MIT: `c-blosc-LICENSE.txt` in [archive][license-archive] | Optional external OpenVDB compression dependency; no source is vendored. |
+| zlib | zlib license: `zlib-LICENSE.txt` in [archive][license-archive] | Optional external OpenVDB compression dependency; no source is vendored. |
+| Imath | BSD-3-Clause: `imath-LICENSE.md` in [archive][license-archive] | External math dependency located through USD; no source is vendored. |
+| MaterialX | Apache-2.0: `materialx-LICENSE.txt` in [archive][license-archive] | External dependency located through USD; no source is vendored. |
+| FreeType | [Upstream FTL / GPLv2 choices](https://freetype.org/license.html); notice from the selected package | External font dependency referenced in build instructions. No FreeType source or separate notice is included here; confirm terms and notices before redistributing the package. |
+
+### Other package notices
+
+[LICENSES/omniverse-paraview-connector-LICENSES.txt](LICENSES/omniverse-paraview-connector-LICENSES.txt)
+indexes the [license archive][license-archive]. The additional entries below
+are package notices, not proof that each component is linked or shipped.
+Dependency source and downstream patch histories are not included here;
+release maintainers must verify the selected package versions and modifications.
+
+| Component and archive entry | License described by notice | Use evidenced here |
+|---|---|---|
+| Alembic — `alembic-LICENSE.txt` | BSD-style Alembic terms and Boost notices | Package notice only; no direct connector target identified. |
+| Draco — `draco-LICENSE.txt` | Apache-2.0 | Package notice only; no direct connector target identified. |
+| FastLZ — `fastlz-LICENSE.txt` | MIT | Compression-library notice; no direct connector target identified. |
+| fmt — `fmt-LICENSE.txt` | MIT | Formatting-library notice; no direct connector target identified. |
+| h5py — `h5py-LICENSE.txt` | BSD-3-Clause | Python/HDF5 notice; no direct connector target identified. |
+| libffi — `libffi-LICENSE.txt` | MIT | Foreign-function-interface notice; no direct connector target identified. |
+| libjpeg-turbo — `libjpeg-turbo-LICENSE.md` | IJG, BSD-3-Clause and zlib terms by component | Image-codec notice; no direct connector target identified. |
+| libpng — `libpng-LICENSE.txt` | PNG Reference Library license terms | Image-codec notice; no direct connector target identified. |
+| libtiff — `libtiff-LICENSE.md` | libtiff permissive license | Image-codec notice; no direct connector target identified. |
+| LZ4 — `lz4-LICENSE.txt` | BSD-2-Clause | Compression-library notice; no direct connector target identified. |
+| OpenEXR — `openexr-LICENSE.md` | BSD-3-Clause | Image-library notice; no direct connector target identified. |
+| OpenImageIO — `openimageio-LICENSE.md` | Apache-2.0 | Image-library notice; no direct connector target identified. |
+| OpenSSL — `openssl-LICENSE.txt` | Apache-2.0 | TLS/cryptography notice; no direct connector target identified. |
+| OpenSubdiv — `opensubdiv-LICENSE.txt` | Modified Apache 2.0 terms | Subdivision-library notice; no direct connector target identified. |
+| pybind11 — `pybind11-LICENSE.txt` | BSD-3-Clause | Python-binding notice; no direct connector target identified. |
+| Snappy — `snappy-LICENSE.txt` | BSD-3-Clause | Compression-library notice; no direct connector target identified. |
+| stdint — `stdint-LICENSE.txt` | BSD-style terms in the included notice | Compatibility-header notice; no direct connector target identified. |
+| XZ Utils — `xz-LICENSE.txt`, `PACKAGE-LICENSE.txt` | 0BSD for liblzma; additional per-file terms in the notices | Compression notices; selected components determine applicable terms. |
+| repo_nv — `repo_nv-LICENSE.txt` | NVIDIA proprietary terms | Build-tool notice; no direct connector runtime target identified. |
+| Connector binary package — `omniverse-paraview-connector-LICENSE.txt` | NVIDIA proprietary package notice | Existing binary-package notice retained verbatim. It does not replace root MIT terms for public source; reconcile it with the actual binary distribution terms. |
+
+Preserve third-party notices with redistributed source or binaries. Record
+selected versions, original revisions and local patches in the release
+inventory. [Provenance notes](docs/licensing-provenance.md) list the unresolved
+file-origin questions.
+
+[license-archive]: LICENSES/omniverse-paraview-connector-LICENSES.zip
 
 ## Prerequisites
 
@@ -82,6 +156,7 @@ Depending on which components have been turned on or off (see below), this will 
 
     -D OMNICLIENT_ROOT_DIR=<omniclient_dir>
     -D OMNIUSDRESOLVER_ROOT_DIR=<usdresolver_dir>
+    -D OMNISPECTREE_ROOT_DIR=<spectree_dir>
     -D BOOST_ROOT=<boost_dir>
     -D OpenVDB_ROOT=<openvdb_dir>
     -D Blosc_ROOT=<blosc_dir>
@@ -94,7 +169,7 @@ where the Blosc and Zlib installations are typically pointing to the OpenVDB dir
 
 In case of `USE_USD_OPENVDB_BUILD=ON`, all of OpenVDB, Blosc and Zlib dependencies can be left out; they will instead be assumed to exist as part of the USD installation.
 In case of `OMNICONNECT_USE_OPENVDB=OFF`, the OpenVDB, Blosc and Zlib dependencies can be left out, and OpenVDB support will not be available. 
-In case of `OMNICONNECT_USE_OMNIVERSE=OFF`, the client library and omni resolver dependency can be left out, and Omniverse support will not be available.
+In case of `OMNICONNECT_USE_OMNIVERSE=OFF`, the client library, Omniverse USD Resolver, and SpecTree dependencies can be left out, and Omniverse support will not be available. With Omniverse support enabled, SpecTree provides the `omni_usd_live` file-format plugin required for live sync.
 
 If `OMNICONNECT_USE_OPENVDB=ON`, the following dependencies are best linked statically, to not cause potential clashes with dynamic libraries included with ParaView:
 
@@ -110,7 +185,7 @@ It is also recommended to install the USD and Omniverse dependencies along with 
 
 After the cmake configuration has finished, build and install the generated project files as desired.
 
-Lastly, the installed connector plugin and all of its aforementioned dependency binaries (Python, Qt, Usd, Omniclient/resolver, OpenVDB) have to be copied to the the ParaView installation, or made available via the `PATH` environment variable before loading the plugin from within the ParaView UI.
+Lastly, the installed connector plugin and all of its aforementioned dependency binaries (Python, Qt, USD, Omniverse Client Library, Omniverse USD Resolver, SpecTree, OpenVDB) have to be copied to the ParaView installation, or made available via the `PATH` environment variable before loading the plugin from within the ParaView UI. Keep the USD plugin resource files alongside their corresponding libraries.
 
 ## VTK-only usage
 
@@ -128,8 +203,52 @@ which can be set up and used completely within Python:
 
 ## Downloading the Omniverse libraries
 
-- Clone the Connect Sample on Github: https://github.com/NVIDIA-Omniverse/connect-samples
-- Make sure you check out a tag using a supported USD version for this project: inspect the `deps/target-deps.packman.xml` file, and make sure that the `omni_connect_sdk` entry contains a major version of the `pxr-<version>` substring corresponding to what is listed at the top of this `README.md`.
-- Build the connect sample by running `repo.sh/.bat build` in its folder
-- Locate the `usd`, `omni_usd_resolver`, `omni_client_library` and `python` folders in the `_build/target-deps` subfolder
-- The location of the previous four subfolders respectively can directly be set as `USD_ROOT_DIR`, `OMNIUSDRESOLVER_ROOT_DIR`, `OMNICLIENT_ROOT_DIR`, `Python3_ROOT_DIR` in the ANARI CMake configuration, as demonstrated in [Building the ParaView Connector](#building-the-paraview-connector).
+The connector can use NVIDIA's prebuilt OpenUSD and Omniverse libraries without building another sample project or installing a package manager. Download the `.7z` archives directly from:
+
+```text
+https://d4i3qtqj3r0z5.cloudfront.net/<archive-name>.7z
+```
+
+The following is one compatible OpenUSD 25.11 / Python 3.12 package set. Replace `<config>` with `release` or `debug` for the first three packages, matching the build configuration. To support both configurations, download and extract both variants. Archive names, including the platform spelling, matter:
+
+| Dependency | Windows x86-64 archive name | Linux x86-64 archive name |
+| --- | --- | --- |
+| OpenUSD | `usd.py312.windows-x86_64.stock.<config>@0.25.11.kit.5-gl.21209` | `usd.py312.manylinux_2_35_x86_64.stock.<config>@0.25.11.kit.5-gl.21209` |
+| Omniverse USD Resolver | `omniusdresolver_openusd_0.25.11_py_3.12@2.3.2-gl.3274.96b573c8.windows-x86_64.<config>` | `omniusdresolver_openusd_0.25.11_py_3.12@2.3.2-gl.3274.96b573c8.manylinux_2_35_x86_64.<config>` |
+| SpecTree (`omni_usd_live`) | `omnispectree_openusd_0.25.11_py_3.12@2.0.0-gl.685.69f78827.windows-x86_64.<config>` | `omnispectree_openusd_0.25.11_py_3.12@2.0.0-gl.685.69f78827.manylinux_2_35_x86_64.<config>` |
+| Omniverse Client Library | `omni_client_library.windows-x86_64@2.75.1` | `omni_client_library.manylinux_2_35_x86_64@2.75.1` |
+| Python | `python@3.12.12%2Bnv2-windows-x86_64` | `python@3.12.12%2Bnv2-linux-x86_64` |
+
+Append `.7z` to each name. In the Python URL, `%2B` encodes the `+` in the package version. Check each archive URL for availability before use, and check the license files inside each archive before redistribution.
+
+Extract the archives with 7-Zip (`7z` or `7zz`) into a directory of your choice, using this layout (the names on the left are your local directories, not part of the download URL):
+
+```text
+dependencies/
+  usd/release/              <- contents of the OpenUSD release archive
+  usd/debug/                <- contents of the OpenUSD debug archive
+  omni_usd_resolver/release/ <- contents of the resolver release archive
+  omni_usd_resolver/debug/   <- contents of the resolver debug archive
+  omni_spectree/release/     <- contents of the SpecTree release archive
+  omni_spectree/debug/       <- contents of the SpecTree debug archive
+  omni_client_library/      <- contents of the single client-library archive
+  python/                   <- contents of the Python archive
+```
+
+For example, on Windows, download and extract the SpecTree release archive with:
+
+```powershell
+$url = 'https://d4i3qtqj3r0z5.cloudfront.net/omnispectree_openusd_0.25.11_py_3.12@2.0.0-gl.685.69f78827.windows-x86_64.release.7z'
+Invoke-WebRequest -Uri $url -OutFile 'omni_spectree_release.7z'
+7z x 'omni_spectree_release.7z' '-odependencies\omni_spectree\release'
+```
+
+On Linux, the equivalent download and extraction is:
+
+```bash
+curl -fL -o omni_spectree_release.7z 'https://d4i3qtqj3r0z5.cloudfront.net/omnispectree_openusd_0.25.11_py_3.12@2.0.0-gl.685.69f78827.manylinux_2_35_x86_64.release.7z'
+mkdir -p dependencies/omni_spectree/release
+7z x omni_spectree_release.7z -odependencies/omni_spectree/release
+```
+
+After extracting all required archives, configure CMake with `USD_ROOT_DIR`, `OMNIUSDRESOLVER_ROOT_DIR`, `OMNISPECTREE_ROOT_DIR`, and `OMNICLIENT_ROOT_DIR` pointing to the corresponding directories under `dependencies/`. Set the Python CMake paths to the extracted `dependencies/python` package, or to a compatible Python 3.12 installation. `INSTALL_USD_DEPS=ON` and `INSTALL_OMNIVERSE_DEPS=ON` install the relevant runtime binaries and USD plugin resources with the connector; they do not replace the need to deploy the rest of ParaView's dependencies. For USD-only output, use `OMNICONNECT_USE_OMNIVERSE=OFF` and omit the three Omniverse packages.

@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -27,6 +28,10 @@
 PXR_NAMESPACE_USING_DIRECTIVE
 
 #include <assert.h>
+#include <algorithm>
+#include <atomic>
+#include <chrono>
+#include <cstring>
 #include <string>
 #include <cmath>
 
@@ -409,7 +414,8 @@ public:
   void UpdateActorMaterial(OmniConnectActorCache& actorCache, const OmniConnectMaterialData& omniMatData, double animTimeStep);
   void RemoveActorMaterial(OmniConnectActorCache& actorCache, size_t matId);
   UsdShadeShader InitializeUsdTexture(OmniConnectActorCache& actorCache, OmniConnectSamplerData& samplerData, OmniConnectTexCache& texCache);
-  void UpdateUsdTexture(OmniConnectTexCache& texCache, UsdShadeShader& textureReader, bool timeVarying, double animTimeStep);
+  void UpdateUsdTexture(OmniConnectActorCache& actorCache, OmniConnectTexCache& texCache,
+    UsdShadeShader& textureReader, bool timeVarying, double animTimeStep);
   void UpdateTexture(OmniConnectActorCache& actorCache, size_t texId, OmniConnectSamplerData& samplerData, bool timeVarying, double animTimeStep);
   void DeleteTexture(OmniConnectActorCache& actorCache, size_t texCacheIdx);
   void UpdateGenericArrays(UsdGeomPrimvarsAPI& actorPrimvarsApi, UsdGeomPrimvarsAPI& clipPrimvarsApi, UsdGeomPrimvarsAPI& topPrimvarsApi, OmniConnectGenericArray* genericArrays, size_t numGenericArrays, double animTimeStep);
@@ -585,11 +591,18 @@ public:
   // Camera initialization and cached parameters
   bool CameraInitialized = false;
   bool CachedCameraValid = false;
+  bool CachedCameraDirty = false;
+  bool AuthoredCameraValid = false;
   double CachedCameraPosition[3] = {0.0, 0.0, 0.0};
   double CachedCameraFocalPoint[3] = {0.0, 0.0, 0.0};
   double CachedCameraViewUp[3] = {0.0, 0.0, 1.0};
   double CachedCameraViewAngle = 30.0;
   double CachedCameraClippingRange[2] = {0.1, 1000.0};
+  double AuthoredCameraPosition[3] = {0.0, 0.0, 0.0};
+  double AuthoredCameraFocalPoint[3] = {0.0, 0.0, 0.0};
+  double AuthoredCameraViewUp[3] = {0.0, 0.0, 1.0};
+  double AuthoredCameraViewAngle = 30.0;
+  double AuthoredCameraClippingRange[2] = {0.1, 1000.0};
 
 #ifdef FORCE_OMNI_CLIP_UPDATES_WITH_DUMMY
   std::vector<UsdStageRefPtr> DummyStages;
@@ -888,7 +901,12 @@ void OmniConnectInternals::OpenActorStage(OmniConnectActorCache& actorCache)
 
 void OmniConnectInternals::OpenClipAndTopologyStage(const char* clipFilePath, const char* topologyFilePath, UsdStageRefPtr& clipStage, UsdStageRefPtr& topologyStage)
 {
-  const char* stageUrl = this->Connection->GetUrl(clipFilePath);
+  const auto resolveStageUrl = [this](const char* path)
+  {
+    return std::string(std::strstr(path, "://") ? path : this->Connection->GetUrl(path));
+  };
+
+  std::string stageUrl = resolveStageUrl(clipFilePath);
 
   OmniConnectDiagnosticMgrDelegate::SetOutputEnabled(false);
   clipStage = UsdStage::Open(stageUrl); // Try to open first: clip stage timestep may be revisited, or process may have been killed earlier
@@ -900,7 +918,7 @@ void OmniConnectInternals::OpenClipAndTopologyStage(const char* clipFilePath, co
     assert(clipStage);
   }
 
-  stageUrl = this->Connection->GetUrl(topologyFilePath);
+  stageUrl = resolveStageUrl(topologyFilePath);
 
   OmniConnectDiagnosticMgrDelegate::SetOutputEnabled(false);
   topologyStage = UsdStage::Open(stageUrl);
@@ -911,6 +929,10 @@ void OmniConnectInternals::OpenClipAndTopologyStage(const char* clipFilePath, co
     topologyStage = UsdStage::CreateNew(stageUrl);
     assert(topologyStage);
   }
+
+  // Initialize copied live assets here; clip-path bookkeeping only selects them.
+  this->LiveInterface.InitializeLiveLayer(clipStage);
+  this->LiveInterface.InitializeLiveLayer(topologyStage);
 }
 
 OmniConnectActorCache* OmniConnectInternals::GetCachedActorCache(size_t actorId)
@@ -1015,6 +1037,13 @@ void OmniConnectInternals::UpdateCameraCacheFromTransform(const double position[
   // Always cache the camera parameters (never write to USD from this method)
   if (position && focalPoint && viewUp && clippingRange)
   {
+    CachedCameraDirty = !AuthoredCameraValid ||
+      !std::equal(position, position + 3, AuthoredCameraPosition) ||
+      !std::equal(focalPoint, focalPoint + 3, AuthoredCameraFocalPoint) ||
+      !std::equal(viewUp, viewUp + 3, AuthoredCameraViewUp) ||
+      viewAngle != AuthoredCameraViewAngle ||
+      !std::equal(clippingRange, clippingRange + 2, AuthoredCameraClippingRange);
+
     CachedCameraPosition[0] = position[0];
     CachedCameraPosition[1] = position[1];
     CachedCameraPosition[2] = position[2];
@@ -1039,6 +1068,8 @@ void OmniConnectInternals::UpdateCameraCacheFromTransform(const double position[
 void OmniConnectInternals::ApplyCachedCameraToUSD()
 {
   if (!CameraInitialized || !CachedCameraValid || !SceneStage)
+    return;
+  if (LiveInterface.GetLiveWorkflowEnabled() && !CachedCameraDirty)
     return;
 
   // Get the camera from the stage using the path
@@ -1085,6 +1116,13 @@ void OmniConnectInternals::ApplyCachedCameraToUSD()
   {
     sceneCamera.GetClippingRangeAttr().Set(GfVec2f((float)CachedCameraClippingRange[0], (float)CachedCameraClippingRange[1]));
   }
+  std::copy(CachedCameraPosition, CachedCameraPosition + 3, AuthoredCameraPosition);
+  std::copy(CachedCameraFocalPoint, CachedCameraFocalPoint + 3, AuthoredCameraFocalPoint);
+  std::copy(CachedCameraViewUp, CachedCameraViewUp + 3, AuthoredCameraViewUp);
+  AuthoredCameraViewAngle = CachedCameraViewAngle;
+  std::copy(CachedCameraClippingRange, CachedCameraClippingRange + 2, AuthoredCameraClippingRange);
+  AuthoredCameraValid = true;
+  CachedCameraDirty = false;
 }
 
 UsdShadeOutput OmniConnectInternals::CreateUsdPreviewSurface(OmniConnectActorCache& actorCache, OmniConnectMatCache& matCache, UsdShadeShader& shader, bool newMat)
@@ -1262,6 +1300,14 @@ void OmniConnectInternals::UpdateActorMaterial(OmniConnectActorCache& actorCache
   }
 
   const OmniConnectTexCache* texCache = (omniMatData.TexId != -1) ? &actorCache.GetTexCache(omniMatData.TexId).second : nullptr;
+  SdfAssetPath textureAssetPath;
+  if(texCache)
+  {
+    const SdfAssetPath& durableTextureAssetPath = texCache->TimeVarying ?
+      texCache->TimedSceneRelTexturePath : texCache->SceneRelTexturePath;
+    textureAssetPath = LiveInterface.GetAssetPathForAuthoring(
+      actorCache.Stage, durableTextureAssetPath);
+  }
 
   if (matCache.TimeVarying != forceTimeVarying)
   {
@@ -1285,7 +1331,8 @@ void OmniConnectInternals::UpdateActorMaterial(OmniConnectActorCache& actorCache
   {
     UpdateUsdPreviewSurface(actorCache, matCache, texCache, omniMatData, shader, animTimeStep);
 #ifdef USE_MDL_MATERIALS
-    UpdateUsdMdlShader(actorCache, matCache, texCache, omniMatData, mdlShader, this->MdlNames, animTimeStep);
+    UpdateUsdMdlShader(actorCache, matCache, texCache, textureAssetPath,
+      omniMatData, mdlShader, this->MdlNames, animTimeStep);
 #endif
   }
   else
@@ -1312,7 +1359,9 @@ UsdShadeShader OmniConnectInternals::InitializeUsdTexture(OmniConnectActorCache&
   textureReader.CreateInput(OmniConnectTokens->fallback, SdfValueTypeNames->Float4).Set(GfVec4f(1.0f, 0.0f, 0.0f, 1.0f));
   textureReader.CreateOutput(OmniConnectTokens->rgb, SdfValueTypeNames->Float3);
   textureReader.CreateOutput(OmniConnectTokens->a, SdfValueTypeNames->Float);
-  textureReader.CreateInput(OmniConnectTokens->file, SdfValueTypeNames->Asset).Set(texCache.SceneRelTexturePath);
+  UsdShadeInput fileInput = textureReader.CreateInput(OmniConnectTokens->file, SdfValueTypeNames->Asset);
+  if (!texCache.TimeVarying)
+    fileInput.Set(LiveInterface.GetAssetPathForAuthoring(actorCache.Stage, texCache.SceneRelTexturePath));
 
   // Properties determined at texture creation, remain static
   textureReader.CreateInput(OmniConnectTokens->WrapS, SdfValueTypeNames->Token).Set(TextureWrapToken(samplerData.WrapS));
@@ -1321,22 +1370,28 @@ UsdShadeShader OmniConnectInternals::InitializeUsdTexture(OmniConnectActorCache&
   return textureReader;
 }
 
-void OmniConnectInternals::UpdateUsdTexture(OmniConnectTexCache& texCache, UsdShadeShader& textureReader, bool timeVarying, double animTimeStep)
+void OmniConnectInternals::UpdateUsdTexture(OmniConnectActorCache& actorCache,
+  OmniConnectTexCache& texCache, UsdShadeShader& textureReader, bool timeVarying,
+  double animTimeStep)
 {
   UsdShadeInput fileInput = textureReader.GetInput(OmniConnectTokens->file);
   if (texCache.TimeVarying != timeVarying)
   {
-    // Only clear the attribute, leave files (with associated timesteps in cache) alone
+    // Clear authored values when switching between default and time-sampled paths.
     fileInput.GetAttr().Clear();
     texCache.TimeVarying = timeVarying;
-
-    if(!timeVarying)
-      fileInput.Set(texCache.SceneRelTexturePath); // filename doesn't change if content changes, so only has to be set once for the default timestep (it was initialized in InitializeUsdTexture())
   }
 
   if (timeVarying)
   {
-    fileInput.Set(texCache.TimedSceneRelTexturePath, animTimeStep);
+    fileInput.Set(LiveInterface.GetAssetPathForAuthoring(
+      actorCache.Stage, texCache.TimedSceneRelTexturePath), animTimeStep);
+  }
+  else
+  {
+    // A live texture upload can change the file name without changing its texture prim.
+    fileInput.Set(LiveInterface.GetAssetPathForAuthoring(
+      actorCache.Stage, texCache.SceneRelTexturePath));
   }
 }
 
@@ -1355,27 +1410,51 @@ void OmniConnectInternals::UpdateTexture(OmniConnectActorCache& actorCache, size
     texCache.TimeVarying = timeVarying;
   }
 
+  const std::string timedSuffix = timeVarying ? "." + std::to_string(animTimeStep) : "";
+  std::string fileSuffix = timedSuffix;
+  if (LiveInterface.GetLiveWorkflowEnabled())
+  {
+    // Kit may not reload an image overwritten at the same URL during live sync.
+    // Give each live upload a new URL so its texture input changes too.
+    static std::atomic<uint64_t> nextRevision{
+      static_cast<uint64_t>(std::chrono::system_clock::now().time_since_epoch().count())};
+    fileSuffix += "_live_" + std::to_string(nextRevision.fetch_add(1, std::memory_order_relaxed));
+  }
+
+  const std::string texTargetPath = texCache.AbsTexturePathBase + fileSuffix + OmniConnectTexCache::ImageExt;
+  const SdfAssetPath sceneRelTexturePath(
+    texCache.SceneRelTexturePathBase + fileSuffix + OmniConnectTexCache::ImageExt);
+  if (!Connection->WriteFile(samplerData.TexData, samplerData.TexDataSize, texTargetPath.c_str()))
+  {
+    OmniConnectErrorMacro("Cannot write texture file: " << texTargetPath);
+    return;
+  }
+
   if (timeVarying)
   {
-    texCache.ResetTimedTexPaths(animTimeStep);
-    if (std::find(texCache.TimeSteps.begin(), texCache.TimeSteps.end(), animTimeStep) == texCache.TimeSteps.end())
-      texCache.TimeSteps.push_back(animTimeStep);
+    texCache.TimedSceneRelTexturePath = sceneRelTexturePath;
   }
-  std::string& texTargetPath = timeVarying ? texCache.TimedAbsTexturePath : texCache.AbsTexturePath;
-  Connection->WriteFile(samplerData.TexData, samplerData.TexDataSize, texTargetPath.c_str());
+  else
+  {
+    texCache.SceneRelTexturePath = sceneRelTexturePath;
+  }
 
   UsdShadeShader textureReader = UsdShadeShader::Get(actorCache.Stage, texCache.TexturePrimPath);
   if(!textureReader)
     textureReader = InitializeUsdTexture(actorCache, samplerData, texCache);
 
-  UpdateUsdTexture(texCache, textureReader, timeVarying, animTimeStep); // updates texCache.timeVarying
+  UpdateUsdTexture(actorCache, texCache, textureReader, timeVarying, animTimeStep); // updates texCache.timeVarying
 
 #if !USE_CUSTOM_MDL
+  const SdfAssetPath& durableTextureAssetPath = texCache.TimeVarying ?
+    texCache.TimedSceneRelTexturePath : texCache.SceneRelTexturePath;
+  const SdfAssetPath textureAssetPath = LiveInterface.GetAssetPathForAuthoring(
+    actorCache.Stage, durableTextureAssetPath);
   UsdShadeShader mdlSampler = UsdShadeShader::Get(actorCache.Stage, texCache.TexturePrimPath_mdl);
   if(!mdlSampler)
-    mdlSampler = InitializeMdlTexture(actorCache, samplerData, texCache);
+    mdlSampler = InitializeMdlTexture(actorCache, samplerData, texCache, textureAssetPath);
 
-  UpdateMdlTexture(texCache, mdlSampler, animTimeStep); // uses texCache.timeVarying
+  UpdateMdlTexture(texCache, mdlSampler, textureAssetPath, animTimeStep); // uses texCache.timeVarying
 #endif
 }
 
@@ -1386,16 +1465,8 @@ void OmniConnectInternals::DeleteTexture(OmniConnectActorCache& actorCache
   auto& texCacheEntry = actorCache.TexCaches[texCacheIdx];
   OmniConnectTexCache& texCache = texCacheEntry.second;
 
-  // Remove the default texture file
-  Connection->RemoveFile(texCache.AbsTexturePath.c_str());
-
-  // For each timestep-texture ever written, remove the file
-  for (double timeStep : texCache.TimeSteps)
-  {
-    texCache.ResetTimedTexPaths(timeStep);
-    Connection->RemoveFile(texCache.TimedAbsTexturePath.c_str());
-  }
-
+  // Texture files remain in the output session: older USD time samples or
+  // merged live edits may still reference an earlier version.
   actorCache.Stage->RemovePrim(texCache.TexturePrimPath);
 }
 
@@ -1637,6 +1708,10 @@ void OmniConnectInternals::UpdateGeom(OmniConnectActorCache* actorCache, double 
   bool newGeom = this->UpdateActorGeom(*actorCache, geomCache, geomData, animTimeStep,
     updatedGenericArrays, numUga, deletedGenericArrays, numDga);
 
+  // Live-clip invalidation workaround for Kit consumers on both session backends.
+  if(UsdSaveEnabled && !LiveInterface.PublishLiveClip(*actorCache, geomCache, animTimeStep))
+    return;
+
   if (newGeom)
   {
     // Under the assumption that timesteps are generally added in sequence starting from 0,
@@ -1716,8 +1791,8 @@ void OmniConnectInternals::GetActorGeomPrimsAndStages(OmniConnectActorCache& act
   geomPrim = actorGeom.GetPrim();
 
   // Get the clip/topology files/paths
-  geomCache.ResetTopologyFile(actorCache, this->LiveInterface.GetLiveExtension());
-  geomCache.ResetTimedGeomClipFile(animTimeStep, this->LiveInterface.GetLiveExtension());
+  this->LiveInterface.ResetTopologyFile(actorCache, geomCache);
+  this->LiveInterface.ResetTimedGeomClipFile(actorCache, geomCache, animTimeStep);
   std::string& geomClipFile = geomCache.TimedSceneRelGeomClipFile;
   std::string& geomTopologyFile = geomCache.SceneRelGeomTopologyFile;
   std::string& geomClipStagePath = geomCache.TimedGeomClipStagePath;
@@ -1731,9 +1806,19 @@ void OmniConnectInternals::GetActorGeomPrimsAndStages(OmniConnectActorCache& act
   clipGeom = PrimType::Get(geomClipStage, geomPath);
   topGeom = PrimType::Get(geomTopologyStage, geomPath);
   newTimeStep = !clipGeom;
+  const bool liveWorkflow = this->LiveInterface.GetLiveWorkflowEnabled();
+  UsdClipsAPI clipsApi(geomPrim);
+  if(liveWorkflow)
+  {
+    // Existing timesteps also need the actor's manifest redirected to live.
+    SdfAssetPath currentManifest;
+    if(!clipsApi.GetClipManifestAssetPath(&currentManifest) ||
+      currentManifest.GetAssetPath() != geomTopologyFile)
+      clipsApi.SetClipManifestAssetPath(SdfAssetPath(geomTopologyFile));
+  }
+
   if (newTimeStep)
   {
-    UsdClipsAPI clipsApi(geomPrim);
     bool saveTopGeom = false;
     if (!topGeom) // Either because of newGeom, or because of live stage
     {
@@ -1744,7 +1829,8 @@ void OmniConnectInternals::GetActorGeomPrimsAndStages(OmniConnectActorCache& act
     if (newGeom)
     {
       clipsApi.SetClipPrimPath(geomCache.GeomPath);
-      clipsApi.SetClipManifestAssetPath(SdfAssetPath(geomTopologyFile));
+      if(!liveWorkflow)
+        clipsApi.SetClipManifestAssetPath(SdfAssetPath(geomTopologyFile));
 
       InitializeGeom(actorGeom, actorCache.Stage, geomCache, true);
       InitializeGeom(topGeom, geomTopologyStage, geomCache, false);
@@ -1760,29 +1846,55 @@ void OmniConnectInternals::GetActorGeomPrimsAndStages(OmniConnectActorCache& act
     }
     assert(topGeom);
     if(UsdSaveEnabled && saveTopGeom)
-      geomTopologyStage->Save();
+      LiveInterface.FlushStage(geomTopologyStage);
 
 #ifdef FORCE_OMNI_CLIP_UPDATES_WITH_SUBLAYER
     actorCache.Stage->GetRootLayer()->InsertSubLayerPath(geomClipFile);
 #endif
-
-    VtArray<SdfAssetPath>& assetPaths = geomCache.ClipAssetPaths;
-    LiveInterface.FilterAssetPaths(assetPaths, geomClipFile, geomClipStage);
-    size_t assetPathIdx = assetPaths.size();
-    assetPaths.push_back(SdfAssetPath(geomClipFile));
-    clipsApi.SetClipAssetPaths(assetPaths);
-
-    VtVec2dArray& clipActives = geomCache.ClipActives;
-    bool modified = LiveInterface.ModifyClipActives(clipActives, animTimeStep, (double)assetPathIdx);
-    if(!modified)
-      clipActives.push_back(GfVec2d(animTimeStep, (double)assetPathIdx));
-    clipsApi.SetClipActive(clipActives);
 
     //Define the standard geom prim.
     clipGeom = DefineOnEmptyPrim<PrimType>(geomClipStage, geomPath);
 
     InitializeGeom(clipGeom, geomClipStage, geomCache, false);
   }
+
+  // Live revisions are published after geometry authoring and saves complete.
+  // Advertising them here would expose partially authored geometry to viewers.
+  if(newTimeStep && !liveWorkflow)
+  {
+    VtArray<SdfAssetPath>& assetPaths = geomCache.ClipAssetPaths;
+    bool pathsChanged = false;
+    size_t assetPathIdx = LiveInterface.UpdateClipAssetPath(assetPaths, geomClipFile, pathsChanged);
+    if(pathsChanged)
+      clipsApi.SetClipAssetPaths(assetPaths);
+
+    VtVec2dArray& clipActives = geomCache.ClipActives;
+    bool activeChanged = false;
+    bool modified = LiveInterface.ModifyClipActives(
+      clipActives, animTimeStep, (double)assetPathIdx, activeChanged);
+    if(!modified)
+    {
+      clipActives.push_back(GfVec2d(animTimeStep, (double)assetPathIdx));
+      activeChanged = true;
+    }
+    if(activeChanged)
+      clipsApi.SetClipActive(clipActives);
+  }
+
+#ifndef TOPOLOGY_AS_SUBLAYER
+  if(liveWorkflow && !newGeom)
+  {
+    // Avoid replacing an unchanged reference on every geometry update.
+    SdfPrimSpecHandle editSpec = actorCache.Stage->GetEditTarget().GetLayer()->GetPrimAtPath(geomPath);
+    const std::vector<SdfReference> references = editSpec ?
+      editSpec->GetReferenceList().GetAddedOrExplicitItems() : std::vector<SdfReference>{};
+    if(references.size() != 1 || references[0] != SdfReference(geomTopologyFile, geomPath))
+    {
+      geomPrim.GetReferences().ClearReferences();
+      geomPrim.GetReferences().AddReference(geomTopologyFile, geomPath);
+    }
+  }
+#endif
 }
 
 void OmniConnectInternals::InitializeGeom(UsdGeomMesh& mesh, UsdStageRefPtr& geomStage, OmniConnectMeshCache& meshCache, bool setDefaultValues)
@@ -2225,9 +2337,9 @@ namespace
 #endif
 
     SyncTimeVaryingPrimvar(actPrimvarDispC, clipPrimvarDispC, topPrimvarsApi, timeVaryingUpdate, timeEval.TimeCode,
-      OmniConnectTokens->displayColor, SdfValueTypeNames->TexCoord2fArray);
+      OmniConnectTokens->displayColor, SdfValueTypeNames->Color3fArray);
     SyncTimeVaryingPrimvar(actPrimvarDispO, clipPrimvarDispO, topPrimvarsApi, timeVaryingUpdate, timeEval.TimeCode,
-      OmniConnectTokens->displayOpacity, SdfValueTypeNames->TexCoord2fArray);
+      OmniConnectTokens->displayOpacity, SdfValueTypeNames->FloatArray);
 #if defined(USE_MDL_MATERIALS) && (USE_CUSTOM_MDL || USE_CUSTOM_POINT_SHADER)
 #if USE_CUSTOM_POINT_SHADER
     if(isPointsGeom)
@@ -2937,8 +3049,8 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
 
   if (UsdSaveEnabled)
   {
-    geomTopologyStage->Save();
-    geomClipStage->Save();
+    LiveInterface.FlushStage(geomTopologyStage);
+    LiveInterface.FlushStage(geomClipStage);
   }
 
   return newMesh;
@@ -3028,8 +3140,8 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
 
   if (UsdSaveEnabled)
   {
-    geomTopologyStage->Save();
-    geomClipStage->Save();
+    LiveInterface.FlushStage(geomTopologyStage);
+    LiveInterface.FlushStage(geomClipStage);
   }
 
   return newInstancer;
@@ -3073,8 +3185,8 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache & actorCache, O
 
   if (UsdSaveEnabled)
   {
-    geomTopologyStage->Save();
-    geomClipStage->Save();
+    LiveInterface.FlushStage(geomTopologyStage);
+    LiveInterface.FlushStage(geomClipStage);
   }
 
   return newCurve;
@@ -3164,7 +3276,8 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
       UsdShadeShader volOutShader = timeVaryingUpdate ? volClipShader : volActShader;
       volumeCache.ResetTimedOvdbFile(animTimeStep);
 
-      SdfAssetPath volAsset(volumeCache.TimedRelOvdbFile);
+      SdfAssetPath volAsset = LiveInterface.GetAssetPathForAuthoring(
+        actorCache.Stage, SdfAssetPath(volumeCache.TimedRelOvdbFile));
       volOutShader.GetInput(OmniConnectTokens->volume_density_texture).Set(volAsset, timeCode);
 #endif
     }
@@ -3187,7 +3300,8 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
     geomOutPrim = volOutGeom;
 
     volumeCache.ResetTimedOvdbFile(animTimeStep);
-    SdfAssetPath volAsset(volumeCache.TimedRelOvdbFile);
+    SdfAssetPath volAsset = LiveInterface.GetAssetPathForAuthoring(
+      actorCache.Stage, SdfAssetPath(volumeCache.TimedRelOvdbFile));
 
     bool standardVolumeFields = (numUga == 0);
 
@@ -3244,8 +3358,8 @@ bool OmniConnectInternals::UpdateActorGeom(OmniConnectActorCache& actorCache, Om
 
   if (UsdSaveEnabled)
   {
-    geomTopologyStage->Save();
-    geomClipStage->Save();
+    LiveInterface.FlushStage(geomTopologyStage);
+    LiveInterface.FlushStage(geomClipStage);
   }
 
   return newVolume;
@@ -3364,8 +3478,8 @@ bool OmniConnectInternals::RemoveActorGeomAtTime(OmniConnectActorCache& actorCac
   }
 
   // Get the clip and topology paths
-  geomCache.ResetTopologyFile(actorCache, this->LiveInterface.GetLiveExtension());
-  geomCache.ResetTimedGeomClipFile(animTimeStep, this->LiveInterface.GetLiveExtension());
+  this->LiveInterface.ResetTopologyFile(actorCache, geomCache);
+  this->LiveInterface.ResetTimedGeomClipFile(actorCache, geomCache, animTimeStep, false);
   std::string& geomClipStagePath = geomCache.TimedGeomClipStagePath;
   std::string& geomTopologyStagePath = geomCache.GeomTopologyStagePath;
 
@@ -3434,7 +3548,7 @@ void OmniConnectInternals::RemoveActorGeom(OmniConnectActorCache& actorCache, Ca
   RemoveActorGeomUniformData(actorCache, geomCache);
 
   // Remove geom prim and topology sublayer reference+file
-  geomCache.ResetTopologyFile(actorCache, this->LiveInterface.GetLiveExtension());
+  this->LiveInterface.ResetTopologyFile(actorCache, geomCache);
   RemovePrimAndTopology(actorCache, geomCache.GeomTopologyStagePath, geomPath);
 
   // Remove the geometry files for all timesteps
@@ -3785,12 +3899,12 @@ void OmniConnectInternals::SetLiveWorkflowEnabled(bool enable)
   {
     if(this->Settings.OutputLocal)
     {
-      OmniConnectErrorMacro("Live workflows can only be enabled for output on an Omniverse Nucleus server.");
+      OmniConnectErrorMacro("Live workflows require a remote storage connection.");
       return;
     }
     if(!OmniConnectRemoteConnection::OmniClientInitialized)
     {
-      OmniConnectErrorMacro("Live workflows can only be enabled when an Omniverse client connection with a Nucleus server has been established.");
+      OmniConnectErrorMacro("Live workflows require an initialized Omniverse client connection.");
       return;
     }
   }
@@ -3850,11 +3964,17 @@ void OmniConnect::InitializeUsdPlugins()
       std::filesystem::path usdPath(usdPluginPath);
       std::filesystem::path installDir = usdPath.parent_path().parent_path();
       std::filesystem::path resolverPluginDir = installDir / "plugin" / "omni_usd_resolver" / "resources";
+      std::filesystem::path livePluginDir = installDir / "plugin" / "omni_usd_live" / "resources";
 
       std::string resolverPluginPath = resolverPluginDir.string();
       OmniConnectDebugMacro("Attempting to register plugins from: " << resolverPluginPath);
 
       registry.RegisterPlugins(resolverPluginPath);
+
+      std::string livePluginPath = livePluginDir.string();
+      OmniConnectDebugMacro("Attempting to register plugins from: " << livePluginPath);
+
+      registry.RegisterPlugins(livePluginPath);
 
   }
   else
@@ -3862,24 +3982,6 @@ void OmniConnect::InitializeUsdPlugins()
     OmniConnectDebugMacro("Could not find any USD plugin to determine plugin directory structure");
   }
 
-#ifndef NDEBUG
-  // DEBUG: List all loaded plugins (refresh after potential registration)
-  PlugPluginPtrVector plugins = registry.GetAllPlugins();
-  OmniConnectDebugMacro("=== USD Plugins (Total: " << plugins.size() << ") ===");
-
-  for (auto& plugin : plugins)
-  {
-    std::string pluginName = plugin->GetName();
-    std::string pluginPath = plugin->GetPath();
-    bool isLoaded = plugin->IsLoaded();
-    OmniConnectDebugMacro("Plugin: " << pluginName << " | Path: " << pluginPath << " | Loaded: " << (isLoaded ? "YES" : "NO"));
-  }
-
-  // DEBUG: Check active resolver
-  ArResolver& resolver = ArGetResolver();
-  std::string resolverType = typeid(resolver).name();
-  OmniConnectDebugMacro("Active resolver type: " << resolverType);
-#endif
 }
 
 const OmniConnectSettings& OmniConnect::GetSettings()
@@ -4280,7 +4382,7 @@ void OmniConnect::SetSceneToAnimTime(size_t actorId, double sceneTime, const dou
 
   if (UsdSaveEnabled)
   {
-    Internals->SceneStage->Save();
+    Internals->LiveInterface.FlushStage(Internals->SceneStage);
   }
 }
 
@@ -4293,7 +4395,7 @@ void OmniConnect::FlushActorUpdates(size_t actorId)
 
   if (UsdSaveEnabled)
   {
-    actorCache->Stage->Save();
+    Internals->LiveInterface.FlushActorStage(*actorCache);
   }
 }
 
@@ -4311,7 +4413,7 @@ void OmniConnect::FlushSceneUpdates()
     Internals->RunningDummyIndex = newDummyIdx;
 #endif
 
-    Internals->SceneStage->Save();
+    Internals->LiveInterface.FlushStage(Internals->SceneStage);
 
     this->Connection->ProcessUpdates();
   }
@@ -4334,7 +4436,7 @@ void OmniConnect::DeleteActorFromScene(size_t actorId)
 
   if (UsdSaveEnabled)
   {
-    Internals->SceneStage->Save();
+    Internals->LiveInterface.FlushStage(Internals->SceneStage);
   }
 }
 
@@ -4349,9 +4451,9 @@ void OmniConnect::SetUpdateOmniContents(bool update)
   {
     for (auto& mapEntry : Internals->ActorCacheMap)
     {
-      mapEntry.second.Stage->Save();
+      Internals->LiveInterface.FlushActorStage(mapEntry.second);
     }
-    Internals->SceneStage->Save();
+    Internals->LiveInterface.FlushStage(Internals->SceneStage);
 
     Connection->ProcessUpdates();
   }
@@ -4391,6 +4493,18 @@ void OmniConnect::SetCameraCacheFromTransform(const double position[3], const do
   Internals->UpdateCameraCacheFromTransform(position, focalPoint, viewUp, viewAngle, clippingRange);
 }
 
+bool OmniConnect::AuthorLiveCameraIfChanged()
+{
+  if (!ConnectionValid || !Internals || !UsdSaveEnabled ||
+      !Internals->LiveInterface.GetLiveWorkflowEnabled() || !Internals->CachedCameraDirty ||
+      !Internals->CameraInitialized || !Internals->SceneStage)
+    return false;
+
+  // The renderer flushes the scene once after its postpass, including this edit.
+  Internals->ApplyCachedCameraToUSD();
+  return !Internals->CachedCameraDirty;
+}
+
 void OmniConnect::ApplyCachedCameraToUSD()
 {
   if (!ConnectionValid || !Internals)
@@ -4402,6 +4516,6 @@ void OmniConnect::ApplyCachedCameraToUSD()
   // Save the scene stage to persist camera changes
   if (UsdSaveEnabled && Internals->SceneStage)
   {
-    Internals->SceneStage->Save();
+    Internals->LiveInterface.FlushStage(Internals->SceneStage);
   }
 }

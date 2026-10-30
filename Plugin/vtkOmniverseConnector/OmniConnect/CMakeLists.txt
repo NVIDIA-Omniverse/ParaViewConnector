@@ -100,6 +100,12 @@ if(DEFINED TBB_ROOT)
   set(PXR_FIND_TBB_IN_CONFIG OFF)
 endif()
 
+# pxrConfig.cmake performs a find_dependency(OpenSubdiv CONFIG), but some USD
+# distributions only ship the prebuilt OpenSubdiv libraries without a CMake
+# config package. The OpenSubdiv symbols are already provided through pxrTargets,
+# so disable USD's config-mode lookup, as is done for TBB above.
+set(PXR_FIND_OPENSUBDIV_IN_CONFIG OFF)
+
 # Search in config mode (USD will now skip TBB finding and use our targets)
 find_package(pxr REQUIRED
   HINTS ${USD_ROOT_DIR_CURRENT})
@@ -158,6 +164,7 @@ target_sources(${PROJECT_NAME}
   PRIVATE
     OmniConnect.cxx
     OmniConnectLiveInterface.cxx
+    OmniConnectLiveSession.cxx
     OmniConnectUtilsExternal.cxx
     OmniConnectUsdUtils.cxx
     OmniConnectCaches.cxx
@@ -167,6 +174,7 @@ target_sources(${PROJECT_NAME}
     OmniConnectUsdUtils.h
     OmniConnect.h
     OmniConnectLiveInterface.h
+    OmniConnectLiveSession.h
     OmniConnectCaches.h
     OmniConnectDiagnosticMgrDelegate.h
     ${OMNICONNECT_MDL_HEADERS}

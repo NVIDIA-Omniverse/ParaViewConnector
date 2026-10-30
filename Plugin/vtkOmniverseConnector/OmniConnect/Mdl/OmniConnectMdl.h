@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -60,16 +61,19 @@ UsdShadeOutput CreateUsdMdlMeshVolumeShader(UsdShadeShader& usdShader, OmniConne
 
 void ResetUsdMdlShader(UsdShadeShader& usdShader, OmniConnectActorCache& actorCache, OmniConnectMatCache& matCache);
 
-void UpdateUsdMdlShader(OmniConnectActorCache& actorCache, OmniConnectMatCache& matCache, const OmniConnectTexCache* texCache, 
-  const OmniConnectMaterialData& omniMatData, UsdShadeShader& usdShader, const OmniConnectMdlNames& mdlNames, double animTimeStep
+void UpdateUsdMdlShader(OmniConnectActorCache& actorCache, OmniConnectMatCache& matCache, const OmniConnectTexCache* texCache,
+  const SdfAssetPath& textureAssetPath, const OmniConnectMaterialData& omniMatData, UsdShadeShader& usdShader,
+  const OmniConnectMdlNames& mdlNames, double animTimeStep
 #if USE_CUSTOM_POINT_SHADER
   , bool updateCustomShader = false
 #endif
   );
 
 #if !USE_CUSTOM_MDL
-UsdShadeShader InitializeMdlTexture(const OmniConnectActorCache& actorCache, const OmniConnectSamplerData& samplerData, const OmniConnectTexCache& texCache);
-void UpdateMdlTexture(const OmniConnectTexCache& texCache, const UsdShadeShader& sampler, double animTimeStep);
+UsdShadeShader InitializeMdlTexture(const OmniConnectActorCache& actorCache, const OmniConnectSamplerData& samplerData,
+  const OmniConnectTexCache& texCache, const SdfAssetPath& textureAssetPath);
+void UpdateMdlTexture(const OmniConnectTexCache& texCache, const UsdShadeShader& sampler,
+  const SdfAssetPath& textureAssetPath, double animTimeStep);
 #endif
 
 #endif

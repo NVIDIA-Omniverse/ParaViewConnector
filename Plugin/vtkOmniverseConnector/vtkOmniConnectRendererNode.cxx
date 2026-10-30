@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -246,6 +247,9 @@ void vtkOmniConnectRendererNode::Render(bool prepass)
   }
   else
   {
+    // A camera-only render still needs a live scene edit, but no extra flush.
+    if (this->Connector && this->Connector->AuthorLiveCameraIfChanged())
+      this->FlushSceneUpdates();
     this->Internals->SceneFlushAndReset(this->Connector);
 
     if (this->ProgressNotifier)

@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -132,7 +133,6 @@ void OmniConnectTexCache::SetPathsAndNames(const OmniConnectActorCache& actorCac
 {
   std::string idStr = std::to_string(texId);
   this->AbsTexturePathBase = actorCache.TexturePathBase + idStr;
-  this->AbsTexturePath = this->AbsTexturePathBase + ImageExt;
 
   this->SceneRelTexturePathBase = actorCache.SceneRelTexturePathBase + idStr;
   this->SceneRelTexturePath = SdfAssetPath(this->SceneRelTexturePathBase + ImageExt);
@@ -141,13 +141,6 @@ void OmniConnectTexCache::SetPathsAndNames(const OmniConnectActorCache& actorCac
 #if !USE_CUSTOM_MDL
   this->TexturePrimPath_mdl = SdfPath(texPrimPath + "_mdl");
 #endif
-}
-
-void OmniConnectTexCache::ResetTimedTexPaths(double animTimeStep)
-{
-  std::string timedExt = "." + std::to_string(animTimeStep) + OmniConnectTexCache::ImageExt;
-  TimedAbsTexturePath = this->AbsTexturePathBase + timedExt;
-  TimedSceneRelTexturePath = SdfAssetPath(this->SceneRelTexturePathBase + timedExt);
 }
 
 void OmniConnectGeomCache::ResetTopologyFile(const OmniConnectActorCache& actorCache, const std::string& fileExtension)

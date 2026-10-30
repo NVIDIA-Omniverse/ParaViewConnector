@@ -493,50 +493,25 @@ if(openvdb_houdini IN_LIST OpenVDB_FIND_COMPONENTS)
   include(OpenVDBHoudiniSetup)
 endif()
 
-# Add standard dependencies
+# Add standard dependencies. Most builds use the regular TBB::tbb target, but
+# callers may need OpenVDB to link against a TBB target that differs from the
+# project-wide TBB dependency. In that case the caller may provide a separate
+# imported target through OPENVDB_TBB_TARGET so this module does not reuse the
+# global TBB::tbb target.
 
-find_package(TBB REQUIRED COMPONENTS tbb)
-
-if(NOT OPENVDB_USE_STATIC_LIBS AND NOT Boost_USE_STATIC_LIBS)
-  # @note  Both of these must be set for Boost 1.70 (VFX2020) to link against
-  #        boost shared libraries (more specifically libraries built with -fPIC).
-  #        http://boost.2283326.n4.nabble.com/CMake-config-scripts-broken-in-1-70-td4708957.html
-  #        https://github.com/boostorg/boost_install/commit/160c7cb2b2c720e74463865ef0454d4c4cd9ae7c
-  set(BUILD_SHARED_LIBS ON)
-  set(Boost_USE_STATIC_LIBS OFF)
+if(OPENVDB_TBB_TARGET)
+  if(NOT TARGET ${OPENVDB_TBB_TARGET})
+    message(FATAL_ERROR "OPENVDB_TBB_TARGET is set to ${OPENVDB_TBB_TARGET}, but that target does not exist")
+  endif()
+else()
+  find_package(TBB REQUIRED COMPONENTS tbb)
+  set(OPENVDB_TBB_TARGET TBB::tbb)
 endif()
 
-find_package(Boost REQUIRED COMPONENTS iostreams)
-
 # Add deps for pyopenvdb
-# @todo track for numpy
 
 if(pyopenvdb IN_LIST OpenVDB_FIND_COMPONENTS)
   find_package(Python REQUIRED)
-
-  # Boost python handling - try and find both python and pythonXx (version suffixed).
-  # Prioritize the version suffixed library, failing if neither exist.
-
-  find_package(Boost ${MINIMUM_BOOST_VERSION}
-    QUIET COMPONENTS python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}
-  )
-
-  if(TARGET Boost::python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR})
-    set(BOOST_PYTHON_LIB "python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
-    message(STATUS "Found boost_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}")
-  else()
-    find_package(Boost ${MINIMUM_BOOST_VERSION} QUIET COMPONENTS python)
-    if(TARGET Boost::python)
-      set(BOOST_PYTHON_LIB "python")
-      message(STATUS "Found non-suffixed boost_python, assuming to be python version "
-        "\"${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}\" compatible"
-      )
-    else()
-      message(FATAL_ERROR "Unable to find boost_python or "
-        "boost_python${PYTHON_VERSION_MAJOR}${PYTHON_VERSION_MINOR}."
-      )
-    endif()
-  endif()
 endif()
 
 # Add deps for openvdb_ax
@@ -655,6 +630,17 @@ elseif(NOT OPENVDB_USE_STATIC_LIBS)
   unset(_OPENVDB_PREREQUISITE_LIST)
 endif()
 
+# Some dynamically-built OpenVDB packages statically embed blosc and zlib into
+# the openvdb shared library and ship no separate blosc/zlib import libs,
+# headers or runtime DLLs. version.h still advertises OPENVDB_USE_BLOSC/ZLIB,
+# which would otherwise force find_package(Blosc/ZLIB REQUIRED) and add
+# non-existent link dependencies. Only resolve them as external packages when
+# statically linking OpenVDB, where the consumer must provide them itself.
+if(NOT OPENVDB_USE_STATIC_LIBS)
+  set(OpenVDB_USES_BLOSC OFF)
+  set(OpenVDB_USES_ZLIB OFF)
+endif()
+
 if(OpenVDB_USES_BLOSC)
   find_package(Blosc REQUIRED)
 endif()
@@ -668,19 +654,14 @@ if(OpenVDB_USES_LOG4CPLUS)
 endif()
 
 if(OpenVDB_USES_IMATH_HALF)
-  find_package(Imath CONFIG)
-  if (NOT TARGET Imath::Imath)
-    find_package(IlmBase REQUIRED COMPONENTS Half)
-  endif()
+  find_package(Imath REQUIRED CONFIG)
+endif()
 
-  if(WIN32)
-    # @note OPENVDB_OPENEXR_STATICLIB is old functionality and should be removed
-    if(OPENEXR_USE_STATIC_LIBS OR
-        ("${ILMBASE_LIB_TYPE}" STREQUAL "STATIC_LIBRARY") OR
-        ("${IMATH_LIB_TYPE}" STREQUAL "STATIC_LIBRARY"))
-      list(APPEND OpenVDB_DEFINITIONS OPENVDB_OPENEXR_STATICLIB)
-    endif()
-  endif()
+# Boost headers are required by OpenVDB's public headers even without delayed loading.
+if(OpenVDB_USES_DELAYED_LOADING)
+  find_package(Boost REQUIRED COMPONENTS iostreams)
+else()
+  find_package(Boost REQUIRED)
 endif()
 
 if(UNIX)
@@ -692,11 +673,7 @@ endif()
 # namespaced headers are correctly prioritized. Otherwise other include paths
 # from shared installs (including houdini) may pull in the wrong headers
 
-set(_OPENVDB_VISIBLE_DEPENDENCIES "")
-
-if(OPENVDB_USE_STATIC_LIBS AND Boost_USE_STATIC_LIBS)
-  list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES Boost::iostreams)
-endif()
+set(_OPENVDB_VISIBLE_DEPENDENCIES Boost::headers)
 
 if(OpenVDB_USES_DELAYED_LOADING)
   list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES Boost::iostreams)
@@ -704,7 +681,7 @@ if(OpenVDB_USES_DELAYED_LOADING)
 endif()
 
 if(OpenVDB_USES_IMATH_HALF)
-  list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES $<TARGET_NAME_IF_EXISTS:IlmBase::Half> $<TARGET_NAME_IF_EXISTS:Imath::Imath>)
+  list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES Imath::Imath)
 endif()
 
 if(OpenVDB_USES_LOG4CPLUS)
@@ -713,7 +690,7 @@ if(OpenVDB_USES_LOG4CPLUS)
 endif()
 
 list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES
-  TBB::tbb
+  ${OPENVDB_TBB_TARGET}
 )
 if(UNIX)
   list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES
@@ -731,6 +708,8 @@ if(NOT OPENVDB_USE_STATIC_LIBS)
     list(APPEND _OPENVDB_HIDDEN_DEPENDENCIES ZLIB::ZLIB)
   endif()
 else()
+  # When statically linking OpenVDB its optional dependencies must appear on the
+  # consumer's link line so their symbols resolve.
   if(OpenVDB_USES_BLOSC AND BLOSC_USE_STATIC_LIBS)
     list(APPEND _OPENVDB_VISIBLE_DEPENDENCIES Blosc::blosc)
   endif()
@@ -804,7 +783,7 @@ if(OpenVDB_pyopenvdb_LIBRARY)
     set_target_properties(OpenVDB::pyopenvdb PROPERTIES
       IMPORTED_LOCATION "${OpenVDB_pyopenvdb_LIBRARY}"
       INTERFACE_INCLUDE_DIRECTORIES "${OpenVDB_pyopenvdb_INCLUDE_DIR};${PYTHON_INCLUDE_DIR}"
-      INTERFACE_LINK_LIBRARIES "OpenVDB::openvdb;Boost::${BOOST_PYTHON_LIB};${PYTHON_LIBRARIES}"
+      INTERFACE_LINK_LIBRARIES "OpenVDB::openvdb;${PYTHON_LIBRARIES}"
       INTERFACE_COMPILE_FEATURES cxx_std_17
    )
   endif()

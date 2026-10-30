@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -30,6 +31,10 @@ PXR_NAMESPACE_USING_DIRECTIVE
 
 #include "OmniConnectCaches.h"
 #include "OmniConnectConnection.h"
+#include "OmniConnectLiveSession.h"
+
+#include <cstdint>
+#include <map>
 
 class OmniConnectLiveInterface
 {
@@ -44,29 +49,55 @@ class OmniConnectLiveInterface
       ActorCacheMapType* actorCaches);
     bool GetLiveWorkflowEnabled() const { return LiveWorkflowEnabled; }
 
-    // Filter usd asset paths matching a live asset path. Sideeffect: if a match is found, it's contents are copied over to liveClipStage.
-    void FilterAssetPaths(VtArray<SdfAssetPath>& assetPaths, std::string& liveAssetPath, UsdStageRefPtr& liveClipStage) const; 
-    bool ModifyClipActives(VtVec2dArray& clipActives, double animTimeStep, double assetPathIdx) const;
+    void ResetTopologyFile(const OmniConnectActorCache& actorCache, OmniConnectGeomCache& geomCache);
+    void ResetTimedGeomClipFile(const OmniConnectActorCache& actorCache, OmniConnectGeomCache& geomCache,
+      double animTimeStep, bool createRevision = true);
+    void InitializeLiveLayer(UsdStageRefPtr& liveStage) const;
+    // Work around stale Kit geometry by publishing a new, completed live clip.
+    bool PublishLiveClip(OmniConnectActorCache& actorCache,
+      OmniConnectGeomCache& geomCache, double animTimeStep);
+    SdfAssetPath GetAssetPathForAuthoring(const UsdStageRefPtr& durableStage,
+      const SdfAssetPath& durableAssetPath) const;
+    void FlushStage(UsdStageRefPtr& stage);
+    void FlushActorStage(OmniConnectActorCache& actorCache);
+    size_t UpdateClipAssetPath(VtArray<SdfAssetPath>& assetPaths,
+      const std::string& assetPath, bool& changed) const;
+    bool ModifyClipActives(VtVec2dArray& clipActives, double animTimeStep,
+      double assetPathIdx, bool& changed) const;
     
     const std::string& GetLiveExtension() const { return LiveWorkflowEnabled ? LiveExtension : *UsdExtension; }
+    const OmniConnectLiveSessionState& GetLiveSession() const { return LiveSession; }
 
     static OmniConnectLogCallback LogCallback;
 
   protected:
-    using LiveEditStagePair = std::pair<UsdStageRefPtr, UsdStageRefPtr>;
+    bool StartLiveSession(const std::string& baseLayerUrl);
+    void StopLiveSession();
+    UsdStageRefPtr CreateSessionRootLayer();
+    UsdStageRefPtr CreateLiveEditLayer(UsdStageRefPtr& stage, const std::string& durableLayerUrl,
+      const std::string& layerNamePrefix, OmniConnectLiveLayerRole role);
+    bool AttachLiveEditLayer(UsdStageRefPtr& stage, const UsdStageRefPtr& liveEditStage);
+    bool AddSubLayerToParent(UsdStageRefPtr parentStage, UsdStageRefPtr childStage);
+    bool ClearLiveSubLayers(const UsdStageRefPtr& stage);
+    std::string MakeLiveLayerName(const std::string& prefix, const std::string& stableIdentity) const;
 
-    LiveEditStagePair CreateLiveEditLayer(UsdStageRefPtr& stage, std::string& stageUrl, std::string& stageFileName);
-    void AddSubLayerToParent(UsdStageRefPtr parentStage, UsdStageRefPtr childStage);
-
-    void MergeLiveEditLayer(UsdStageRefPtr& stage, LiveEditStagePair& liveEditStage);
-    void CopyClipToLive(UsdStageRefPtr& liveClipStage) const;
-    template<typename CacheType> void CopyClipsToUsd(OmniConnectActorCache& actorCache);
+    void DetachLiveEditLayer(UsdStageRefPtr& stage, UsdStageRefPtr& liveEditStage);
+    bool MergeLiveEditLayer(UsdStageRefPtr& stage, UsdStageRefPtr& liveEditStage);
+    void CopyLayerToLive(UsdStageRefPtr& liveStage, const OmniConnectLiveLayerRecord& layer) const;
+    bool CopyLayerToDurable(const OmniConnectLiveLayerRecord& layer) const;
+    bool ClearCopiedLiveLayers() const;
+    template<typename CacheType> bool CopyClipsToUsd(OmniConnectActorCache& actorCache);
 
     bool LiveWorkflowEnabled = false;
     OmniConnectConnection* Connection = nullptr;
 
-    LiveEditStagePair LiveEditMultiSceneStage;
-    LiveEditStagePair LiveEditSceneStage;
+    UsdStageRefPtr LiveEditSceneStage;
+    UsdStageRefPtr LiveSessionRootStage;
+    OmniConnectLiveSessionState LiveSession;
+    std::map<std::string, UsdEditTarget> PreviousEditTargets;
+    // Seed each revision from the last published clip, retaining untouched arrays.
+    std::map<std::string, std::string> PublishedClipUrls;
+    uint64_t ClipRevision = 0;
 
     std::string* UsdExtension = nullptr;
     SdfPath RootPath;

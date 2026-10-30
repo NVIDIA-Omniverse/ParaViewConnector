@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -31,7 +32,11 @@
 #define NOMINMAX // Make sure nobody #defines min or max
 // Python must be included first because it monkeys with macros that cause
 // TBB to fail to compile in debug mode if TBB is included before Python
+#if __has_include(<pxr/external/boost/python/object.hpp>)
+#include <pxr/external/boost/python/object.hpp>
+#else
 #include <boost/python/object.hpp>
+#endif
 #include <pxr/pxr.h>
 #include <pxr/base/tf/token.h>
 #include <pxr/base/trace/reporter.h>

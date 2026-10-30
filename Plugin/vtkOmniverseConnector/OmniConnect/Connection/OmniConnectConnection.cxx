@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -30,6 +31,7 @@
 #include <condition_variable>
 #include <algorithm>
 #include <cstring>
+#include <mutex>
 #include <vector>
 #include <string>
 
@@ -184,6 +186,27 @@ bool OmniConnectConnection::ProcessUpdates()
   return true;
 }
 
+bool OmniConnectConnection::ListLiveSessions(const char*, OmniConnectLiveSessionInfoList& sessions) const
+{
+  sessions.clear();
+  return false;
+}
+
+bool OmniConnectConnection::CreateLiveSession(const char*, const char*, std::string& sessionUrl) const
+{
+  sessionUrl.clear();
+  return false;
+}
+
+bool OmniConnectConnection::JoinLiveSession(const char*, const char*)
+{
+  return false;
+}
+
+void OmniConnectConnection::LeaveLiveSession()
+{
+}
+
 const char* OmniConnectConnection::GetOmniUser(const char*) const
 {
   return "Guest";
@@ -251,6 +274,13 @@ public:
   std::string OmniUser;
   std::string OmniClientVersion;
 
+  // The live-session join request remains active until explicitly stopped.
+  std::mutex LiveSessionMutex;
+  uint64_t LiveSessionRequestId = 0;
+  std::string LiveSessionUrl;
+  std::string LiveSessionConnectionId;
+  bool LiveSessionConnected = false;
+
   // Stream
   const char* StreamFilePath;
   bool StreamIsBinary;
@@ -270,6 +300,7 @@ OmniConnectRemoteConnection::OmniConnectRemoteConnection()
 
 OmniConnectRemoteConnection::~OmniConnectRemoteConnection()
 {
+  LeaveLiveSession();
   delete Internals;
 }
 
@@ -507,6 +538,8 @@ bool OmniConnectRemoteConnection::Initialize(const OmniConnectConnectionSettings
 
 void OmniConnectRemoteConnection::Shutdown()
 {
+  LeaveLiveSession();
+
   if (ConnectionInitialized && --NumInitializedConnInstances == 0)
   {
     omniClientSetLogCallback(nullptr);
@@ -647,6 +680,158 @@ bool OmniConnectRemoteConnection::ProcessUpdates()
   //omniClientLiveWaitForPendingUpdates(); // Refactor: test whether this should be enabled
 
   return true;
+}
+
+bool OmniConnectRemoteConnection::ListLiveSessions(
+  const char* baseLayerUrl, OmniConnectLiveSessionInfoList& sessions) const
+{
+  struct ListSessionsContext : public DefaultContext
+  {
+    OmniConnectLiveSessionInfoList Sessions;
+  } context;
+
+  sessions.clear();
+  omniClientWait(omniClientLiveListSessions(
+    baseLayerUrl, &context,
+    [](void* userData, OmniClientResult result, uint32_t sessionCount,
+      OmniClientLiveSessionInfo const* sessionInfos) OMNICLIENT_NOEXCEPT
+    {
+      auto& context = *static_cast<ListSessionsContext*>(userData);
+      context.result = result;
+      if (result == eOmniClientResult_Ok || result == eOmniClientResult_OkLatest)
+      {
+        context.Sessions.reserve(sessionCount);
+        for (uint32_t sessionIndex = 0; sessionIndex < sessionCount; ++sessionIndex)
+        {
+          const OmniClientLiveSessionInfo& source = sessionInfos[sessionIndex];
+          OmniConnectLiveSessionInfo destination;
+          destination.Url = source.sessionUrl ? source.sessionUrl : "";
+          destination.Name = source.sessionName ? source.sessionName : "";
+          destination.Owner = source.sessionOwner ? source.sessionOwner : "";
+          destination.ModifiedTimestamp = source.modifiedTimestamp;
+          context.Sessions.emplace_back(std::move(destination));
+        }
+      }
+      context.done = true;
+    }));
+
+  if (context.result != eOmniClientResult_Ok && context.result != eOmniClientResult_OkLatest)
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::ERR,
+      "Unable to list live sessions for " << baseLayerUrl << ": " << omniResultToString(context.result));
+    return false;
+  }
+
+  sessions = std::move(context.Sessions);
+  return true;
+}
+
+bool OmniConnectRemoteConnection::CreateLiveSession(
+  const char* baseLayerUrl, const char* sessionName, std::string& sessionUrl) const
+{
+  struct CreateSessionContext : public DefaultContext
+  {
+    std::string SessionUrl;
+  } context;
+
+  sessionUrl.clear();
+  omniClientWait(omniClientLiveCreateSession(
+    baseLayerUrl, sessionName, &context,
+    [](void* userData, OmniClientResult result, const char* createdSessionUrl) OMNICLIENT_NOEXCEPT
+    {
+      auto& context = *static_cast<CreateSessionContext*>(userData);
+      context.result = result;
+      if ((result == eOmniClientResult_Ok || result == eOmniClientResult_OkLatest) && createdSessionUrl)
+        context.SessionUrl = createdSessionUrl;
+      context.done = true;
+    }));
+
+  if ((context.result != eOmniClientResult_Ok && context.result != eOmniClientResult_OkLatest) || context.SessionUrl.empty())
+  {
+    OmniConnectLogMacro(OmniConnectLogLevel::ERR,
+      "Unable to create live session '" << sessionName << "' for " << baseLayerUrl << ": "
+      << omniResultToString(context.result));
+    return false;
+  }
+
+  sessionUrl = std::move(context.SessionUrl);
+  return true;
+}
+
+bool OmniConnectRemoteConnection::JoinLiveSession(const char* sessionUrl, const char* applicationName)
+{
+  if (!sessionUrl || !sessionUrl[0])
+    return false;
+
+  {
+    std::lock_guard<std::mutex> lock(Internals->LiveSessionMutex);
+    if (Internals->LiveSessionRequestId != 0 && Internals->LiveSessionUrl == sessionUrl)
+      return true;
+  }
+
+  LeaveLiveSession();
+
+  {
+    std::lock_guard<std::mutex> lock(Internals->LiveSessionMutex);
+    Internals->LiveSessionUrl = sessionUrl;
+    Internals->LiveSessionConnected = false;
+    Internals->LiveSessionConnectionId.clear();
+  }
+
+  const OmniClientRequestId requestId = omniClientLiveJoinSession(
+    sessionUrl, applicationName, Internals,
+    [](void* userData, OmniClientResult result, OmniClientLiveSessionEvent const* event) OMNICLIENT_NOEXCEPT
+    {
+      auto* internals = static_cast<OmniConnectRemoteConnectionInternals*>(userData);
+      std::lock_guard<std::mutex> lock(internals->LiveSessionMutex);
+
+      if (result != eOmniClientResult_Ok && result != eOmniClientResult_OkLatest)
+      {
+        internals->LiveSessionConnected = false;
+        OmniConnectLogMacro(OmniConnectLogLevel::ERR,
+          "Live session connection failed: " << omniResultToString(result));
+        return;
+      }
+
+      if (!event)
+        return;
+
+      if (event->eventType == eOmniClientLiveSessionEvent_Connection)
+      {
+        internals->LiveSessionConnected = true;
+        internals->LiveSessionConnectionId = event->connectionId ? event->connectionId : "";
+      }
+    });
+
+  if (requestId == 0)
+  {
+    std::lock_guard<std::mutex> lock(Internals->LiveSessionMutex);
+    Internals->LiveSessionUrl.clear();
+    OmniConnectLogMacro(OmniConnectLogLevel::ERR, "Unable to start live session join request for " << sessionUrl);
+    return false;
+  }
+
+  {
+    std::lock_guard<std::mutex> lock(Internals->LiveSessionMutex);
+    Internals->LiveSessionRequestId = requestId;
+  }
+  return true;
+}
+
+void OmniConnectRemoteConnection::LeaveLiveSession()
+{
+  OmniClientRequestId requestId = 0;
+  {
+    std::lock_guard<std::mutex> lock(Internals->LiveSessionMutex);
+    requestId = Internals->LiveSessionRequestId;
+    Internals->LiveSessionRequestId = 0;
+    Internals->LiveSessionConnected = false;
+    Internals->LiveSessionConnectionId.clear();
+    Internals->LiveSessionUrl.clear();
+  }
+
+  if (requestId != 0)
+    omniClientStop(requestId);
 }
 
 const char* OmniConnectRemoteConnection::GetOmniUser(const char* serverUrl) const
@@ -937,6 +1122,28 @@ bool OmniConnectRemoteConnection::ProcessUpdates()
   OmniConnectConnection::ProcessUpdates();
 
   return true;
+}
+
+bool OmniConnectRemoteConnection::ListLiveSessions(
+  const char* baseLayerUrl, OmniConnectLiveSessionInfoList& sessions) const
+{
+  return OmniConnectConnection::ListLiveSessions(baseLayerUrl, sessions);
+}
+
+bool OmniConnectRemoteConnection::CreateLiveSession(
+  const char* baseLayerUrl, const char* sessionName, std::string& sessionUrl) const
+{
+  return OmniConnectConnection::CreateLiveSession(baseLayerUrl, sessionName, sessionUrl);
+}
+
+bool OmniConnectRemoteConnection::JoinLiveSession(const char* sessionUrl, const char* applicationName)
+{
+  return OmniConnectConnection::JoinLiveSession(sessionUrl, applicationName);
+}
+
+void OmniConnectRemoteConnection::LeaveLiveSession()
+{
+  OmniConnectConnection::LeaveLiveSession();
 }
 
 const char* OmniConnectRemoteConnection::GetOmniUser(const char* serverUrl) const

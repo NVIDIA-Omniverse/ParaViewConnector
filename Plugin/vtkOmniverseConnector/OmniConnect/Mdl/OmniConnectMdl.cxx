@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -282,8 +283,9 @@ void ResetUsdMdlShader(UsdShadeShader & usdShader,
 #endif
 }
 
-void UpdateUsdMdlShader(OmniConnectActorCache& actorCache, OmniConnectMatCache& matCache, const OmniConnectTexCache* texCache, 
-  const OmniConnectMaterialData& omniMatData, UsdShadeShader& usdShader, const OmniConnectMdlNames& mdlNames, double animTimeStep
+void UpdateUsdMdlShader(OmniConnectActorCache& actorCache, OmniConnectMatCache& matCache, const OmniConnectTexCache* texCache,
+  const SdfAssetPath& textureAssetPath, const OmniConnectMaterialData& omniMatData, UsdShadeShader& usdShader,
+  const OmniConnectMdlNames& mdlNames, double animTimeStep
 #if USE_CUSTOM_POINT_SHADER
   , bool updateCustomShader
 #endif
@@ -318,8 +320,7 @@ void UpdateUsdMdlShader(OmniConnectActorCache& actorCache, OmniConnectMatCache& 
       else if (!texCache->TimeVarying)
         diffTexInput.GetAttr().Clear();
 
-      diffTexInput.Set(
-        texCache->TimeVarying ? texCache->TimedSceneRelTexturePath : texCache->SceneRelTexturePath,
+      diffTexInput.Set(textureAssetPath,
         texCache->TimeVarying ? timeEval.TimeCode : timeEval.DefaultTime);
 
       usdShader.GetInput(OmniConnectTokens->diffuse_wrapmode_u).Set((int)texCache->WrapS);
@@ -408,7 +409,8 @@ void UpdateUsdMdlShader(OmniConnectActorCache& actorCache, OmniConnectMatCache& 
 #if USE_CUSTOM_POINT_SHADER
     UsdShadeMaterial material = UsdShadeMaterial::Get(actorCache.Stage, matCache.SdfMatName);
     UsdShadeShader pointShader = UsdShadeShader::Get(actorCache.Stage, matCache.MdlPointShadPath);
-    UpdateUsdMdlShader(actorCache, matCache, texCache, omniMatData, pointShader, mdlNames, animTimeStep, true);
+    UpdateUsdMdlShader(actorCache, matCache, texCache, textureAssetPath,
+      omniMatData, pointShader, mdlNames, animTimeStep, true);
 
     if(omniMatData.UsePointShader)
       material.GetSurfaceOutput(OmniConnectTokens->mdl).ConnectToSource(pointShader.GetOutput(OmniConnectTokens->surface));
@@ -420,7 +422,9 @@ void UpdateUsdMdlShader(OmniConnectActorCache& actorCache, OmniConnectMatCache& 
 }
 
 #if !USE_CUSTOM_MDL
-UsdShadeShader InitializeMdlTexture(const OmniConnectActorCache& actorCache, const OmniConnectSamplerData& samplerData, const OmniConnectTexCache& texCache)
+UsdShadeShader InitializeMdlTexture(const OmniConnectActorCache& actorCache,
+  const OmniConnectSamplerData& samplerData, const OmniConnectTexCache& texCache,
+  const SdfAssetPath& textureAssetPath)
 {
   UsdShadeShader sampler = UsdShadeShader::Define(actorCache.Stage, texCache.TexturePrimPath_mdl);
   assert(sampler);
@@ -433,12 +437,14 @@ UsdShadeShader InitializeMdlTexture(const OmniConnectActorCache& actorCache, con
   // Timevarying properties
   UsdShadeInput texInput = sampler.CreateInput(OmniConnectTokens->tex, SdfValueTypeNames->Asset);
   texInput.GetAttr().SetMetadata(OmniConnectTokens->colorSpace, VtValue("sRGB"));
-  texInput.Set(texCache.SceneRelTexturePath);
+  if (!texCache.TimeVarying)
+    texInput.Set(textureAssetPath);
 
   return sampler;
 }
 
-void UpdateMdlTexture(const OmniConnectTexCache& texCache, const UsdShadeShader& sampler, double animTimeStep)
+void UpdateMdlTexture(const OmniConnectTexCache& texCache, const UsdShadeShader& sampler,
+  const SdfAssetPath& textureAssetPath, double animTimeStep)
 {
   UsdShadeInput fileInput = sampler.GetInput(OmniConnectTokens->tex);
 
@@ -447,9 +453,8 @@ void UpdateMdlTexture(const OmniConnectTexCache& texCache, const UsdShadeShader&
     fileInput.GetAttr().Clear();
 
   // Set the texture file
-  fileInput.Set(
-      texCache.TimeVarying ? texCache.TimedSceneRelTexturePath : texCache.SceneRelTexturePath,
-      texCache.TimeVarying ? UsdTimeCode(animTimeStep) : UsdTimeCode::Default());
+  fileInput.Set(textureAssetPath,
+    texCache.TimeVarying ? UsdTimeCode(animTimeStep) : UsdTimeCode::Default());
 }
 #endif
 

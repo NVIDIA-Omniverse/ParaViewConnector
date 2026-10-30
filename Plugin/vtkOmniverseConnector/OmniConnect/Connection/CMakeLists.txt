@@ -163,6 +163,12 @@ endfunction()
 if(${OMNICONNECT_USE_OMNIVERSE})
   set(OMNICLIENT_ROOT_DIR "" CACHE PATH "Path to the OmniClient Library")
   set(OMNIUSDRESOLVER_ROOT_DIR "" CACHE PATH "Path to the Omni Usd Resolver Library")
+  set(OMNISPECTREE_ROOT_DIR "" CACHE PATH "Path to the Omni Spectree Library")
+
+  if(NOT EXISTS "${OMNISPECTREE_ROOT_DIR}")
+    message(FATAL_ERROR
+      "No valid OMNISPECTREE_ROOT_DIR set. The Omni USD Live file-format plugin is required for live sync.")
+  endif()
 
   # Handle OmniClient (no cmake config files - use manual approach)
   get_omni_dependency(
@@ -177,7 +183,7 @@ if(${OMNICONNECT_USE_OMNIVERSE})
   list(APPEND OMNICLIENT_SHARED_LIBS omniclient)
 
   # Check structure and use appropriate approach
-  if(EXISTS "include/OmniUsdResolver.h")
+  if(EXISTS "${OMNIUSDRESOLVER_ROOT_DIR}/include/OmniUsdResolver.h")
     # Old structure: use get_omni_dependency for manual setup
     get_omni_dependency(
       OMNIUSDRESOLVER_ROOT_DIR
@@ -345,6 +351,34 @@ if(${OMNICONNECT_USE_OMNIVERSE})
     else()
       message(WARNING "Omni USD Resolver plugin directory not found: ${OMNIUSDRESOLVER_PLUGIN_SOURCE_DIR}")
     endif()
+
+    if(CMAKE_BUILD_TYPE MATCHES "Debug")
+      set(OMNISPECTREE_CONFIG_DIR "${OMNISPECTREE_ROOT_DIR}/debug")
+    else()
+      set(OMNISPECTREE_CONFIG_DIR "${OMNISPECTREE_ROOT_DIR}/release")
+    endif()
+
+    # SpecTree packages place Windows DLLs in bin/ and Linux shared objects in lib/.
+    if(WIN32)
+      set(OMNISPECTREE_RUNTIME_DIR "${OMNISPECTREE_CONFIG_DIR}/bin")
+    else()
+      set(OMNISPECTREE_RUNTIME_DIR "${OMNISPECTREE_CONFIG_DIR}/lib")
+    endif()
+
+    set(OMNIUSDLIVE_LIBRARY
+      "${OMNISPECTREE_RUNTIME_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}omni_usd_live${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    set(OMNIUSDLIVE_PLUGIN_SOURCE_DIR "${OMNISPECTREE_CONFIG_DIR}/plugins/omni_usd_live")
+    if(NOT EXISTS "${OMNIUSDLIVE_LIBRARY}" OR NOT EXISTS "${OMNIUSDLIVE_PLUGIN_SOURCE_DIR}")
+      message(FATAL_ERROR
+        "Omni USD Live runtime files were not found. Expected library: ${OMNIUSDLIVE_LIBRARY}; plugin resources: ${OMNIUSDLIVE_PLUGIN_SOURCE_DIR}")
+    endif()
+
+    install(
+      FILES "${OMNIUSDLIVE_LIBRARY}"
+      DESTINATION ${PLATFORM_INSTALL_LIBDIR})
+    install(
+      DIRECTORY "${OMNIUSDLIVE_PLUGIN_SOURCE_DIR}/"
+      DESTINATION "${CMAKE_INSTALL_PREFIX}/plugin/omni_usd_live/")
   endif()
 endif()
 

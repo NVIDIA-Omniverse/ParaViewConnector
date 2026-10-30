@@ -1,6 +1,7 @@
 /*###############################################################################
 #
-# Copyright 2024 NVIDIA Corporation
+# SPDX-FileCopyrightText: Copyright (c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+# SPDX-License-Identifier: MIT
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy of
 # this software and associated documentation files (the "Software"), to deal in
@@ -94,9 +95,8 @@ QString pqOmniConnectViewSettings::getUsdPath() const
 {
   // Determine *.usd or *.usda path based from the settings
   QString outputDirectory = OutputLocal ? LocalOutputDirectory : OmniWorkingDirectory;
-  QString extension = LiveWorkflowEnabled ? ".live" : (OutputBinary ? ".usd" : ".usda");
-  QString livePrefix = LiveWorkflowEnabled ? "live_" : "";
-  QString fileName = NumPartitions > 1 ? QString("%1MultiScene%2").arg(livePrefix).arg(extension) : QString("%1FullScene%2").arg(livePrefix).arg(extension);
+  QString extension = OutputBinary ? ".usd" : ".usda";
+  QString fileName = NumPartitions > 1 ? QString("MultiScene%1").arg(extension) : QString("FullScene%1").arg(extension);
   QString usdPath;
   if (OutputLocal) {
     usdPath = QString("%1/Session_%2/%3").arg(outputDirectory).arg(QString::number(SessionNumber)).arg(fileName);
